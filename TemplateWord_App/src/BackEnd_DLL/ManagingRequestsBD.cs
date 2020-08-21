@@ -45,15 +45,58 @@ namespace BackEnd_DLL
 			return false;
 		}
 
-/*		public void Open()
+		public string[,] GetTable(string tableName)
         {
-			_con.Open();
-        }
+			if (tableName != String.Empty)
+            {
+				string sql = "SELECT * FROM " + tableName + ";";
+				try
+                {
+					MySqlCommand command = new MySqlCommand(sql, _con); // запрос на все данные
+					MySqlDataReader reader = command.ExecuteReader(); // получае данные
+					if (reader.HasRows) // если есть строки
+                    {
+						int rowCount = 0;
+						int colCount = reader.FieldCount;
 
-		public void Close()
-        {
-			_con.Close();
+						//узнаем кол-во строк
+						while (reader.Read())
+						{
+							++rowCount;
+						}
+
+						//закрываем ридер и пересоздаем его
+						reader.Close();
+						reader = command.ExecuteReader();
+
+						//создаем массив строк и заполняем его
+						string[,] infoArr = new string[rowCount, colCount];
+						int i = 0;
+						while (reader.Read())
+						{
+							for (int j = 0; j < colCount; ++j)
+                            {
+								infoArr[i,j] = reader[j].ToString();
+                            }
+							++i;
+						}
+
+						//закрываем ридер и возвращаем массив либо null
+						reader.Close();
+						return infoArr;
+					}
+					reader.Close();
+					return null;
+				}
+
+				//ловиим исключения при работе с бд
+				catch (Exception e)
+				{
+					Console.WriteLine("{0} Exception caught.", e);
+					return null;
+				}
+			}
+			return null;
         }
-*/
 	}
 }
