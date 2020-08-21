@@ -19,13 +19,13 @@ namespace FrontEnd
 		public MainWindow(ManagingRequestsBD mrBD)
 		{
 			_mrBD = mrBD;
-			_mrBD.Open();
+			//_mrBD.Open();
 			InitializeComponent();
 		}
 
 		private void MainWindow_Load(object sender, EventArgs e)
 		{
-			_mrBD.Close();
+			//_mrBD.Close();
 		}
 
 		private void button_Otzv_Click(object sender, EventArgs e)
