@@ -28,7 +28,10 @@ namespace BackEnd_DLL
         public List<Report> MakeReport()
         {
             List<Teacher> prepods = dataBase.GetPrepods();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
+            string dateReport = dataBase.GetDate();//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
             List<Report> reports = new List<Report>();
+            string[] dates = dateReport.Split('-');
+            string nowADay = DateTime.Now.ToShortDateString();
 
             foreach(Teacher prepod in prepods)
             {
@@ -40,7 +43,9 @@ namespace BackEnd_DLL
                 dicGeneral.Add("footer_name", prepod.name[0] + "." + prepod.middleName[0] + ". " + prepod.secondName);
                 dicGeneral.Add("number", prepod.students[0].course);
                 dicGeneral.Add("Faculty_name", prepod.students[0].faculty);
-
+                dicGeneral.Add("date_start", dates[0]);
+                dicGeneral.Add("date_end", dates[1]);
+                dicGeneral.Add("footer_date", nowADay);
 
                 List<Dictionary<string, string>> dicStudents = new List<Dictionary<string, string>>();
                 foreach(Student stud in prepod.students)
