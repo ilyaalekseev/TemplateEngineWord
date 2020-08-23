@@ -11,6 +11,7 @@ namespace BackEnd_DLL
     public class DocumentWord
 	{
 		string _fullPath;
+		
 
 		public DocumentWord(string fullPath)
 		{
