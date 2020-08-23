@@ -6,23 +6,20 @@ using System.Threading.Tasks;
 
 namespace BackEnd_DLL
 {
-    class Report : DocumentWord
+    public class Report : DocumentWord
     {
 		string _fullPath;
-		Dictionary<string, string> dic;
+		Dictionary<string, string> _dicGeneral;
+		List<Dictionary<string, string>> _students;
 		ManagingRequestsBD _db;
 
-		public Report(ManagingRequestsBD db)
+		public Report(Dictionary<string, string> dicGen, List<Dictionary<string, string>> stud)
 		{
 			_fullPath = "";//Путь до шаблона Отчёта
-			dic = new Dictionary<string, string>();//ключ - это тэг в шаблоне ворда, а значение - значение, которое вставляется по тегу
-			_db = db;
+			_dicGeneral = dicGen;//ключ - это тэг в шаблоне ворда, а значение - значение, которое вставляется по тегу
+			_students = stud;
 		}
 
-		public void MakeDic()
-        {
-
-        }
 
 		//// Открыть документ для редактирования
 		//public void OpenDocument()

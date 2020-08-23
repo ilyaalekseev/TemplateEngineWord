@@ -6,14 +6,17 @@ using System.Threading.Tasks;
 
 namespace BackEnd_DLL
 {
-    class Student
+    public class Student
     {
-        string rank;//звание
-        string secondName;//фамилия
-        string name;//имя
-        string middleName;//отчество
-        string course;//курс
-        string faculty;//факультет
+        public string rank;//звание
+        public string secondName;//фамилия
+        public string name;//имя
+        public string middleName;//отчество
+        public string course;//курс
+        public string faculty;//факультет
+        public string location;//место проведения практики
+        public string position;
+        public string mark;
         //добавьте, если что-то забыл
     }
 }
