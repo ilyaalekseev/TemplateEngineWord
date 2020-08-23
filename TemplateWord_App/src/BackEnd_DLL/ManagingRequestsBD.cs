@@ -29,10 +29,10 @@ namespace BackEnd_DLL
 			if (tableName != String.Empty && columnName != String.Empty && columnType != String.Empty)
             {
 				string sql = "CREATE TABLE " + tableName + " (" + columnName + " " + columnType + ");";
-
-				MySqlCommand command = new MySqlCommand(sql, _con);
+	
 				try
                 {
+					MySqlCommand command = new MySqlCommand(sql, _con);
 					command.ExecuteNonQuery();
 				}
 				catch(Exception e)
@@ -98,5 +98,33 @@ namespace BackEnd_DLL
 			}
 			return null;
         }
+
+		/*
+			Функция изменяет старое значение в таблице tableName в колонке columnName
+			на новое значение newValue в строке с номером id
+		*/
+		// Сводка:
+		//     Задает значения по умолчанию во всем приложении для свойства UseCompatibleTextRendering,
+		//     определенного в конкретных элементах управления.
+		//
+		public bool ChangeColumnValue(string tableName, string columnName,  string newValue, string id)
+        {
+			if (tableName != String.Empty && columnName != String.Empty && newValue != String.Empty && id != String.Empty)
+            {
+				string sql = "UPDATE `template_engine`.`" + tableName + "` SET `" + columnName + "` = '" + newValue + "' WHERE (`id` = '" + id + "');";
+				try
+				{
+					MySqlCommand command = new MySqlCommand(sql, _con);
+					command.ExecuteNonQuery();
+				}
+				catch (Exception e)
+				{
+					Console.WriteLine("{0} Exception caught.", e);
+					return false;
+				}
+				return true;
+			}
+			return false;
+		}
 	}
 }

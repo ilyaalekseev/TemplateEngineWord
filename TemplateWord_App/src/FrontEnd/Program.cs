@@ -17,8 +17,6 @@ namespace FrontEnd
 		static void Main()
 		{
             ManagingRequestsBD mrBD = new ManagingRequestsBD();
-			/*	mrBD.CreateTable("test_table", "test_column", "VARCHAR(45)"); */
-			/*	mrBD.GetTable("test_table"); */
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run(new MainWindow(mrBD));
