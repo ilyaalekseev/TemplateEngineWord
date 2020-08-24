@@ -12,11 +12,13 @@ namespace BackEnd_DLL
         public string secondName;//фамилия
         public string name;//имя
         public string middleName;//отчество
+        public string group;
         public string course;//курс
         public string faculty;//факультет
         public string location;//место проведения практики
         public string position;
         public string mark;
+        public string practicType;
         //добавьте, если что-то забыл
     }
 }
