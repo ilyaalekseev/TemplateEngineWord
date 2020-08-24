@@ -59,6 +59,18 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SetRatings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SetRatings.Designer.cs">
+      <DependentUpon>SetRatings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SetRatingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="SetRatingsControl.Designer.cs">
+      <DependentUpon>SetRatingsControl.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>
@@ -70,7 +82,14 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="SetRatings.resx">
+      <DependentUpon>SetRatings.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SetRatingsControl.resx">
+      <DependentUpon>SetRatingsControl.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -110,6 +129,12 @@
       <Project>{b3b31396-85e0-48f9-9a8a-e9f9281ceeb1}</Project>
       <Name>BackEnd_DLL</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\close %281%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tick.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using BackEnd_DLL;
+using FrontEnd.Properties;
 
 namespace FrontEnd
 {
@@ -21,6 +22,11 @@ namespace FrontEnd
 			_mrBD = mrBD;
 			_mrBD.Open();
 			InitializeComponent();
+			pictureBox1.Image = Resources.close__1_;
+			pictureBox2.Image = Resources.close__1_;
+			pictureBox3.Image = Resources.close__1_;
+			pictureBox4.Image = Resources.close__1_;
+			pictureBox5.Image = Resources.close__1_;
 		}
 
 		private void MainWindow_Load(object sender, EventArgs e)
@@ -28,7 +34,8 @@ namespace FrontEnd
 			_mrBD.Close();
 		}
 
-		private void button_Otzv_Click(object sender, EventArgs e)
+		// Выделить незаполненные поля
+		private bool NotFull()
 		{
 			if (comboBox_Cours.Text == "" | comboBox_Faculty.Text == "")
 			{
@@ -37,10 +44,43 @@ namespace FrontEnd
 				//Таймер на секунду
 				comboBox_Cours.BackColor = Color.White;
 				comboBox_Faculty.BackColor = Color.White;
+				return true;
 			}
 			else
-			{
+				return false;
+		}
 
+		
+
+		private void button_Otchet_Click(object sender, EventArgs e)
+		{
+			if (!NotFull())
+			{
+				pictureBox1.Image = Resources.tick;
+			}
+		}
+
+		private void button_Raport_Click(object sender, EventArgs e)
+		{
+			if (!NotFull())
+			{
+				pictureBox2.Image = Resources.tick;
+			}
+		}
+
+		private void button_Otzv_Click(object sender, EventArgs e)
+		{
+			if (!NotFull())
+			{
+				pictureBox3.Image = Resources.tick;
+			}
+		}
+
+		private void button_Dnevnik_Click(object sender, EventArgs e)
+		{
+			if (!NotFull())
+			{
+				pictureBox4.Image = Resources.tick;
 			}
 		}
 	}
