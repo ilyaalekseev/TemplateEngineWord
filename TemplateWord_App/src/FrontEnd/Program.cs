@@ -16,11 +16,11 @@ namespace FrontEnd
 		[STAThread]
 		static void Main()
 		{
-			ManagingRequestsBD mrBD = new ManagingRequestsBD();
+            ManagingRequestsBD mrBD = new ManagingRequestsBD();
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			Application.Run(new MainWindow(mrBD));
 
-		}
+        }
 	}
 }

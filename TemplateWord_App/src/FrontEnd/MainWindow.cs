@@ -20,7 +20,7 @@ namespace FrontEnd
 		public MainWindow(ManagingRequestsBD mrBD)
 		{
 			_mrBD = mrBD;
-			_mrBD.Open();
+			//_mrBD.Open();
 			InitializeComponent();
 			pictureBox1.Image = Resources.close__1_;
 			pictureBox2.Image = Resources.close__1_;
@@ -31,7 +31,7 @@ namespace FrontEnd
 
 		private void MainWindow_Load(object sender, EventArgs e)
 		{
-			_mrBD.Close();
+			//_mrBD.Close();
 		}
 
 		// Выделить незаполненные поля
