@@ -28,7 +28,7 @@ namespace BackEnd_DLL
         public List<Report> MakeReport()
         {
             List<Teacher> prepods = dataBase.GetTeachers();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
-            string dateReport = dataBase.GetDate();//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
+            string dateReport = prepods[0].students[0].date;//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
             Teacher approver = dataBase.GetApprover();
             List<Report> reports = new List<Report>();
             string[] dates = dateReport.Split('-');
@@ -78,8 +78,8 @@ namespace BackEnd_DLL
         //а не по разному в каждом документе, да и неплохо было бы норм имена давать (как сделаешь, переделаю ключи тут)
         public List<Feedback> MakeFeedback()
         {
-            List<Teacher> prepods = dataBase.GetPrepods();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
-            string dateFeedback = dataBase.GetDate();//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
+            List<Teacher> prepods = dataBase.GetTeachers();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
+            string dateFeedback = prepods[0].students[0].date;//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
             Teacher approver = dataBase.GetApprover();
             List<Feedback> feedbacks = new List<Feedback>();
             string[] dates = dateFeedback.Split('-');
@@ -125,8 +125,8 @@ namespace BackEnd_DLL
 
         public List<Raport> MakeRaport()
         {
-            List<Teacher> prepods = dataBase.GetPrepods();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
-            string dateRaport = dataBase.GetDate();//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
+            List<Teacher> prepods = dataBase.GetTeachers();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
+            string dateRaport = prepods[0].students[0].date;//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
             Teacher approver = dataBase.GetApprover();
             List<Raport> raports = new List<Raport>();
             string[] dates = dateRaport.Split('-');
