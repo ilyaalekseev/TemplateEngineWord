@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Dairy.cs" />
     <Compile Include="DocumentWord.cs" />
     <Compile Include="Feedback.cs" />
     <Compile Include="IService.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="Report.cs" />
     <Compile Include="Service.cs" />
     <Compile Include="Student.cs" />
+    <Compile Include="Task.cs" />
     <Compile Include="Teacher.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

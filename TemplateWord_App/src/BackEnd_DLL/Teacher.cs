@@ -13,7 +13,8 @@ namespace BackEnd_DLL
         public string secondName;//фамилия
         public string name;//имя
         public string middleName;//отчество
-        public string department;//кафедра
+        public string department;//номер кафедра
+        public string facultyOfDepartment;//факультет кафедры
         public string position;//должность
         public string personalNumber;//личный номер
         public string directionNumber;//номер потока

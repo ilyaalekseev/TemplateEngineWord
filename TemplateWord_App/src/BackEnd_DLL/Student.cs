@@ -24,7 +24,11 @@ namespace BackEnd_DLL
         public string skill;//навыки полученные в ходе практики
         public string position;//должность в практике
         public string mark;
+<<<<<<< HEAD
         public string practicType;
         //добавьте, если что-то забыл
+=======
+        //добавьте, если что-то забыл 
+>>>>>>> 1a53b3055a84d16760578a1a997b95a853b51ee4
     }
 }

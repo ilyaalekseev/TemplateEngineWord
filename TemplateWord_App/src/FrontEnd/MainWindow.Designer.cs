@@ -29,6 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.MainPanel = new System.Windows.Forms.Panel();
+			this.button_start = new System.Windows.Forms.Button();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.comboBox_Faculty = new System.Windows.Forms.ComboBox();
@@ -37,41 +38,76 @@
 			this.panelChoice = new System.Windows.Forms.Panel();
 			this.StackItems_flowLayoutPanel = new System.Windows.Forms.FlowLayoutPanel();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.panel1 = new System.Windows.Forms.Panel();
+			this.panel18 = new System.Windows.Forms.Panel();
+			this.button_Otmena = new System.Windows.Forms.Button();
+			this.button_OK = new System.Windows.Forms.Button();
+			this.panel17 = new System.Windows.Forms.Panel();
+			this.panel16 = new System.Windows.Forms.Panel();
+			this.panel15 = new System.Windows.Forms.Panel();
+			this.button3 = new System.Windows.Forms.Button();
+			this.panel14 = new System.Windows.Forms.Panel();
+			this.panel13 = new System.Windows.Forms.Panel();
+			this.button_Dnevnik = new System.Windows.Forms.Button();
+			this.panel12 = new System.Windows.Forms.Panel();
+			this.panel11 = new System.Windows.Forms.Panel();
+			this.button_Otzv = new System.Windows.Forms.Button();
+			this.panel10 = new System.Windows.Forms.Panel();
+			this.panel9 = new System.Windows.Forms.Panel();
+			this.button_Raport = new System.Windows.Forms.Button();
+			this.panel8 = new System.Windows.Forms.Panel();
+			this.panel7 = new System.Windows.Forms.Panel();
+			this.button_Otchet = new System.Windows.Forms.Button();
+			this.panel_Otchet = new System.Windows.Forms.Panel();
+			this.panel_Otchet_OK = new System.Windows.Forms.Panel();
+			this.pictureBox1 = new System.Windows.Forms.PictureBox();
 			this.label3 = new System.Windows.Forms.Label();
-			this.panel2 = new System.Windows.Forms.Panel();
+			this.panel_Raport = new System.Windows.Forms.Panel();
+			this.panel_raport_OK = new System.Windows.Forms.Panel();
+			this.pictureBox2 = new System.Windows.Forms.PictureBox();
 			this.label4 = new System.Windows.Forms.Label();
-			this.panel3 = new System.Windows.Forms.Panel();
+			this.panel_Otzv = new System.Windows.Forms.Panel();
+			this.panel_Otzv_OK = new System.Windows.Forms.Panel();
+			this.pictureBox3 = new System.Windows.Forms.PictureBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.panel4 = new System.Windows.Forms.Panel();
+			this.panel_Dnevnik_OK = new System.Windows.Forms.Panel();
+			this.pictureBox4 = new System.Windows.Forms.PictureBox();
 			this.label6 = new System.Windows.Forms.Label();
 			this.panel5 = new System.Windows.Forms.Panel();
+			this.panel19 = new System.Windows.Forms.Panel();
+			this.pictureBox5 = new System.Windows.Forms.PictureBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.panel6 = new System.Windows.Forms.Panel();
-			this.panel7 = new System.Windows.Forms.Panel();
-			this.panel8 = new System.Windows.Forms.Panel();
-			this.panel9 = new System.Windows.Forms.Panel();
-			this.panel10 = new System.Windows.Forms.Panel();
-			this.panel11 = new System.Windows.Forms.Panel();
-			this.panel12 = new System.Windows.Forms.Panel();
-			this.panel13 = new System.Windows.Forms.Panel();
-			this.panel14 = new System.Windows.Forms.Panel();
-			this.panel15 = new System.Windows.Forms.Panel();
-			this.button_Otzv = new System.Windows.Forms.Button();
 			this.MainPanel.SuspendLayout();
 			this.panelTop.SuspendLayout();
 			this.StackItems_flowLayoutPanel.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
-			this.panel1.SuspendLayout();
-			this.panel2.SuspendLayout();
-			this.panel3.SuspendLayout();
-			this.panel4.SuspendLayout();
-			this.panel5.SuspendLayout();
+			this.panel18.SuspendLayout();
+			this.panel15.SuspendLayout();
+			this.panel13.SuspendLayout();
 			this.panel11.SuspendLayout();
+			this.panel9.SuspendLayout();
+			this.panel7.SuspendLayout();
+			this.panel_Otchet.SuspendLayout();
+			this.panel_Otchet_OK.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+			this.panel_Raport.SuspendLayout();
+			this.panel_raport_OK.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+			this.panel_Otzv.SuspendLayout();
+			this.panel_Otzv_OK.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
+			this.panel4.SuspendLayout();
+			this.panel_Dnevnik_OK.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
+			this.panel5.SuspendLayout();
+			this.panel19.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// MainPanel
 			// 
+			this.MainPanel.Controls.Add(this.button_start);
 			this.MainPanel.Controls.Add(this.label2);
 			this.MainPanel.Controls.Add(this.label1);
 			this.MainPanel.Controls.Add(this.comboBox_Faculty);
@@ -81,8 +117,18 @@
 			this.MainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.MainPanel.Location = new System.Drawing.Point(0, 0);
 			this.MainPanel.Name = "MainPanel";
-			this.MainPanel.Size = new System.Drawing.Size(918, 411);
+			this.MainPanel.Size = new System.Drawing.Size(918, 433);
 			this.MainPanel.TabIndex = 0;
+			// 
+			// button_start
+			// 
+			this.button_start.Location = new System.Drawing.Point(783, 66);
+			this.button_start.Name = "button_start";
+			this.button_start.Size = new System.Drawing.Size(123, 26);
+			this.button_start.TabIndex = 8;
+			this.button_start.Text = "ОК";
+			this.button_start.UseVisualStyleBackColor = true;
+			this.button_start.Click += new System.EventHandler(this.button_start_Click);
 			// 
 			// label2
 			// 
@@ -149,17 +195,20 @@
 			// 
 			this.StackItems_flowLayoutPanel.Controls.Add(this.tableLayoutPanel1);
 			this.StackItems_flowLayoutPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.StackItems_flowLayoutPanel.Location = new System.Drawing.Point(0, 109);
+			this.StackItems_flowLayoutPanel.Location = new System.Drawing.Point(0, 98);
 			this.StackItems_flowLayoutPanel.Name = "StackItems_flowLayoutPanel";
-			this.StackItems_flowLayoutPanel.Size = new System.Drawing.Size(918, 302);
+			this.StackItems_flowLayoutPanel.Size = new System.Drawing.Size(918, 335);
 			this.StackItems_flowLayoutPanel.TabIndex = 2;
 			// 
 			// tableLayoutPanel1
 			// 
 			this.tableLayoutPanel1.ColumnCount = 3;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33334F));
+			this.tableLayoutPanel1.Controls.Add(this.panel18, 2, 5);
+			this.tableLayoutPanel1.Controls.Add(this.panel17, 1, 5);
+			this.tableLayoutPanel1.Controls.Add(this.panel16, 0, 5);
 			this.tableLayoutPanel1.Controls.Add(this.panel15, 2, 4);
 			this.tableLayoutPanel1.Controls.Add(this.panel14, 1, 4);
 			this.tableLayoutPanel1.Controls.Add(this.panel13, 2, 3);
@@ -169,31 +218,227 @@
 			this.tableLayoutPanel1.Controls.Add(this.panel9, 2, 1);
 			this.tableLayoutPanel1.Controls.Add(this.panel8, 1, 1);
 			this.tableLayoutPanel1.Controls.Add(this.panel7, 2, 0);
-			this.tableLayoutPanel1.Controls.Add(this.panel1, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.panel2, 0, 1);
-			this.tableLayoutPanel1.Controls.Add(this.panel3, 0, 2);
+			this.tableLayoutPanel1.Controls.Add(this.panel_Otchet, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.panel_Raport, 0, 1);
+			this.tableLayoutPanel1.Controls.Add(this.panel_Otzv, 0, 2);
 			this.tableLayoutPanel1.Controls.Add(this.panel4, 0, 3);
 			this.tableLayoutPanel1.Controls.Add(this.panel5, 0, 4);
 			this.tableLayoutPanel1.Controls.Add(this.panel6, 1, 0);
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(3, 3);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-			this.tableLayoutPanel1.RowCount = 5;
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(911, 225);
+			this.tableLayoutPanel1.RowCount = 6;
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 17F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 17F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 17F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 17F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 17F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(911, 299);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
-			// panel1
+			// panel18
 			// 
-			this.panel1.Controls.Add(this.label3);
-			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel1.Location = new System.Drawing.Point(3, 3);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(297, 39);
-			this.panel1.TabIndex = 0;
+			this.panel18.Controls.Add(this.button_Otmena);
+			this.panel18.Controls.Add(this.button_OK);
+			this.panel18.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel18.Location = new System.Drawing.Point(609, 253);
+			this.panel18.Name = "panel18";
+			this.panel18.Size = new System.Drawing.Size(299, 43);
+			this.panel18.TabIndex = 17;
+			// 
+			// button_Otmena
+			// 
+			this.button_Otmena.Location = new System.Drawing.Point(64, 3);
+			this.button_Otmena.Name = "button_Otmena";
+			this.button_Otmena.Size = new System.Drawing.Size(75, 40);
+			this.button_Otmena.TabIndex = 1;
+			this.button_Otmena.Text = "Отмена";
+			this.button_Otmena.UseVisualStyleBackColor = true;
+			this.button_Otmena.Click += new System.EventHandler(this.button_Otmena_Click);
+			// 
+			// button_OK
+			// 
+			this.button_OK.Location = new System.Drawing.Point(145, 3);
+			this.button_OK.Name = "button_OK";
+			this.button_OK.Size = new System.Drawing.Size(154, 40);
+			this.button_OK.TabIndex = 0;
+			this.button_OK.Text = "Создать документы";
+			this.button_OK.UseVisualStyleBackColor = true;
+			this.button_OK.Click += new System.EventHandler(this.button_OK_Click);
+			// 
+			// panel17
+			// 
+			this.panel17.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel17.Location = new System.Drawing.Point(306, 253);
+			this.panel17.Name = "panel17";
+			this.panel17.Size = new System.Drawing.Size(297, 43);
+			this.panel17.TabIndex = 16;
+			// 
+			// panel16
+			// 
+			this.panel16.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel16.Location = new System.Drawing.Point(3, 253);
+			this.panel16.Name = "panel16";
+			this.panel16.Size = new System.Drawing.Size(297, 43);
+			this.panel16.TabIndex = 15;
+			// 
+			// panel15
+			// 
+			this.panel15.Controls.Add(this.button3);
+			this.panel15.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel15.Location = new System.Drawing.Point(609, 203);
+			this.panel15.Name = "panel15";
+			this.panel15.Size = new System.Drawing.Size(299, 44);
+			this.panel15.TabIndex = 14;
+			// 
+			// button3
+			// 
+			this.button3.Location = new System.Drawing.Point(171, 3);
+			this.button3.Name = "button3";
+			this.button3.Size = new System.Drawing.Size(123, 32);
+			this.button3.TabIndex = 3;
+			this.button3.Text = "Выбрать";
+			this.button3.UseVisualStyleBackColor = true;
+			this.button3.Click += new System.EventHandler(this.button3_Click);
+			// 
+			// panel14
+			// 
+			this.panel14.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel14.Location = new System.Drawing.Point(306, 203);
+			this.panel14.Name = "panel14";
+			this.panel14.Size = new System.Drawing.Size(297, 44);
+			this.panel14.TabIndex = 13;
+			// 
+			// panel13
+			// 
+			this.panel13.Controls.Add(this.button_Dnevnik);
+			this.panel13.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel13.Location = new System.Drawing.Point(609, 153);
+			this.panel13.Name = "panel13";
+			this.panel13.Size = new System.Drawing.Size(299, 44);
+			this.panel13.TabIndex = 12;
+			// 
+			// button_Dnevnik
+			// 
+			this.button_Dnevnik.Location = new System.Drawing.Point(171, 4);
+			this.button_Dnevnik.Name = "button_Dnevnik";
+			this.button_Dnevnik.Size = new System.Drawing.Size(123, 32);
+			this.button_Dnevnik.TabIndex = 2;
+			this.button_Dnevnik.Text = "Выбрать";
+			this.button_Dnevnik.UseVisualStyleBackColor = true;
+			this.button_Dnevnik.Click += new System.EventHandler(this.button_Dnevnik_Click);
+			// 
+			// panel12
+			// 
+			this.panel12.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel12.Location = new System.Drawing.Point(306, 153);
+			this.panel12.Name = "panel12";
+			this.panel12.Size = new System.Drawing.Size(297, 44);
+			this.panel12.TabIndex = 11;
+			// 
+			// panel11
+			// 
+			this.panel11.Controls.Add(this.button_Otzv);
+			this.panel11.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel11.Location = new System.Drawing.Point(609, 103);
+			this.panel11.Name = "panel11";
+			this.panel11.Size = new System.Drawing.Size(299, 44);
+			this.panel11.TabIndex = 10;
+			// 
+			// button_Otzv
+			// 
+			this.button_Otzv.Location = new System.Drawing.Point(171, 9);
+			this.button_Otzv.Name = "button_Otzv";
+			this.button_Otzv.Size = new System.Drawing.Size(123, 30);
+			this.button_Otzv.TabIndex = 1;
+			this.button_Otzv.Text = "Выбрать";
+			this.button_Otzv.UseVisualStyleBackColor = true;
+			this.button_Otzv.Click += new System.EventHandler(this.button_Otzv_Click);
+			// 
+			// panel10
+			// 
+			this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel10.Location = new System.Drawing.Point(306, 103);
+			this.panel10.Name = "panel10";
+			this.panel10.Size = new System.Drawing.Size(297, 44);
+			this.panel10.TabIndex = 9;
+			// 
+			// panel9
+			// 
+			this.panel9.Controls.Add(this.button_Raport);
+			this.panel9.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel9.Location = new System.Drawing.Point(609, 53);
+			this.panel9.Name = "panel9";
+			this.panel9.Size = new System.Drawing.Size(299, 44);
+			this.panel9.TabIndex = 8;
+			// 
+			// button_Raport
+			// 
+			this.button_Raport.Location = new System.Drawing.Point(171, 9);
+			this.button_Raport.Name = "button_Raport";
+			this.button_Raport.Size = new System.Drawing.Size(123, 32);
+			this.button_Raport.TabIndex = 1;
+			this.button_Raport.Text = "Выбрать";
+			this.button_Raport.UseVisualStyleBackColor = true;
+			this.button_Raport.Click += new System.EventHandler(this.button_Raport_Click);
+			// 
+			// panel8
+			// 
+			this.panel8.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel8.Location = new System.Drawing.Point(306, 53);
+			this.panel8.Name = "panel8";
+			this.panel8.Size = new System.Drawing.Size(297, 44);
+			this.panel8.TabIndex = 7;
+			// 
+			// panel7
+			// 
+			this.panel7.Controls.Add(this.button_Otchet);
+			this.panel7.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel7.Location = new System.Drawing.Point(609, 3);
+			this.panel7.Name = "panel7";
+			this.panel7.Size = new System.Drawing.Size(299, 44);
+			this.panel7.TabIndex = 6;
+			// 
+			// button_Otchet
+			// 
+			this.button_Otchet.Location = new System.Drawing.Point(171, 9);
+			this.button_Otchet.Name = "button_Otchet";
+			this.button_Otchet.Size = new System.Drawing.Size(123, 32);
+			this.button_Otchet.TabIndex = 0;
+			this.button_Otchet.Text = "Выбрать";
+			this.button_Otchet.UseVisualStyleBackColor = true;
+			this.button_Otchet.Click += new System.EventHandler(this.button_Otchet_Click);
+			// 
+			// panel_Otchet
+			// 
+			this.panel_Otchet.Controls.Add(this.panel_Otchet_OK);
+			this.panel_Otchet.Controls.Add(this.label3);
+			this.panel_Otchet.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel_Otchet.Location = new System.Drawing.Point(3, 3);
+			this.panel_Otchet.Name = "panel_Otchet";
+			this.panel_Otchet.Size = new System.Drawing.Size(297, 44);
+			this.panel_Otchet.TabIndex = 0;
+			// 
+			// panel_Otchet_OK
+			// 
+			this.panel_Otchet_OK.Controls.Add(this.pictureBox1);
+			this.panel_Otchet_OK.Location = new System.Drawing.Point(6, 9);
+			this.panel_Otchet_OK.Name = "panel_Otchet_OK";
+			this.panel_Otchet_OK.Size = new System.Drawing.Size(25, 26);
+			this.panel_Otchet_OK.TabIndex = 1;
+			// 
+			// pictureBox1
+			// 
+			this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.pictureBox1.ErrorImage = global::FrontEnd.Properties.Resources.close__1_;
+			this.pictureBox1.Image = global::FrontEnd.Properties.Resources.close__1_;
+			this.pictureBox1.InitialImage = global::FrontEnd.Properties.Resources.close__1_;
+			this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+			this.pictureBox1.Name = "pictureBox1";
+			this.pictureBox1.Size = new System.Drawing.Size(25, 26);
+			this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.pictureBox1.TabIndex = 0;
+			this.pictureBox1.TabStop = false;
 			// 
 			// label3
 			// 
@@ -204,14 +449,33 @@
 			this.label3.TabIndex = 0;
 			this.label3.Text = "Отчёт";
 			// 
-			// panel2
+			// panel_Raport
 			// 
-			this.panel2.Controls.Add(this.label4);
-			this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel2.Location = new System.Drawing.Point(3, 48);
-			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(297, 39);
-			this.panel2.TabIndex = 1;
+			this.panel_Raport.Controls.Add(this.panel_raport_OK);
+			this.panel_Raport.Controls.Add(this.label4);
+			this.panel_Raport.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel_Raport.Location = new System.Drawing.Point(3, 53);
+			this.panel_Raport.Name = "panel_Raport";
+			this.panel_Raport.Size = new System.Drawing.Size(297, 44);
+			this.panel_Raport.TabIndex = 1;
+			// 
+			// panel_raport_OK
+			// 
+			this.panel_raport_OK.Controls.Add(this.pictureBox2);
+			this.panel_raport_OK.Location = new System.Drawing.Point(6, 9);
+			this.panel_raport_OK.Name = "panel_raport_OK";
+			this.panel_raport_OK.Size = new System.Drawing.Size(25, 26);
+			this.panel_raport_OK.TabIndex = 2;
+			// 
+			// pictureBox2
+			// 
+			this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.pictureBox2.Location = new System.Drawing.Point(0, 0);
+			this.pictureBox2.Name = "pictureBox2";
+			this.pictureBox2.Size = new System.Drawing.Size(25, 26);
+			this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.pictureBox2.TabIndex = 0;
+			this.pictureBox2.TabStop = false;
 			// 
 			// label4
 			// 
@@ -222,14 +486,33 @@
 			this.label4.TabIndex = 0;
 			this.label4.Text = "Рапорт";
 			// 
-			// panel3
+			// panel_Otzv
 			// 
-			this.panel3.Controls.Add(this.label5);
-			this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel3.Location = new System.Drawing.Point(3, 93);
-			this.panel3.Name = "panel3";
-			this.panel3.Size = new System.Drawing.Size(297, 39);
-			this.panel3.TabIndex = 2;
+			this.panel_Otzv.Controls.Add(this.panel_Otzv_OK);
+			this.panel_Otzv.Controls.Add(this.label5);
+			this.panel_Otzv.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.panel_Otzv.Location = new System.Drawing.Point(3, 103);
+			this.panel_Otzv.Name = "panel_Otzv";
+			this.panel_Otzv.Size = new System.Drawing.Size(297, 44);
+			this.panel_Otzv.TabIndex = 2;
+			// 
+			// panel_Otzv_OK
+			// 
+			this.panel_Otzv_OK.Controls.Add(this.pictureBox3);
+			this.panel_Otzv_OK.Location = new System.Drawing.Point(6, 9);
+			this.panel_Otzv_OK.Name = "panel_Otzv_OK";
+			this.panel_Otzv_OK.Size = new System.Drawing.Size(25, 26);
+			this.panel_Otzv_OK.TabIndex = 2;
+			// 
+			// pictureBox3
+			// 
+			this.pictureBox3.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.pictureBox3.Location = new System.Drawing.Point(0, 0);
+			this.pictureBox3.Name = "pictureBox3";
+			this.pictureBox3.Size = new System.Drawing.Size(25, 26);
+			this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.pictureBox3.TabIndex = 0;
+			this.pictureBox3.TabStop = false;
 			// 
 			// label5
 			// 
@@ -242,12 +525,31 @@
 			// 
 			// panel4
 			// 
+			this.panel4.Controls.Add(this.panel_Dnevnik_OK);
 			this.panel4.Controls.Add(this.label6);
 			this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel4.Location = new System.Drawing.Point(3, 138);
+			this.panel4.Location = new System.Drawing.Point(3, 153);
 			this.panel4.Name = "panel4";
-			this.panel4.Size = new System.Drawing.Size(297, 39);
+			this.panel4.Size = new System.Drawing.Size(297, 44);
 			this.panel4.TabIndex = 3;
+			// 
+			// panel_Dnevnik_OK
+			// 
+			this.panel_Dnevnik_OK.Controls.Add(this.pictureBox4);
+			this.panel_Dnevnik_OK.Location = new System.Drawing.Point(6, 10);
+			this.panel_Dnevnik_OK.Name = "panel_Dnevnik_OK";
+			this.panel_Dnevnik_OK.Size = new System.Drawing.Size(25, 26);
+			this.panel_Dnevnik_OK.TabIndex = 2;
+			// 
+			// pictureBox4
+			// 
+			this.pictureBox4.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.pictureBox4.Location = new System.Drawing.Point(0, 0);
+			this.pictureBox4.Name = "pictureBox4";
+			this.pictureBox4.Size = new System.Drawing.Size(25, 26);
+			this.pictureBox4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.pictureBox4.TabIndex = 0;
+			this.pictureBox4.TabStop = false;
 			// 
 			// label6
 			// 
@@ -260,119 +562,57 @@
 			// 
 			// panel5
 			// 
+			this.panel5.Controls.Add(this.panel19);
 			this.panel5.Controls.Add(this.label7);
 			this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel5.Location = new System.Drawing.Point(3, 183);
+			this.panel5.Location = new System.Drawing.Point(3, 203);
 			this.panel5.Name = "panel5";
-			this.panel5.Size = new System.Drawing.Size(297, 39);
+			this.panel5.Size = new System.Drawing.Size(297, 44);
 			this.panel5.TabIndex = 4;
+			// 
+			// panel19
+			// 
+			this.panel19.Controls.Add(this.pictureBox5);
+			this.panel19.Location = new System.Drawing.Point(6, 12);
+			this.panel19.Name = "panel19";
+			this.panel19.Size = new System.Drawing.Size(25, 26);
+			this.panel19.TabIndex = 2;
+			// 
+			// pictureBox5
+			// 
+			this.pictureBox5.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.pictureBox5.Location = new System.Drawing.Point(0, 0);
+			this.pictureBox5.Name = "pictureBox5";
+			this.pictureBox5.Size = new System.Drawing.Size(25, 26);
+			this.pictureBox5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.pictureBox5.TabIndex = 0;
+			this.pictureBox5.TabStop = false;
 			// 
 			// label7
 			// 
 			this.label7.AutoSize = true;
 			this.label7.Location = new System.Drawing.Point(54, 12);
 			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(90, 17);
+			this.label7.Size = new System.Drawing.Size(178, 17);
 			this.label7.TabIndex = 0;
-			this.label7.Text = "Чего-то ещё";
+			this.label7.Text = "Индивидуальное задание";
 			// 
 			// panel6
 			// 
 			this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel6.Location = new System.Drawing.Point(306, 3);
 			this.panel6.Name = "panel6";
-			this.panel6.Size = new System.Drawing.Size(297, 39);
+			this.panel6.Size = new System.Drawing.Size(297, 44);
 			this.panel6.TabIndex = 5;
-			// 
-			// panel7
-			// 
-			this.panel7.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel7.Location = new System.Drawing.Point(609, 3);
-			this.panel7.Name = "panel7";
-			this.panel7.Size = new System.Drawing.Size(299, 39);
-			this.panel7.TabIndex = 6;
-			// 
-			// panel8
-			// 
-			this.panel8.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel8.Location = new System.Drawing.Point(306, 48);
-			this.panel8.Name = "panel8";
-			this.panel8.Size = new System.Drawing.Size(297, 39);
-			this.panel8.TabIndex = 7;
-			// 
-			// panel9
-			// 
-			this.panel9.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel9.Location = new System.Drawing.Point(609, 48);
-			this.panel9.Name = "panel9";
-			this.panel9.Size = new System.Drawing.Size(299, 39);
-			this.panel9.TabIndex = 8;
-			// 
-			// panel10
-			// 
-			this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel10.Location = new System.Drawing.Point(306, 93);
-			this.panel10.Name = "panel10";
-			this.panel10.Size = new System.Drawing.Size(297, 39);
-			this.panel10.TabIndex = 9;
-			// 
-			// panel11
-			// 
-			this.panel11.Controls.Add(this.button_Otzv);
-			this.panel11.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel11.Location = new System.Drawing.Point(609, 93);
-			this.panel11.Name = "panel11";
-			this.panel11.Size = new System.Drawing.Size(299, 39);
-			this.panel11.TabIndex = 10;
-			// 
-			// panel12
-			// 
-			this.panel12.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel12.Location = new System.Drawing.Point(306, 138);
-			this.panel12.Name = "panel12";
-			this.panel12.Size = new System.Drawing.Size(297, 39);
-			this.panel12.TabIndex = 11;
-			// 
-			// panel13
-			// 
-			this.panel13.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel13.Location = new System.Drawing.Point(609, 138);
-			this.panel13.Name = "panel13";
-			this.panel13.Size = new System.Drawing.Size(299, 39);
-			this.panel13.TabIndex = 12;
-			// 
-			// panel14
-			// 
-			this.panel14.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel14.Location = new System.Drawing.Point(306, 183);
-			this.panel14.Name = "panel14";
-			this.panel14.Size = new System.Drawing.Size(297, 39);
-			this.panel14.TabIndex = 13;
-			// 
-			// panel15
-			// 
-			this.panel15.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel15.Location = new System.Drawing.Point(609, 183);
-			this.panel15.Name = "panel15";
-			this.panel15.Size = new System.Drawing.Size(299, 39);
-			this.panel15.TabIndex = 14;
-			// 
-			// button_Otzv
-			// 
-			this.button_Otzv.Location = new System.Drawing.Point(171, 6);
-			this.button_Otzv.Name = "button_Otzv";
-			this.button_Otzv.Size = new System.Drawing.Size(123, 30);
-			this.button_Otzv.TabIndex = 1;
-			this.button_Otzv.Text = "Выбрать";
-			this.button_Otzv.UseVisualStyleBackColor = true;
-			this.button_Otzv.Click += new System.EventHandler(this.button_Otzv_Click);
 			// 
 			// MainWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(918, 411);
+			this.ClientSize = new System.Drawing.Size(918, 433);
 			this.Controls.Add(this.MainPanel);
+			this.MaximumSize = new System.Drawing.Size(936, 480);
+			this.MinimumSize = new System.Drawing.Size(936, 480);
 			this.Name = "MainWindow";
 			this.Text = "Template Master [Word]";
 			this.Load += new System.EventHandler(this.MainWindow_Load);
@@ -381,17 +621,32 @@
 			this.panelTop.ResumeLayout(false);
 			this.StackItems_flowLayoutPanel.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
-			this.panel1.ResumeLayout(false);
-			this.panel1.PerformLayout();
-			this.panel2.ResumeLayout(false);
-			this.panel2.PerformLayout();
-			this.panel3.ResumeLayout(false);
-			this.panel3.PerformLayout();
+			this.panel18.ResumeLayout(false);
+			this.panel15.ResumeLayout(false);
+			this.panel13.ResumeLayout(false);
+			this.panel11.ResumeLayout(false);
+			this.panel9.ResumeLayout(false);
+			this.panel7.ResumeLayout(false);
+			this.panel_Otchet.ResumeLayout(false);
+			this.panel_Otchet.PerformLayout();
+			this.panel_Otchet_OK.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+			this.panel_Raport.ResumeLayout(false);
+			this.panel_Raport.PerformLayout();
+			this.panel_raport_OK.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+			this.panel_Otzv.ResumeLayout(false);
+			this.panel_Otzv.PerformLayout();
+			this.panel_Otzv_OK.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
 			this.panel4.ResumeLayout(false);
 			this.panel4.PerformLayout();
+			this.panel_Dnevnik_OK.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
 			this.panel5.ResumeLayout(false);
 			this.panel5.PerformLayout();
-			this.panel11.ResumeLayout(false);
+			this.panel19.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
 			this.ResumeLayout(false);
 
 		}
@@ -407,11 +662,11 @@
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-		private System.Windows.Forms.Panel panel1;
+		private System.Windows.Forms.Panel panel_Otchet;
 		private System.Windows.Forms.Label label3;
-		private System.Windows.Forms.Panel panel2;
+		private System.Windows.Forms.Panel panel_Raport;
 		private System.Windows.Forms.Label label4;
-		private System.Windows.Forms.Panel panel3;
+		private System.Windows.Forms.Panel panel_Otzv;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.Panel panel4;
 		private System.Windows.Forms.Label label6;
@@ -428,6 +683,26 @@
 		private System.Windows.Forms.Panel panel8;
 		private System.Windows.Forms.Panel panel7;
 		private System.Windows.Forms.Panel panel6;
+		private System.Windows.Forms.Panel panel18;
+		private System.Windows.Forms.Button button_Otmena;
+		private System.Windows.Forms.Button button_OK;
+		private System.Windows.Forms.Panel panel17;
+		private System.Windows.Forms.Panel panel16;
+		private System.Windows.Forms.Button button3;
+		private System.Windows.Forms.Button button_Dnevnik;
+		private System.Windows.Forms.Button button_Raport;
+		private System.Windows.Forms.Button button_Otchet;
+		private System.Windows.Forms.Panel panel_Otchet_OK;
+		private System.Windows.Forms.Panel panel_raport_OK;
+		private System.Windows.Forms.Panel panel_Otzv_OK;
+		private System.Windows.Forms.Panel panel_Dnevnik_OK;
+		private System.Windows.Forms.Panel panel19;
+		private System.Windows.Forms.PictureBox pictureBox1;
+		private System.Windows.Forms.PictureBox pictureBox2;
+		private System.Windows.Forms.PictureBox pictureBox3;
+		private System.Windows.Forms.PictureBox pictureBox4;
+		private System.Windows.Forms.PictureBox pictureBox5;
+		private System.Windows.Forms.Button button_start;
 	}
 }
 
