@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -6,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
 using MySqlX.XDevAPI;
+
 
 namespace BackEnd_DLL
 {
@@ -200,6 +202,28 @@ namespace BackEnd_DLL
 		}
 
 		/*
+			Возвращает список всех студентов
+		*/
+		public List<Student> GetStudents()
+        {
+			List<Student> studentsList = new List<Student>();
+			string[,] studentsArr = GetTable("students");
+			int rowCount = studentsArr.GetLength(0);
+
+			for (int i = 0; i < rowCount; ++i)
+			{
+				//получаем массив с данными об ученике, практике и заполняем структуру
+				string[] studentArr = GetDesiredRowFromArr(studentsArr, i);
+				string[] practiceArr = GetPracticeById(studentArr[0]);
+				Student currentStudent = new Student();
+				MakeStudent(studentArr, practiceArr, currentStudent);
+
+				studentsList.Add(currentStudent);
+			}
+			return studentsList;
+		}
+
+		/*
 			Заполняет структуру Teacher данными из массива строк, полученного из бд
 		*/
 		public void MakeTeacher(string[] teacherArr, Teacher teacher)
@@ -289,11 +313,33 @@ namespace BackEnd_DLL
 		*/
 		public string[] GetPracticeById(string id)
         {
-			string sql = "SELECT * FROM template_engine.practices WHERE student_id = '" + id + "';";
+			//string sql = "SELECT * FROM template_engine.practices WHERE student_id = '" + id + "';";
 			string condition = " WHERE student_id = '" + id + "';";
 			string[,] practice = GetRowsWithCondition("practices", condition);
+			if (practice == null)
+            {
+				string[] practiceArrNull = new string[9]; // TODO: кол-во столбцов в таблице вынести в глоб переменую
+				for (int i = 0; i < practiceArrNull.Length; ++i)
+                {
+					practiceArrNull[i] = "";
+                }
+				return practiceArrNull;
+            }
+
 			string[] practiceArr = GetDesiredRowFromArr(practice, 0);
 			return practiceArr;
+		}
+
+		/*
+		  Возвращает массив с инфой об учителе по его id
+		 */
+		public string[] GetTeacherById(string id)
+        {
+			//string sql = "SELECT * FROM template_engine.teachers WHERE id = '" + id + "';";
+			string condition = " WHERE id = '" + id + "';";
+			string[,] teacherArrs = GetRowsWithCondition("teachers", condition);
+			string[] teacherArr = GetDesiredRowFromArr(teacherArrs, 0);
+			return teacherArr;
 		}
 
 		/*
@@ -376,35 +422,15 @@ namespace BackEnd_DLL
 			return desiredRow;
 		}
 
+		/*
+			Возвращает утверждающего
+		*/
+		public Teacher GetApprover()
+        {
+			Teacher approver = new Teacher();
+			string[] approverArr = GetTeacherById("0");
+			MakeTeacher(approverArr, approver);
+			return approver;
+        }
 	}
 }
-
-
-
-
-/*
-<-------------------------------- HOW -----------TO ----------------USE--------------------------->
-
-	ManagingRequestsBD mrBD = new ManagingRequestsBD();
-	mrBD.CreateTable("test_table", "test_column", "VARCHAR(45)");
-
-	mrBD.GetTable("test_table");
-
-	mrBD.ChangeColumnValue("test_table", "test_column", "someValue", "1");
-
-	string[,] arr = {
-			{ "", "Жмышеноко", "лох", "СТ", "12345"},
-			{ "", "Коля Кухаркин", "жызн", "ОТФ", "11235"},
-			{ "", "Йоба", "8Боба", "9", ""}, // Ммм, найс!!!!!!
-			{ "", "10", "11", "12", "33"}
-	};
-	mrBD.WritingToTable("students", arr);
-
-	string[,] arr = {
-			{ "1", "2", "Копать траву", "Красить землю", "Абитура", "Jopa", "+10 k stamina", "5"},
-            { "1", "1", "Копать траву", "Красить землю", "Абитура", "Jopa", "", ""},
-            { "Йоба", "8Боба", "9", "", "", "", "", ""},
-            { "10", "11", "12", "33", "", "", "", ""}
-	};
-	mrBD.WritingToTable("practices", arr);
-*/
