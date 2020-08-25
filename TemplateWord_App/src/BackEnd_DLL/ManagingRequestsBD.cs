@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -56,52 +57,7 @@ namespace BackEnd_DLL
         {
 			if (tableName != String.Empty)
             {
-				string sql = "SELECT * FROM " + tableName + ";";
-				try
-                {
-					MySqlCommand command = new MySqlCommand(sql, _con); // запрос на все данные
-					MySqlDataReader reader = command.ExecuteReader(); // получае данные
-					if (reader.HasRows) // если есть строки
-                    {
-						int rowCount = 0;
-						int colCount = reader.FieldCount;
-
-						//узнаем кол-во строк
-						while (reader.Read())
-						{
-							++rowCount;
-						}
-
-						//закрываем ридер и пересоздаем его
-						reader.Close();
-						reader = command.ExecuteReader();
-
-						//создаем массив строк и заполняем его
-						string[,] recordsArr = new string[rowCount, colCount];
-						int i = 0;
-						while (reader.Read())
-						{
-							for (int j = 0; j < colCount; ++j)
-                            {
-								recordsArr[i,j] = reader[j].ToString();
-                            }
-							++i;
-						}
-
-						//закрываем ридер и возвращаем массив либо null
-						reader.Close();
-						return recordsArr;
-					}
-					reader.Close();
-					return null;
-				}
-
-				//ловиим исключения при работе с бд
-				catch (Exception e)
-				{
-					Console.WriteLine("{0} Exception caught.", e);
-					return null;
-				}
+				return GetRowsWithCondition(tableName, ";");
 			}
 			return null;
         }
@@ -219,8 +175,210 @@ namespace BackEnd_DLL
 				return null;
 			}
 		}
+
+		/*
+			Возвращает лист всех преподавателей 
+		*/
+		public List<Teacher> GetTeachers()
+        {
+			List<Teacher> teachersList = new List<Teacher>();
+			string[,] teachersArr = GetTable("teachers");
+			int rowCount = teachersArr.GetLength(0);
+
+			for (int i = 0; i < rowCount; ++i)
+            {
+				//получаем массив с данными о преподе и заполняем структуру
+				string[] teacherArr = GetDesiredRowFromArr(teachersArr, i);
+				Teacher currentTeacher = new Teacher();
+				MakeTeacher(teacherArr, currentTeacher);
+
+				// получаем список учеников для препода и добавляем его в лист
+				currentTeacher.students = GetStudentsForTeacher(currentTeacher.id);
+				teachersList.Add(currentTeacher);
+			}
+			return teachersList;
+		}
+
+		/*
+			Заполняет структуру Teacher данными из массива строк, полученного из бд
+		*/
+		public void MakeTeacher(string[] teacherArr, Teacher teacher)
+        {
+			int i = 0;
+
+			teacher.id = teacherArr[i++];
+			string[] nameArr = teacherArr[i++].Split(' ');
+			teacher.secondName = nameArr[0];
+			teacher.name = nameArr[1];
+			teacher.middleName = nameArr[2];
+			teacher.rank = teacherArr[i++];
+			teacher.position = teacherArr[i++];
+			teacher.department = teacherArr[i++];
+			teacher.personalNumber = teacherArr[i++];
+			teacher.directionNumber = teacherArr[i++];	
+		}
+
+		/*
+			Заполняет структуру student значениями из массива studentArr
+		*/
+		public void MakeStudent(string[] studentArr, string[] practiceArr, Student student)
+        {
+			int i = 0;
+
+			//заполнение инфо из массива studentArr
+			student.id = studentArr[i++];
+			string[] nameArr = studentArr[i++].Split(' ');
+			student.secondName = nameArr[0];
+			student.name = nameArr[1];
+			student.middleName = nameArr[2];
+			student.rank = studentArr[i++];
+			student.faculty = studentArr[i++];
+			student.course = studentArr[i][2].ToString(); // третья цифра - номер курса
+
+			i = 1;
+
+			//заполнение инфо из массива practiceArr
+			student.teacherId = practiceArr[i++];
+			student.practiceTypeOne = practiceArr[i++];
+			student.practiceTypeTwo = practiceArr[i++];
+			student.position = practiceArr[i++];
+			student.location = practiceArr[i++];
+			student.date = practiceArr[i++];
+			student.skill = practiceArr[i++];
+			student.mark = practiceArr[i];
+		}
+
+		/*
+			Возвращает список студентов для преподавателя с teacherId
+		*/
+		public List<Student> GetStudentsForTeacher (string teacherId)
+        {
+			List<Student> studentsList = new List<Student>();
+			//string sqlStudentsId = "SELECT student_id FROM template_engine.practices WHERE teacher_id = '" + teacherId + "';";
+			//string sqlStudents = "SELECT * FROM template_engine.students WHERE id in ";
+
+			//получаем массив с id учеников для препода
+			string conditionStudentsId = " WHERE teacher_id = '" + teacherId + "';";
+			string[,] studentsIdArrs = GetRowsWithCondition("practices", conditionStudentsId);
+			
+			//формируем запрос на получение инфы о нужных учениках
+			string conditionStudents = " WHERE id in (";
+			int idCounts = studentsIdArrs.GetLength(0);
+			for (int i = 0; i < idCounts; ++i)
+            {
+				conditionStudents += studentsIdArrs[i, 0] + ", ";
+            }
+			conditionStudents = conditionStudents.Remove(conditionStudents.Length - 2, 2) + ");";
+
+			//получаем инфу об учениках, заполняем структуру, добавляем в список
+			string[,] studentArrs = GetRowsWithCondition("students", conditionStudents);
+			int studentsCount = studentArrs.GetLength(0);
+			for (int i = 0; i < studentsCount; ++i)
+            {
+				string[] studentArr = GetDesiredRowFromArr(studentArrs, i);
+				string[] practiceArr = GetPracticeById(studentArr[0]);
+				Student student = new Student();
+				MakeStudent(studentArr, practiceArr, student);
+				studentsList.Add(student);
+			}
+			return studentsList;
+        }
+
+		/*
+			Возвращает массив с информацией о практике ученика с номером id
+		*/
+		public string[] GetPracticeById(string id)
+        {
+			string sql = "SELECT * FROM template_engine.practices WHERE student_id = '" + id + "';";
+			string condition = " WHERE student_id = '" + id + "';";
+			string[,] practice = GetRowsWithCondition("practices", condition);
+			string[] practiceArr = GetDesiredRowFromArr(practice, 0);
+			return practiceArr;
+		}
+
+		/*
+			Возвращает структуру студента по его id
+			Внимание: рабоате или нет хз - не отлаживал
+		*/
+		public Student GetStudentById (string id)
+        {
+			Student student = new Student();
+			if (id != String.Empty)
+            {
+				string sql = "SELECT * FROM template_engine.students WHERE id = '" + id + "';";
+				string condition = " WHERE id = '" + id + "';";
+				string[,] studentArrs = GetRowsWithCondition("students", condition);
+				string[] studentArr = GetDesiredRowFromArr(studentArrs, 0);
+
+				string[] practiceArr = GetPracticeById(studentArr[0]);
+				MakeStudent(studentArr, practiceArr, student);
+			}
+			return student;
+
+		}
+
+		/*
+			Возвращает массив строк со значениями из таблицы tableName,
+			удовлетворяющие условию condition
+		*/
+		public string[,] GetRowsWithCondition (string tableName, string condition)
+        {
+			string sql = "SELECT * FROM template_engine." + tableName + condition;
+			MySqlCommand command = new MySqlCommand(sql, _con); // запрос на все данные
+			MySqlDataReader reader = command.ExecuteReader(); // получае данные
+			if (reader.HasRows) // если есть строки
+			{
+				int rowCount = 0;
+				int colCount = reader.FieldCount;
+
+				//узнаем кол-во строк
+				while (reader.Read())
+				{
+					++rowCount;
+				}
+
+				//закрываем ридер и пересоздаем его
+				reader.Close();
+				reader = command.ExecuteReader();
+
+				//создаем массив строк и заполняем его
+				string[,] recordsArr = new string[rowCount, colCount];
+				int i = 0;
+				while (reader.Read())
+				{
+					for (int j = 0; j < colCount; ++j)
+					{
+						recordsArr[i, j] = reader[j].ToString();
+					}
+					++i;
+				}
+
+				//закрываем ридер и возвращаем массив либо null
+				reader.Close();
+				return recordsArr;
+			}
+			reader.Close();
+			return null;
+		}
+
+		/*
+			Обертка для получения в виде одномерного массива элемента rowNumber
+			из двумерного массива arr
+		*/
+		public string[] GetDesiredRowFromArr (string[,] arr, int rowNumber)
+        {
+			int colCount = arr.GetLength(1);
+			string[] desiredRow = new string[colCount];
+			for (int i = 0; i < colCount; ++i)
+            {
+				desiredRow[i] = arr[rowNumber, i];
+            }
+			return desiredRow;
+		}
+
 	}
 }
+
 
 
 
