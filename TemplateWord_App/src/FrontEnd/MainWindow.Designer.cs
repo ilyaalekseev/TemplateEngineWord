@@ -29,6 +29,7 @@
 		private void InitializeComponent()
 		{
 			this.MainPanel = new System.Windows.Forms.Panel();
+			this.button_start = new System.Windows.Forms.Button();
 			this.label2 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.comboBox_Faculty = new System.Windows.Forms.ComboBox();
@@ -77,7 +78,6 @@
 			this.pictureBox5 = new System.Windows.Forms.PictureBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.panel6 = new System.Windows.Forms.Panel();
-			this.button_start = new System.Windows.Forms.Button();
 			this.MainPanel.SuspendLayout();
 			this.panelTop.SuspendLayout();
 			this.StackItems_flowLayoutPanel.SuspendLayout();
@@ -119,6 +119,16 @@
 			this.MainPanel.Name = "MainPanel";
 			this.MainPanel.Size = new System.Drawing.Size(918, 433);
 			this.MainPanel.TabIndex = 0;
+			// 
+			// button_start
+			// 
+			this.button_start.Location = new System.Drawing.Point(783, 66);
+			this.button_start.Name = "button_start";
+			this.button_start.Size = new System.Drawing.Size(123, 26);
+			this.button_start.TabIndex = 8;
+			this.button_start.Text = "ОК";
+			this.button_start.UseVisualStyleBackColor = true;
+			this.button_start.Click += new System.EventHandler(this.button_start_Click);
 			// 
 			// label2
 			// 
@@ -244,6 +254,7 @@
 			this.button_Otmena.TabIndex = 1;
 			this.button_Otmena.Text = "Отмена";
 			this.button_Otmena.UseVisualStyleBackColor = true;
+			this.button_Otmena.Click += new System.EventHandler(this.button_Otmena_Click);
 			// 
 			// button_OK
 			// 
@@ -253,6 +264,7 @@
 			this.button_OK.TabIndex = 0;
 			this.button_OK.Text = "Создать документы";
 			this.button_OK.UseVisualStyleBackColor = true;
+			this.button_OK.Click += new System.EventHandler(this.button_OK_Click);
 			// 
 			// panel17
 			// 
@@ -592,16 +604,6 @@
 			this.panel6.Name = "panel6";
 			this.panel6.Size = new System.Drawing.Size(297, 44);
 			this.panel6.TabIndex = 5;
-			// 
-			// button_start
-			// 
-			this.button_start.Location = new System.Drawing.Point(783, 66);
-			this.button_start.Name = "button_start";
-			this.button_start.Size = new System.Drawing.Size(123, 26);
-			this.button_start.TabIndex = 8;
-			this.button_start.Text = "ОК";
-			this.button_start.UseVisualStyleBackColor = true;
-			this.button_start.Click += new System.EventHandler(this.button_start_Click);
 			// 
 			// MainWindow
 			// 

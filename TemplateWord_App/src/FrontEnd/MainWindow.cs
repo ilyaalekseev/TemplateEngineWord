@@ -16,16 +16,20 @@ namespace FrontEnd
 {
 	public partial class MainWindow : Form
 	{
-		ManagingRequestsBD _mrBD;
 		Service _servise;
-		List<string[]> _lstr;
+		List<string[]> _lstrMarks;
 		string _faculty;
 		string _course;
+		bool _flag;
+		
 
 		public MainWindow()
 		{
 			_servise = new Service();
-			_lstr = new List<string[]>();
+			_lstrMarks = new List<string[]>();
+			_flag = true;
+			_faculty = "";
+			_course = "";
 			InitializeComponent();
 			pictureBox1.Image = Resources.close__1_;
 			pictureBox2.Image = Resources.close__1_;
@@ -56,34 +60,36 @@ namespace FrontEnd
 				return false;
 		}
 
-		
+		private async void OpenSetRatings()
+		{
+			// нужно решить как соотнести факультет и его номер
+			if (_lstrMarks.Count == 0)
+			{
+				_lstrMarks = _servise.GetStudentsShortInfo(1, 1);
+				_lstrMarks.Add(new string[] { "Петров Иван Иванович", "12", "4" });
+				_lstrMarks.Add(new string[] { "Моторенков Павел Романыч", "12", "5" });
+				_lstrMarks.Add(new string[] { "Хабибов Чубак Васильевич", "12", "3" });
+			}
 
-		private async void button_Otchet_Click(object sender, EventArgs e)
+			SetRatings sr = new SetRatings(this, _lstrMarks);
+			sr.Show();
+			this.Enabled = false;
+			await GetTaskFromEvent(sr, "FormClosed");
+			this.Enabled = true;
+		}
+
+		private  void button_Otchet_Click(object sender, EventArgs e)
 		{
 			if (!NotFull())
 			{
-				// нужно решить как соотнести факультет и его номер
-				if (_lstr.Count == 0)
-				{
-					_lstr = _servise.GetStudentsShortInfo(1, 1);
-					_lstr.Add(new string[] { "Петров Иван Иванович", "12", "4" });
-					_lstr.Add(new string[] { "Моторенков Павел Романыч", "12", "5" });
-					_lstr.Add(new string[] { "Хабибов Чубак Васильевич", "12", "3" });
-				}
-
-				SetRatings sr = new SetRatings(this, _lstr);
-				sr.Show();
-				this.Enabled = false;
-				await GetTaskFromEvent(sr, "FormClosed");
-				this.Enabled = true;
-
+				OpenSetRatings();
 				pictureBox1.Image = Resources.tick;
 			}
 		}
 
 		public void SetLstr(List<string[]> lstr)
 		{
-			_lstr = lstr;
+			_lstrMarks = lstr;
 		}
 
 		private void button_Raport_Click(object sender, EventArgs e)
@@ -151,25 +157,54 @@ namespace FrontEnd
 
 		private void button_start_Click(object sender, EventArgs e)
 		{
-			tableLayoutPanel1.Visible = true;
-			_course = comboBox_Cours.Text;
+			if (_flag)
+			{
+				tableLayoutPanel1.Visible = true;
+				_course = comboBox_Cours.Text;
 
-			if (comboBox_Faculty.Text == "ИБ")
-			{
-				_faculty = "1";
-			}
-			else if (comboBox_Faculty.Text == "ПМ")
-			{
-				_faculty = "2";
-			}
-			else if (comboBox_Faculty.Text == "СТ")
-			{
-				_faculty = "3";
+				if (_course == "ИБ")
+				{
+					_faculty = "1";
+				}
+				else if (_course == "ПМ")
+				{
+					_faculty = "2";
+				}
+				else if (_course == "СТ")
+				{
+					_faculty = "3";
+				}
+				else
+					_faculty = "4";
+
+				button_start.Text = "Изменить";
+				comboBox_Cours.Enabled = false;
+				comboBox_Faculty.Enabled = false;
+				_flag = false;
 			}
 			else
-				_faculty = "4";
+			{
+				comboBox_Cours.Enabled = true;
+				comboBox_Faculty.Enabled = true;
+				tableLayoutPanel1.Visible = false;
+				_flag = true;
+				button_start.Text = "OK";
+				_course = "";
+				_faculty = "";
+			}
+		}
 
-			button_start.Text = "Изменить";
+		private void button_Otmena_Click(object sender, EventArgs e)
+		{
+			comboBox_Cours.Text = "";
+			comboBox_Faculty.Text = "";
+			_flag = false;
+			button_start_Click(sender, e);
+		}
+
+		private void button_OK_Click(object sender, EventArgs e)
+		{
+
 		}
 	}
 }
