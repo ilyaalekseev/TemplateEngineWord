@@ -40,19 +40,11 @@ namespace BackEnd_DLL
 		// Пока закомментил! 
         public List<Report> MakeReport()
         {
-<<<<<<< HEAD
-			//List<Teacher> prepods = dataBase.GetPrepods();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
-			//string dateReport = dataBase.GetDate();//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
-			//List<Report> reports = new List<Report>();
-			//string[] dates = dateReport.Split('-');
-			//string nowADay = DateTime.Now.ToShortDateString();
-=======
-            List<Teacher> prepods = dataBase.GetTeachers();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
-            string dateReport = dataBase.GetDate();//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
-            List<Report> reports = new List<Report>();
-            string[] dates = dateReport.Split('-');
-            string nowADay = DateTime.Now.ToShortDateString();
->>>>>>> 4bdfd5aec617ccce336694cc8991cf8a2a3e0d5e
+            //List<Teacher> prepods = dataBase.GetTeachers();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
+            //string dateReport = dataBase.GetDate();//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
+            //List<Report> reports = new List<Report>();
+            //string[] dates = dateReport.Split('-');
+            //string nowADay = DateTime.Now.ToShortDateString();
 
 			//foreach(Teacher prepod in prepods)
 			//{
