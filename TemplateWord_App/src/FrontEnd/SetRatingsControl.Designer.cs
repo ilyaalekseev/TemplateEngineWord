@@ -30,7 +30,7 @@
 		{
 			this.label_FIO = new System.Windows.Forms.Label();
 			this.label_group = new System.Windows.Forms.Label();
-			this.comboBox1 = new System.Windows.Forms.ComboBox();
+			this.comboBox_Mark = new System.Windows.Forms.ComboBox();
 			this.SuspendLayout();
 			// 
 			// label_FIO
@@ -51,25 +51,25 @@
 			this.label_group.TabIndex = 1;
 			this.label_group.Text = " Группа";
 			// 
-			// comboBox1
+			// comboBox_Mark
 			// 
-			this.comboBox1.FormattingEnabled = true;
-			this.comboBox1.Items.AddRange(new object[] {
-            "2",
-            "3",
+			this.comboBox_Mark.FormattingEnabled = true;
+			this.comboBox_Mark.Items.AddRange(new object[] {
+            "5",
             "4",
-            "5"});
-			this.comboBox1.Location = new System.Drawing.Point(538, 7);
-			this.comboBox1.Name = "comboBox1";
-			this.comboBox1.Size = new System.Drawing.Size(121, 24);
-			this.comboBox1.TabIndex = 2;
+            "3",
+            "2"});
+			this.comboBox_Mark.Location = new System.Drawing.Point(520, 9);
+			this.comboBox_Mark.Name = "comboBox_Mark";
+			this.comboBox_Mark.Size = new System.Drawing.Size(121, 24);
+			this.comboBox_Mark.TabIndex = 2;
 			// 
 			// SetRatingsControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.BackColor = System.Drawing.SystemColors.ButtonFace;
-			this.Controls.Add(this.comboBox1);
+			this.Controls.Add(this.comboBox_Mark);
 			this.Controls.Add(this.label_group);
 			this.Controls.Add(this.label_FIO);
 			this.Name = "SetRatingsControl";
@@ -83,6 +83,6 @@
 
 		private System.Windows.Forms.Label label_FIO;
 		private System.Windows.Forms.Label label_group;
-		private System.Windows.Forms.ComboBox comboBox1;
+		private System.Windows.Forms.ComboBox comboBox_Mark;
 	}
 }
