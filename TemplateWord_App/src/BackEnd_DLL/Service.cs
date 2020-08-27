@@ -35,21 +35,21 @@ namespace BackEnd_DLL
                 DocX document = DocX.Load(pathDocument + "Дневник.docx");//создаю копию шаблона в той же директории, что и шаблон
                 document.SaveAs(pathDocument + "Дневник " + diary._dic["name_of_student_full"] + ".docx");// в том же каталоге создаю заполненный дневник на конкретного слушателя
                 var valuesToFill = new Content(
-                    new FieldContent("Practic_type", _dic["Practic_type"]),
-                    new FieldContent("Practic_type_2", _dic["Practic_type_2"]),
-                    new FieldContent("name_of_student_full", _dic["name_of_student_full"]),
-                    new FieldContent("date_start", _dic["date_start"]),
-                    new FieldContent("date_end", _dic["date_end"]),
-                    new FieldContent("footer_date", _dic["footer_date"]),
-                    new FieldContent("footer_number", _dic["footer_number"]),
-                    new FieldContent("head_prepod", _dic["head_prepod"]),
-                    new FieldContent("head_date_1", _dic["head_date_1"]),
-                    new FieldContent("rank_of_student", _dic["rank_of_student"]),
-                    new FieldContent("footer_name_of_student", _dic["footer_name_of_student"]),
-                    new FieldContent("name_of_student_RP", _dic["name_of_student_RP"]),
-                    new FieldContent("head_date_2", _dic["head_date_2"])
+                    new FieldContent("Practic_type", diary._dic["Practic_type"]),
+                    new FieldContent("Practic_type_2", diary._dic["Practic_type_2"]),
+                    new FieldContent("name_of_student_full", diary._dic["name_of_student_full"]),
+                    new FieldContent("date_start", diary._dic["date_start"]),
+                    new FieldContent("date_end", diary._dic["date_end"]),
+                    new FieldContent("footer_date", diary._dic["footer_date"]),
+                    new FieldContent("footer_number", diary._dic["footer_number"]),
+                    new FieldContent("head_prepod", diary._dic["head_prepod"]),
+                    new FieldContent("head_date_1", diary._dic["head_date_1"]),
+                    new FieldContent("rank_of_student", diary._dic["rank_of_student"]),
+                    new FieldContent("footer_name_of_student", diary._dic["footer_name_of_student"]),
+                    new FieldContent("name_of_student_RP", diary._dic["name_of_student_RP"]),
+                    new FieldContent("head_date_2", diary._dic["head_date_2"])
                     );
-                using (var outputDocument = new TemplateProcessor("Дневник " + _dic["name_of_student_full"] + ".docx")
+                using (var outputDocument = new TemplateProcessor("Дневник " + diary._dic["name_of_student_full"] + ".docx")
                     .SetRemoveContentControls(true))
                 {
                     outputDocument.FillContent(valuesToFill);
@@ -98,7 +98,7 @@ namespace BackEnd_DLL
                 dicGeneral.Add("Head_rank", approver.rank);
                 dicGeneral.Add("Head_name", prepod.name[0] + "." + prepod.middleName[0] + ". " + prepod.secondName);
                 dicGeneral.Add("Head_date", nowADay);
-                dicGeneral.Add("Practic_type", prepod.students[0].practicType);
+                dicGeneral.Add("Practic_type", prepod.students[0].practiceTypeOne);
 
                 List<Dictionary<string, string>> dicStudents = new List<Dictionary<string, string>>();
                 foreach (Student stud in prepod.students)
@@ -181,7 +181,7 @@ namespace BackEnd_DLL
                 dicGeneral.Add("Head_rank", approver.rank);
                 dicGeneral.Add("Head_name", approver.name[0] + "." + approver.middleName[0] + ". " + approver.secondName);
                 dicGeneral.Add("Head_date", nowADay);
-                dicGeneral.Add("Practic_type", prepod.students[0].practicType);
+                dicGeneral.Add("Practic_type", prepod.students[0].practiceTypeOne);
                 dicGeneral.Add("institute", "ИКСИ");
 
                 foreach (Student stud in prepod.students)
@@ -259,9 +259,21 @@ namespace BackEnd_DLL
 
         public List<Dairy> MakeDairy(string course, string faculty)
         {
-            List<Teacher> prepods = dataBase.GetTeachers();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
-            string dateDairy = prepods[0].students[0].date;//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
             Teacher approver = dataBase.GetApprover();
+            List<Student> students = dataBase.GetStudents();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
+
+            List<Teacher> prepods = new List<Teacher>();
+            foreach(Student stud in students)
+            {
+                if (stud.course == course && stud.faculty == faculty)
+                {
+                    Teacher prepod = new Teacher();
+                    dataBase.MakeTeacher(dataBase.GetTeacherById(stud.teacherId), prepod);
+                    prepods.Add(prepod);
+                }      
+            }
+            string dateDairy = prepods[0].students[0].date;//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
+            
             List<Dairy> dairies = new List<Dairy>();
             string[] dates = dateDairy.Split('-');
             string nowADay = DateTime.Now.ToShortDateString();
@@ -282,6 +294,9 @@ namespace BackEnd_DLL
 
                 foreach (Student stud in prepod.students)
                 {
+                    if (stud.course != course && stud.faculty != faculty)
+                        continue;
+
                     dicGeneral["rank_of_student"] = stud.rank;
                     dicGeneral["name_of_student_full"] = stud.secondName + " " + stud.name + " " + stud.middleName;
                     dicGeneral["footer_name_of_student"] = stud.name[0] + "." + stud.middleName[0] + ". " + stud.secondName;
