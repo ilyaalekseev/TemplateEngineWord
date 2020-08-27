@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using System.Collections;
 using Word = Microsoft.Office.Interop.Word; // Читать и её использовать
 
+
 namespace BackEnd_DLL
 {
 	// Класс, управляющий документом Word
-    public abstract class DocumentWord
+	public abstract class DocumentWord
 	{
-		private string _fullPath;
 		private Dictionary<string, string> dic;
-    }
+	}
 }

@@ -8,7 +8,7 @@ namespace BackEnd_DLL
 {
     public interface IService
     {
-        List<DocumentWord> MakeDocuments(string course, string faculty);
+        void MakeDocuments(string course, string faculty);
 
     }
 }

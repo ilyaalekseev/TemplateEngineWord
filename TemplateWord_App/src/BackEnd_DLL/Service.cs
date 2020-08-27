@@ -3,33 +3,67 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TemplateEngine.Docx;
+using Xceed.Words.NET;
 
 namespace BackEnd_DLL
 {
 	public class Service : IService
 	{
 		private ManagingRequestsBD dataBase;
-		private List<DocumentWord> documents;
+        private string _fullPath = "C:/doci/oki/tyt/";
 
-		public Service()
+        public Service()
 		{
 			dataBase = new ManagingRequestsBD();
 		}
 
-		public List<DocumentWord> MakeDocuments(string course, string faculty)
+		public void MakeDocuments(string course, string faculty)
 		{
-			/*
-             *заполнение доков 
-             */
+            CreateDiaryTemplate(course, faculty);
 
-			return documents;
 		}
 
-		// Верни плез список про слушаков типа:
-		// List<string[]> lstr; 
-		// lstr.Add([Фамилия Имя Отчество, группа, отметка])  ...
-		// если отметки нет, то в этом поле просто пустая строка
-		public List<string[]> GetStudentsShortInfo(int faculty, int course)
+        public void CreateDiaryTemplate(string course, string faculty)
+        {
+            List<Dairy> dairies = MakeDairy(course, faculty);
+
+            string pathDocument = _fullPath + "diary.docx";
+
+            foreach (Dairy diary in dairies)
+            {
+                DocX document = DocX.Load(pathDocument + "Дневник.docx");//создаю копию шаблона в той же директории, что и шаблон
+                document.SaveAs(pathDocument + "Дневник " + diary._dic["name_of_student_full"] + ".docx");// в том же каталоге создаю заполненный дневник на конкретного слушателя
+                var valuesToFill = new Content(
+                    new FieldContent("Practic_type", _dic["Practic_type"]),
+                    new FieldContent("Practic_type_2", _dic["Practic_type_2"]),
+                    new FieldContent("name_of_student_full", _dic["name_of_student_full"]),
+                    new FieldContent("date_start", _dic["date_start"]),
+                    new FieldContent("date_end", _dic["date_end"]),
+                    new FieldContent("footer_date", _dic["footer_date"]),
+                    new FieldContent("footer_number", _dic["footer_number"]),
+                    new FieldContent("head_prepod", _dic["head_prepod"]),
+                    new FieldContent("head_date_1", _dic["head_date_1"]),
+                    new FieldContent("rank_of_student", _dic["rank_of_student"]),
+                    new FieldContent("footer_name_of_student", _dic["footer_name_of_student"]),
+                    new FieldContent("name_of_student_RP", _dic["name_of_student_RP"]),
+                    new FieldContent("head_date_2", _dic["head_date_2"])
+                    );
+                using (var outputDocument = new TemplateProcessor("Дневник " + _dic["name_of_student_full"] + ".docx")
+                    .SetRemoveContentControls(true))
+                {
+                    outputDocument.FillContent(valuesToFill);
+                    outputDocument.SaveChanges();
+                }
+            }
+            
+        }
+
+        // Верни плез список про слушаков типа:
+        // List<string[]> lstr; 
+        // lstr.Add([Фамилия Имя Отчество, группа, отметка])  ...
+        // если отметки нет, то в этом поле просто пустая строка
+        public List<string[]> GetStudentsShortInfo(int faculty, int course)
 		{
 			List<string[]> lstr = new List<string[]>();
 
@@ -223,7 +257,7 @@ namespace BackEnd_DLL
             return raports;
         }
 
-        public List<Dairy> MakeDairy()
+        public List<Dairy> MakeDairy(string course, string faculty)
         {
             List<Teacher> prepods = dataBase.GetTeachers();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
             string dateDairy = prepods[0].students[0].date;//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
