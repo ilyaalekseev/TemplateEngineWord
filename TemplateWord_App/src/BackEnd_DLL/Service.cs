@@ -70,7 +70,7 @@ namespace BackEnd_DLL
                             new FieldContent("part_of_plan", "Пункт три")
                             )/*ну и сколько этих пунктов соответсвенно*/
                     );
-                using (var outputDocument = new TemplateProcessor(pathDocument + "tasks " + _dic["name_of_student"] + ".docx")
+                using (var outputDocument = new TemplateProcessor(pathDocument + "tasks " + task._dic["name_of_student"] + ".docx")
                     .SetRemoveContentControls(true))
                 {
                     outputDocument.FillContent(valuesToFill2);
@@ -183,7 +183,7 @@ namespace BackEnd_DLL
 
 
 		// Пока закомментил! 
-        private List<Report> MakeReport()
+        private List<Report> MakeReport(string course, string faculty)
         {
             List<Teacher> prepods = dataBase.GetTeachers();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
             string dateReport = prepods[0].students[0].date;//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
@@ -268,41 +268,57 @@ namespace BackEnd_DLL
 
         private List<Feedback> MakeFeedback(string course, string faculty)
         {
-            List<Teacher> prepods = dataBase.GetTeachers();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
-            string dateFeedback = prepods[0].students[0].date;//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
             Teacher approver = dataBase.GetApprover();
+            List<Student> students = dataBase.GetStudents();
+
+            List<Teacher> prepods = new List<Teacher>();
+            foreach (Student stud in students)
+            {
+                if (stud.course == course && stud.faculty == faculty)
+                {
+                    Teacher prepod = new Teacher();
+                    dataBase.MakeTeacher(dataBase.GetTeacherById(stud.teacherId), prepod);
+                    if (!IsExistPrepod(prepods, prepod))
+                        prepods.Add(prepod);
+
+                }
+            }
+            string dateDairy = prepods[0].students[0].date;
+
             List<Feedback> feedbacks = new List<Feedback>();
-            string[] dates = dateFeedback.Split('-');
+            string[] dates = dateDairy.Split('-');
             string nowADay = DateTime.Now.ToShortDateString();
 
             foreach (Teacher prepod in prepods)
             {
-                Dictionary<string, string> dicGeneral = new Dictionary<string, string>();
-
-                dicGeneral.Add("name_of_prepod", prepod.secondName + " " + prepod.name + " " + prepod.middleName);
-                dicGeneral.Add("position", prepod.position);
-                dicGeneral.Add("rank", prepod.rank);
-                dicGeneral.Add("footer_name", prepod.name[0] + "." + prepod.middleName[0] + ". " + prepod.secondName);
-                dicGeneral.Add("number", prepod.students[0].course);
-                dicGeneral.Add("faculty", prepod.students[0].faculty);
-                dicGeneral.Add("date_start", dates[0]);
-                dicGeneral.Add("date_end", dates[1]);
-                dicGeneral.Add("footer_date", nowADay);
-                dicGeneral.Add("Head_position", approver.position);
-                dicGeneral.Add("Head_rank", approver.rank);
-                dicGeneral.Add("Head_name", approver.name[0] + "." + approver.middleName[0] + ". " + approver.secondName);
-                dicGeneral.Add("Head_date", nowADay);
-                dicGeneral.Add("Practic_type", prepod.students[0].practiceTypeOne);
-                dicGeneral.Add("institute", "ИКСИ");
-
                 foreach (Student stud in prepod.students)
                 {
-                    dicGeneral["Student_rank"] = stud.rank;
-                    dicGeneral["name_of_student"] = stud.secondName + " " + stud.name + " " + stud.middleName;
-                    dicGeneral["Location_of_practic"] = stud.location;
-                    dicGeneral["student_position"] = stud.position;
-                    dicGeneral["name_of_student_short"] = stud.name[0] + "." + stud.middleName[0] + ". " + stud.secondName;
-                    dicGeneral["number_of_group"] = stud.group;
+                    Dictionary<string, string> dicGeneral = new Dictionary<string, string>();
+
+                    dicGeneral.Add("head_position", approver.position);
+                    dicGeneral.Add("head_rank", approver.rank);
+                    dicGeneral.Add("head_name", approver.name[0] + "." + approver.middleName[0] + ". " + approver.secondName);
+                    dicGeneral.Add("head_date", nowADay);
+                    dicGeneral.Add("Practical_type", prepod.students[0].practiceTypeOne);
+                    dicGeneral.Add("Practical_type_2", prepod.students[0].practiceTypeTwo);
+                    dicGeneral.Add("number_of_group", stud.group);
+                    dicGeneral.Add("faculty", prepod.students[0].faculty);
+                    dicGeneral.Add("institute", "ИКСИ");
+                    dicGeneral.Add("rank_of_student", stud.rank);
+                    dicGeneral.Add("name_of_student", stud.secondName + " " + stud.name + " " + stud.middleName);
+                    dicGeneral.Add("practic_position_of_student", stud.position);
+                    dicGeneral.Add("place_of_practic_full", stud.location);
+                    dicGeneral.Add("date_1_start", dates[0].Split('.')[0]);
+                    dicGeneral.Add("date_2_start", dates[0].Split('.')[1] + dates[0].Split('.')[2]);//пока не разобрался как перевести в русский месяц
+                    dicGeneral.Add("date_1_end", dates[1].Split('.')[0]);
+                    dicGeneral.Add("date_2_end", dates[1].Split('.')[1] + dates[1].Split('.')[2]);
+                    dicGeneral.Add("name_of_student_2", stud.secondName + " " + stud.name[0] + "." + stud.middleName[0] +".");
+                    //Слушатель приобрел навыки...
+                    dicGeneral.Add("mark", stud.mark);
+                    dicGeneral.Add("footer_position", prepod.position);
+                    dicGeneral.Add("footer_rank", prepod.rank);
+                    dicGeneral.Add("footer_name_of_prepod", prepod.name + "." + prepod.middleName + ". " + prepod.secondName);
+                    dicGeneral.Add("footer_date", nowADay);
 
                     Feedback fb = new Feedback(dicGeneral);
                     feedbacks.Add(fb);
@@ -313,42 +329,53 @@ namespace BackEnd_DLL
             return feedbacks;
         }
 
-        private List<Raport> MakeRaport()
+        private List<Raport> MakeRaport(string course, string faculty)
         {
-            List<Teacher> prepods = dataBase.GetTeachers();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
-            string dateRaport = prepods[0].students[0].date;//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
             Teacher approver = dataBase.GetApprover();
+            List<Student> students = dataBase.GetStudents();
+
+            List<Teacher> prepods = new List<Teacher>();
+            foreach (Student stud in students)
+            {
+                if (stud.course == course && stud.faculty == faculty)
+                {
+                    Teacher prepod = new Teacher();
+                    dataBase.MakeTeacher(dataBase.GetTeacherById(stud.teacherId), prepod);
+                    if (!IsExistPrepod(prepods, prepod))
+                        prepods.Add(prepod);
+
+                }
+            }
+            string dateDairy = prepods[0].students[0].date;
+
             List<Raport> raports = new List<Raport>();
-            string[] dates = dateRaport.Split('-');
+            string[] dates = dateDairy.Split('-');
             string nowADay = DateTime.Now.ToShortDateString();
 
             foreach (Teacher prepod in prepods)
             {
                 Dictionary<string, string> dicGeneral = new Dictionary<string, string>();
 
-                dicGeneral.Add("name_of_prepod_in_direction", prepod.secondName + " " + prepod.name + " " + prepod.middleName);
-                dicGeneral.Add("full_position", prepod.position);
-                dicGeneral.Add("rank_in_direction", prepod.rank);
-                dicGeneral.Add("individual_number", prepod.personalNumber);
-                dicGeneral.Add("number_department_in_direction", prepod.department);
-                dicGeneral.Add("number_of_Department", prepod.department);
-                dicGeneral.Add("number_of_direction", prepod.directionNumber);
-                dicGeneral.Add("faculty_in_direction", prepod.facultyOfDepartment);
-                dicGeneral.Add("institute_in_direction", "ИКСИ");
-                dicGeneral.Add("academy", "Академии ФСБ России");
-                dicGeneral.Add("number", prepod.students[0].course);
-                dicGeneral.Add("faculty", prepod.students[0].faculty);
-                dicGeneral.Add("date_start", dates[0]);
-                dicGeneral.Add("date_end", dates[1]);
-                dicGeneral.Add("footer_date", nowADay);
-                dicGeneral.Add("footer_rank", prepod.rank);
-                dicGeneral.Add("footer_position", prepod.position);
-                dicGeneral.Add("footer_name", prepod.name[0] + "." + prepod.middleName[0] + ". " + prepod.secondName);
                 dicGeneral.Add("head_position", approver.position);
                 dicGeneral.Add("head_name", approver.name[0] + "." + approver.middleName[0] + ". " + approver.secondName);
                 dicGeneral.Add("Practical_type", prepod.students[0].practiceTypeOne);
                 dicGeneral.Add("Practical_type_2", prepod.students[0].practiceTypeTwo);
+                dicGeneral.Add("number", prepod.students[0].course);
+                dicGeneral.Add("faculty", prepod.students[0].faculty);
                 dicGeneral.Add("institute", "ИКСИ");
+                dicGeneral.Add("date_start", dates[0]);
+                dicGeneral.Add("date_end", dates[1]);
+                dicGeneral.Add("number_of_Department", prepod.department);
+
+                dicGeneral.Add("number_of_direction", prepod.directionNumber);
+                dicGeneral.Add("full_position", prepod.position);
+                dicGeneral.Add("rank_in_direction", prepod.rank);
+                dicGeneral.Add("name_of_prepod_in_direction", prepod.secondName + " " + prepod.name + " " + prepod.middleName);
+                dicGeneral.Add("individual_number", prepod.personalNumber);
+
+                dicGeneral.Add("number_department_in_direction", prepod.department);
+                dicGeneral.Add("faculty_in_direction", prepod.facultyOfDepartment);
+                dicGeneral.Add("institute_in_direction", "ИКСИ");
 
                 List<Dictionary<string, string>> dicStudents = new List<Dictionary<string, string>>();
                 foreach (Student stud in prepod.students)
@@ -361,6 +388,11 @@ namespace BackEnd_DLL
                     dicStudents.Add(dicStud);
                 }
 
+                dicGeneral.Add("footer_position", prepod.position);
+                dicGeneral.Add("footer_rank", prepod.rank);
+                dicGeneral.Add("footer_name", prepod.name[0] + "." + prepod.middleName[0] + ". " + prepod.secondName);
+                dicGeneral.Add("footer_date", nowADay);
+
                 Raport fb = new Raport(dicGeneral, dicStudents);
                 raports.Add(fb);
             }
@@ -371,7 +403,7 @@ namespace BackEnd_DLL
         private List<Dairy> MakeDairy(string course, string faculty)
         {
             Teacher approver = dataBase.GetApprover();
-            List<Student> students = dataBase.GetStudents();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
+            List<Student> students = dataBase.GetStudents();
 
             List<Teacher> prepods = new List<Teacher>();
             foreach(Student stud in students)
@@ -389,7 +421,6 @@ namespace BackEnd_DLL
             
             List<Dairy> dairies = new List<Dairy>();
             string[] dates = dateDairy.Split('-');
-            string nowADay = DateTime.Now.ToShortDateString();
 
             foreach (Teacher prepod in prepods)
             {
@@ -404,8 +435,7 @@ namespace BackEnd_DLL
                     dicGeneral.Add("date_start", dates[0]);
                     dicGeneral.Add("date_end", dates[1]);
                     dicGeneral.Add("footer_date", dates[0]);
-                    dicGeneral.Add("footer_number", "");//????????????????
-                    dicGeneral.Add("head_prepod", prepod.name[0] + " " + prepod.middleName[0] + " " + prepod.secondName);
+                    dicGeneral.Add("head_prepod", prepod.name[0] + ". " + prepod.middleName[0] + ". " + prepod.secondName);
                     dicGeneral.Add("head_date_1", dates[0]);
                     dicGeneral.Add("head_date_2", dates[1]);
 
@@ -425,38 +455,54 @@ namespace BackEnd_DLL
 
         private List<Task> MakeTask(string course, string faculty)
         {
-            List<Teacher> prepods = dataBase.GetTeachers();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
-            string dateDairy = prepods[0].students[0].date;//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
             Teacher approver = dataBase.GetApprover();
+            List<Student> students = dataBase.GetStudents();
+
+            List<Teacher> prepods = new List<Teacher>();
+            foreach (Student stud in students)
+            {
+                if (stud.course == course && stud.faculty == faculty)
+                {
+                    Teacher prepod = new Teacher();
+                    dataBase.MakeTeacher(dataBase.GetTeacherById(stud.teacherId), prepod);
+                    if (!IsExistPrepod(prepods, prepod))
+                        prepods.Add(prepod);
+
+                }
+            }
+            string dateDairy = prepods[0].students[0].date;
+
             List<Task> tasks = new List<Task>();
             string[] dates = dateDairy.Split('-');
-            string nowADay = DateTime.Now.ToShortDateString();
+
 
             foreach (Teacher prepod in prepods)
             {
-                Dictionary<string, string> dicGeneral = new Dictionary<string, string>();
-
-                dicGeneral.Add("head_position", approver.position);
-                dicGeneral.Add("head_name", approver.name[0] + " " + approver.middleName[0] + " " + approver.secondName);
-                dicGeneral.Add("head_date", "2020");
-                dicGeneral.Add("Practic_type", prepod.students[0].practiceTypeOne);
-                dicGeneral.Add("Practic_type", prepod.students[0].practiceTypeTwo);
-                dicGeneral.Add("date_start_1", dates[0].Split('.')[0]);
-                dicGeneral.Add("date_start_2", dates[0].Split('.')[1] + dates[0].Split('.')[2]);//пока не разобрался как перевести в русский месяц
-                dicGeneral.Add("date_end_1", dates[1].Split('.')[0]);
-                dicGeneral.Add("date_end_2", dates[1].Split('.')[1] + dates[1].Split('.')[2]);
-                /*
-                 * 
-                 * разобраться с планом
-                 * 
-                 */
-
-                dicGeneral.Add("footer_name_of__prepod", prepod.name[0] + " " + prepod.middleName[0] + " " + prepod.secondName);
-
                 foreach (Student stud in prepod.students)
                 {
-                    dicGeneral["place_of_practic"] = stud.location;
-                    dicGeneral["footer_name_of_student"] = stud.name[0] + " " + stud.middleName[0] + stud.secondName;
+                    if (stud.course != course && stud.faculty != faculty)
+                        continue;
+
+                    Dictionary<string, string> dicGeneral = new Dictionary<string, string>();
+
+                    dicGeneral.Add("head_position", approver.position);
+                    dicGeneral.Add("head_name", approver.name[0] + " " + approver.middleName[0] + " " + approver.secondName);
+                    dicGeneral.Add("head_date", "2020");
+                    dicGeneral.Add("Practic_type", prepod.students[0].practiceTypeOne);
+                    dicGeneral.Add("Practic_type_2", prepod.students[0].practiceTypeTwo);
+                    dicGeneral.Add("date_start_1", dates[0].Split('.')[0]);
+                    dicGeneral.Add("date_start_2", dates[0].Split('.')[1] + dates[0].Split('.')[2]);//пока не разобрался как перевести в русский месяц
+                    dicGeneral.Add("date_end_1", dates[1].Split('.')[0]);
+                    dicGeneral.Add("date_end_2", dates[1].Split('.')[1] + dates[1].Split('.')[2]);
+                    /*
+                     * 
+                     * разобраться с планом
+                     * 
+                     */
+
+                    dicGeneral.Add("footer_name_of_prepod", prepod.name[0] + "." + prepod.middleName[0] + "." + prepod.secondName);
+                    dicGeneral.Add("place_of_practic", stud.location);
+                    dicGeneral.Add("footer_name_of_student", stud.name[0] + " " + stud.middleName[0] + stud.secondName);
 
                     Task task = new Task(dicGeneral);
                     tasks.Add(task);

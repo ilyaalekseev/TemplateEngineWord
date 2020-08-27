@@ -8,7 +8,7 @@ namespace BackEnd_DLL
 {
     public class Task
     {
-		Dictionary<string, string> _dic;
+		public Dictionary<string, string> _dic;
 
 		public Task(Dictionary<string, string> dicGen)
 		{

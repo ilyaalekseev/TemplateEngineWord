@@ -8,7 +8,7 @@ namespace BackEnd_DLL
 {
     public class Feedback : DocumentWord
     {
-		Dictionary<string, string> _dic;
+		public Dictionary<string, string> _dic;
 
 		public Feedback(Dictionary<string, string> dicGen)
 		{
