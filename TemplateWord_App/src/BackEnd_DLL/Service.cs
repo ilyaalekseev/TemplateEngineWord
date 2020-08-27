@@ -21,8 +21,63 @@ namespace BackEnd_DLL
 		public void MakeDocuments(string course, string faculty)
 		{
             CreateDiaryTemplate(course, faculty);
+            CreateFeedbackTemplate(course, faculty);
+            CreateTaskTemplate(course, faculty);
+        }
 
-		}
+        private void CreateTaskTemplate(string course, string faculty)
+        {
+            List<Task> tasks = MakeTask(course, faculty);
+
+            string pathDocument = _fullPath;
+
+            foreach (Task task in tasks)
+            {
+                DocX document = DocX.Load(pathDocument + "task.docx");//создаю копию шаблона в той же директории, что и шаблон
+                document.SaveAs(pathDocument + "task " + task._dic["name_of_student"] + ".docx");// в том же каталоге создаю заполненный дневник на конкретного слушателя
+                var valuesToFill = new Content(
+                    new FieldContent("head_position", task._dic["head_position"]),
+                    new FieldContent("head_name", task._dic["head_name"]),
+                    new FieldContent("head_date", task._dic["head_date"]),
+                    new FieldContent("Practic_type", task._dic["Practic_type"]),
+                    new FieldContent("Practic_type_2", task._dic["Practic_type_2"]),
+                    new FieldContent("name_of_student", task._dic["name_of_student"]),
+                    new FieldContent("place_of_practic", task._dic["place_of_practic"]),
+                    new FieldContent("date_start_1", task._dic["date_start_1"]),
+                    new FieldContent("date_start_2", task._dic["date_start_2"]),
+                    new FieldContent("date_end_1", task._dic["date_end_1"]),
+                    new FieldContent("date_end_2", task._dic["date_end_2"]),
+                    new FieldContent("footer_name_of_prepod", task._dic["footer_name_of_prepod"]),
+                    new FieldContent("footer_name_of_student", task._dic["footer_name_of_student"]),
+                    new FieldContent("footer_date_1", task._dic["footer_date_1"]),
+                    new FieldContent("footer_date_2", task._dic["footer_date_2"])
+                    );
+                using (var outputDocument = new TemplateProcessor("task " + task._dic["name_of_student"] + ".docx")
+                    .SetRemoveContentControls(true))
+                {
+                    outputDocument.FillContent(valuesToFill);
+                    outputDocument.SaveChanges();
+                }
+                var valuesToFill2 = new Content(
+                    new ListContent("plan")
+                        .AddItem(
+                            new FieldContent("part_of_plan", "Изучить и выполнить функциональные обязанности по должности прохождения практики.")
+                            )/*заместо второго параметра должен быть n-ый пункт плана*/
+                        .AddItem(
+                            new FieldContent("part_of_plan", "Пункт два")
+                            )/*мне нужно знать в каком виде хранится конкретный пункт плана*/
+                        .AddItem(
+                            new FieldContent("part_of_plan", "Пункт три")
+                            )/*ну и сколько этих пунктов соответсвенно*/
+                    );
+                using (var outputDocument = new TemplateProcessor(pathDocument + "tasks " + _dic["name_of_student"] + ".docx")
+                    .SetRemoveContentControls(true))
+                {
+                    outputDocument.FillContent(valuesToFill2);
+                    outputDocument.SaveChanges();
+                }
+            }
+        }
 
         private void CreateDiaryTemplate(string course, string faculty)
         {
@@ -57,6 +112,52 @@ namespace BackEnd_DLL
                 }
             }
             
+        }
+
+        private void CreateFeedbackTemplate(string course, string faculty)
+        {
+            List<Feedback> feedbacks = MakeFeedback(course, faculty);
+
+            string pathDocument = _fullPath;
+
+            foreach (Feedback feed in feedbacks)
+            {
+                DocX document = DocX.Load(pathDocument + "feedback.docx");
+                document.SaveAs(pathDocument + "feedback " + feed._dic["name_of_student"] + ".docx");
+                var valuesToFill = new Content(
+                    new FieldContent("head_position", feed._dic["head_position"]),
+                    new FieldContent("head_rank", feed._dic["head_rank"]),
+                    new FieldContent("head_name", feed._dic["head_name"]),
+                    new FieldContent("head_date", feed._dic["head_date"]),
+                    new FieldContent("Practical_type", feed._dic["Practical_type"]),
+                    new FieldContent("Practical_type_2", feed._dic["Practical_type_2"]),
+                    new FieldContent("number_of_group", feed._dic["number_of_group"]),
+                    new FieldContent("faculty", feed._dic["faculty"]),
+                    new FieldContent("institute", feed._dic["institute"]),
+                    new FieldContent("rank_of_student", feed._dic["rank_of_student"]),
+                    new FieldContent("name_of_student", feed._dic["name_of_student"]),
+                    new FieldContent("practic_position_of_student", feed._dic["practic_position_of_student"]),
+                    new FieldContent("place_of_practic_full", feed._dic["place_of_practic_full"]),
+                    new FieldContent("date_1_start", feed._dic["date_1_start"]),
+                    new FieldContent("date_2_start", feed._dic["date_2_start"]),
+                    new FieldContent("date_1_end", feed._dic["date_1_end"]),
+                    new FieldContent("date_2_end", feed._dic["date_2_end"]),
+                    new FieldContent("name_of_student_2", feed._dic["name_of_student_2"]),
+                    new FieldContent("skill_of_practic", feed._dic["skill_of_practic"]),
+                    new FieldContent("mark", feed._dic["mark"]),
+                    new FieldContent("footer_position", feed._dic["footer_position"]),
+                    new FieldContent("footer_rank", feed._dic["footer_rank"]),
+                    new FieldContent("footer_name_of_prepod", feed._dic["footer_name_of_prepod"]),
+                    new FieldContent("footer_date", feed._dic["footer_date"])
+
+                );
+                using (var outputDocument = new TemplateProcessor(pathDocument + "feedback " + feed._dic["name_of_student"] + ".docx")
+                .SetRemoveContentControls(true))
+                {
+                    outputDocument.FillContent(valuesToFill);
+                    outputDocument.SaveChanges();
+                }
+            }
         }
 
         // Верни плез список про слушаков типа:
@@ -165,7 +266,7 @@ namespace BackEnd_DLL
 			return new List<Report>();
         }
 
-        private List<Feedback> MakeFeedback()
+        private List<Feedback> MakeFeedback(string course, string faculty)
         {
             List<Teacher> prepods = dataBase.GetTeachers();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
             string dateFeedback = prepods[0].students[0].date;//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
@@ -322,7 +423,7 @@ namespace BackEnd_DLL
             return dairies;
         }
 
-        private List<Task> MakeTask()
+        private List<Task> MakeTask(string course, string faculty)
         {
             List<Teacher> prepods = dataBase.GetTeachers();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
             string dateDairy = prepods[0].students[0].date;//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
