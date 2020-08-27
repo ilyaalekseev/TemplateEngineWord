@@ -239,7 +239,9 @@ namespace BackEnd_DLL
 			teacher.position = teacherArr[i++];
 			teacher.department = teacherArr[i++];
 			teacher.personalNumber = teacherArr[i++];
-			teacher.directionNumber = teacherArr[i++];	
+			teacher.directionNumber = teacherArr[i++];
+
+			teacher.students = GetStudentsForTeacher(teacher.id);
 		}
 
 		/*
@@ -284,7 +286,9 @@ namespace BackEnd_DLL
 			//получаем массив с id учеников для препода
 			string conditionStudentsId = " WHERE teacher_id = '" + teacherId + "';";
 			string[,] studentsIdArrs = GetRowsWithCondition("practices", conditionStudentsId);
-			
+			if (studentsIdArrs == null)
+				return studentsList;
+
 			//формируем запрос на получение инфы о нужных учениках
 			string conditionStudents = " WHERE id in (";
 			int idCounts = studentsIdArrs.GetLength(0);

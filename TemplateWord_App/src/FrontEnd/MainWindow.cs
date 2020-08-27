@@ -204,7 +204,8 @@ namespace FrontEnd
 
 		private void button_OK_Click(object sender, EventArgs e)
 		{
-
+			Service serv = new Service();
+			serv.MakeDocuments("3", "ФИБ");
 		}
 	}
 }

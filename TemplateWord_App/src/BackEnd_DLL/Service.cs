@@ -11,7 +11,7 @@ namespace BackEnd_DLL
 	public class Service : IService
 	{
 		private ManagingRequestsBD dataBase;
-        private string _fullPath = "C:/doci/oki/tyt/";
+        private string _fullPath = "C:/doki/";
 
         public Service()
 		{
@@ -24,16 +24,16 @@ namespace BackEnd_DLL
 
 		}
 
-        public void CreateDiaryTemplate(string course, string faculty)
+        private void CreateDiaryTemplate(string course, string faculty)
         {
             List<Dairy> dairies = MakeDairy(course, faculty);
 
-            string pathDocument = _fullPath + "diary.docx";
+            string pathDocument = _fullPath;
 
             foreach (Dairy diary in dairies)
             {
-                DocX document = DocX.Load(pathDocument + "Дневник.docx");//создаю копию шаблона в той же директории, что и шаблон
-                document.SaveAs(pathDocument + "Дневник " + diary._dic["name_of_student_full"] + ".docx");// в том же каталоге создаю заполненный дневник на конкретного слушателя
+                DocX document = DocX.Load(pathDocument + "diary.docx");//создаю копию шаблона в той же директории, что и шаблон
+                document.SaveAs(pathDocument + "diary " + diary._dic["name_of_student_full"] + ".docx");// в том же каталоге создаю заполненный дневник на конкретного слушателя
                 var valuesToFill = new Content(
                     new FieldContent("Practic_type", diary._dic["Practic_type"]),
                     new FieldContent("Practic_type_2", diary._dic["Practic_type_2"]),
@@ -49,7 +49,7 @@ namespace BackEnd_DLL
                     new FieldContent("name_of_student_RP", diary._dic["name_of_student_RP"]),
                     new FieldContent("head_date_2", diary._dic["head_date_2"])
                     );
-                using (var outputDocument = new TemplateProcessor("Дневник " + diary._dic["name_of_student_full"] + ".docx")
+                using (var outputDocument = new TemplateProcessor(pathDocument + "diary " + diary._dic["name_of_student_full"] + ".docx")
                     .SetRemoveContentControls(true))
                 {
                     outputDocument.FillContent(valuesToFill);
@@ -71,8 +71,18 @@ namespace BackEnd_DLL
 			return lstr;
 		}
 
+        public bool IsExistPrepod(List<Teacher> prepods, Teacher prepod)
+        {
+            foreach (Teacher prep in prepods)
+                if (prep.id == prepod.id)
+                    return true;
+
+            return false;
+        }
+
+
 		// Пока закомментил! 
-        public List<Report> MakeReport()
+        private List<Report> MakeReport()
         {
             List<Teacher> prepods = dataBase.GetTeachers();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
             string dateReport = prepods[0].students[0].date;//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
@@ -155,7 +165,7 @@ namespace BackEnd_DLL
 			return new List<Report>();
         }
 
-        public List<Feedback> MakeFeedback()
+        private List<Feedback> MakeFeedback()
         {
             List<Teacher> prepods = dataBase.GetTeachers();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
             string dateFeedback = prepods[0].students[0].date;//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
@@ -202,7 +212,7 @@ namespace BackEnd_DLL
             return feedbacks;
         }
 
-        public List<Raport> MakeRaport()
+        private List<Raport> MakeRaport()
         {
             List<Teacher> prepods = dataBase.GetTeachers();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
             string dateRaport = prepods[0].students[0].date;//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
@@ -257,7 +267,7 @@ namespace BackEnd_DLL
             return raports;
         }
 
-        public List<Dairy> MakeDairy(string course, string faculty)
+        private List<Dairy> MakeDairy(string course, string faculty)
         {
             Teacher approver = dataBase.GetApprover();
             List<Student> students = dataBase.GetStudents();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
@@ -269,7 +279,9 @@ namespace BackEnd_DLL
                 {
                     Teacher prepod = new Teacher();
                     dataBase.MakeTeacher(dataBase.GetTeacherById(stud.teacherId), prepod);
-                    prepods.Add(prepod);
+                    if (!IsExistPrepod(prepods, prepod))
+                        prepods.Add(prepod);
+                    
                 }      
             }
             string dateDairy = prepods[0].students[0].date;//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
@@ -280,27 +292,26 @@ namespace BackEnd_DLL
 
             foreach (Teacher prepod in prepods)
             {
-                Dictionary<string, string> dicGeneral = new Dictionary<string, string>();
-
-                dicGeneral.Add("Practic_type", prepod.students[0].practiceTypeOne);
-                dicGeneral.Add("Practic_type", prepod.students[0].practiceTypeTwo);
-                dicGeneral.Add("date_start", dates[0]);
-                dicGeneral.Add("date_end", dates[1]);
-                dicGeneral.Add("footer_date", dates[0]);
-                dicGeneral.Add("footer_number", "");//????????????????
-                dicGeneral.Add("head_prepod", prepod.name[0] + " " + prepod.middleName[0] + " " + prepod.secondName);
-                dicGeneral.Add("head_date_1", dates[0]);
-                dicGeneral.Add("head_date_2", dates[1]);
-
                 foreach (Student stud in prepod.students)
                 {
                     if (stud.course != course && stud.faculty != faculty)
                         continue;
+                    Dictionary<string, string> dicGeneral = new Dictionary<string, string>();
 
-                    dicGeneral["rank_of_student"] = stud.rank;
-                    dicGeneral["name_of_student_full"] = stud.secondName + " " + stud.name + " " + stud.middleName;
-                    dicGeneral["footer_name_of_student"] = stud.name[0] + "." + stud.middleName[0] + ". " + stud.secondName;
-                    dicGeneral["name_of_student_RP"] = stud.secondName + " " + stud.name + " " + stud.middleName;
+                    dicGeneral.Add("Practic_type", prepod.students[0].practiceTypeOne);
+                    dicGeneral.Add("Practic_type_2", prepod.students[0].practiceTypeTwo);
+                    dicGeneral.Add("date_start", dates[0]);
+                    dicGeneral.Add("date_end", dates[1]);
+                    dicGeneral.Add("footer_date", dates[0]);
+                    dicGeneral.Add("footer_number", "");//????????????????
+                    dicGeneral.Add("head_prepod", prepod.name[0] + " " + prepod.middleName[0] + " " + prepod.secondName);
+                    dicGeneral.Add("head_date_1", dates[0]);
+                    dicGeneral.Add("head_date_2", dates[1]);
+
+                    dicGeneral.Add("rank_of_student", stud.rank);
+                    dicGeneral.Add("name_of_student_full", stud.secondName + " " + stud.name + " " + stud.middleName);
+                    dicGeneral.Add("footer_name_of_student", stud.name[0] + "." + stud.middleName[0] + ". " + stud.secondName);
+                    dicGeneral.Add("name_of_student_RP", stud.secondName + " " + stud.name + " " + stud.middleName);
 
                     Dairy fb = new Dairy(dicGeneral);
                     dairies.Add(fb);
@@ -311,7 +322,7 @@ namespace BackEnd_DLL
             return dairies;
         }
 
-        public List<Task> MakeTask()
+        private List<Task> MakeTask()
         {
             List<Teacher> prepods = dataBase.GetTeachers();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
             string dateDairy = prepods[0].students[0].date;//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
