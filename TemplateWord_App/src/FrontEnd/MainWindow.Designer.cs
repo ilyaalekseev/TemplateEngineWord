@@ -78,6 +78,17 @@
 			this.pictureBox5 = new System.Windows.Forms.PictureBox();
 			this.label7 = new System.Windows.Forms.Label();
 			this.panel6 = new System.Windows.Forms.Panel();
+			this.buttonTempWindow = new System.Windows.Forms.Button();
+			this.buttonBD = new System.Windows.Forms.Button();
+			this.panelBD = new System.Windows.Forms.Panel();
+			this.openFileDialogCSV = new System.Windows.Forms.OpenFileDialog();
+			this.textBoxFile = new System.Windows.Forms.TextBox();
+			this.buttonOpenFile = new System.Windows.Forms.Button();
+			this.label8 = new System.Windows.Forms.Label();
+			this.buttonConfirm = new System.Windows.Forms.Button();
+			this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+			this.textBoxFolder = new System.Windows.Forms.TextBox();
+			this.buttonFolder = new System.Windows.Forms.Button();
 			this.MainPanel.SuspendLayout();
 			this.panelTop.SuspendLayout();
 			this.StackItems_flowLayoutPanel.SuspendLayout();
@@ -103,10 +114,12 @@
 			this.panel5.SuspendLayout();
 			this.panel19.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).BeginInit();
+			this.panelBD.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// MainPanel
 			// 
+			this.MainPanel.Controls.Add(this.panelBD);
 			this.MainPanel.Controls.Add(this.button_start);
 			this.MainPanel.Controls.Add(this.label2);
 			this.MainPanel.Controls.Add(this.label1);
@@ -152,13 +165,14 @@
 			// 
 			this.comboBox_Faculty.FormattingEnabled = true;
 			this.comboBox_Faculty.Items.AddRange(new object[] {
-            "ИБ",
-            "ПМ",
+            "ФИБ",
+            "ФПМ",
             "ОТФ",
-            "СТ"});
+            "ФСТ",
+            "Выбрать всех"});
 			this.comboBox_Faculty.Location = new System.Drawing.Point(115, 68);
 			this.comboBox_Faculty.Name = "comboBox_Faculty";
-			this.comboBox_Faculty.Size = new System.Drawing.Size(97, 24);
+			this.comboBox_Faculty.Size = new System.Drawing.Size(123, 24);
 			this.comboBox_Faculty.TabIndex = 5;
 			// 
 			// comboBox_Cours
@@ -169,14 +183,19 @@
             "2",
             "3",
             "4",
-            "5"});
+            "5",
+            "Выбрать всех"});
 			this.comboBox_Cours.Location = new System.Drawing.Point(371, 68);
 			this.comboBox_Cours.Name = "comboBox_Cours";
-			this.comboBox_Cours.Size = new System.Drawing.Size(99, 24);
+			this.comboBox_Cours.Size = new System.Drawing.Size(122, 24);
 			this.comboBox_Cours.TabIndex = 4;
 			// 
 			// panelTop
 			// 
+			this.panelTop.Controls.Add(this.buttonFolder);
+			this.panelTop.Controls.Add(this.buttonBD);
+			this.panelTop.Controls.Add(this.textBoxFolder);
+			this.panelTop.Controls.Add(this.buttonTempWindow);
 			this.panelTop.Controls.Add(this.panelChoice);
 			this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panelTop.Location = new System.Drawing.Point(0, 0);
@@ -194,10 +213,9 @@
 			// StackItems_flowLayoutPanel
 			// 
 			this.StackItems_flowLayoutPanel.Controls.Add(this.tableLayoutPanel1);
-			this.StackItems_flowLayoutPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.StackItems_flowLayoutPanel.Location = new System.Drawing.Point(0, 98);
 			this.StackItems_flowLayoutPanel.Name = "StackItems_flowLayoutPanel";
-			this.StackItems_flowLayoutPanel.Size = new System.Drawing.Size(918, 335);
+			this.StackItems_flowLayoutPanel.Size = new System.Drawing.Size(918, 303);
 			this.StackItems_flowLayoutPanel.TabIndex = 2;
 			// 
 			// tableLayoutPanel1
@@ -443,9 +461,10 @@
 			// label3
 			// 
 			this.label3.AutoSize = true;
+			this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.label3.Location = new System.Drawing.Point(54, 12);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(49, 17);
+			this.label3.Size = new System.Drawing.Size(62, 20);
 			this.label3.TabIndex = 0;
 			this.label3.Text = "Отчёт";
 			// 
@@ -480,9 +499,10 @@
 			// label4
 			// 
 			this.label4.AutoSize = true;
+			this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.label4.Location = new System.Drawing.Point(54, 9);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(56, 17);
+			this.label4.Size = new System.Drawing.Size(70, 20);
 			this.label4.TabIndex = 0;
 			this.label4.Text = "Рапорт";
 			// 
@@ -517,9 +537,10 @@
 			// label5
 			// 
 			this.label5.AutoSize = true;
+			this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.label5.Location = new System.Drawing.Point(54, 9);
 			this.label5.Name = "label5";
-			this.label5.Size = new System.Drawing.Size(50, 17);
+			this.label5.Size = new System.Drawing.Size(63, 20);
 			this.label5.TabIndex = 0;
 			this.label5.Text = "Отзыв";
 			// 
@@ -554,9 +575,10 @@
 			// label6
 			// 
 			this.label6.AutoSize = true;
+			this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.label6.Location = new System.Drawing.Point(54, 12);
 			this.label6.Name = "label6";
-			this.label6.Size = new System.Drawing.Size(65, 17);
+			this.label6.Size = new System.Drawing.Size(81, 20);
 			this.label6.TabIndex = 0;
 			this.label6.Text = "Дневник";
 			// 
@@ -591,9 +613,10 @@
 			// label7
 			// 
 			this.label7.AutoSize = true;
+			this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
 			this.label7.Location = new System.Drawing.Point(54, 12);
 			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(178, 17);
+			this.label7.Size = new System.Drawing.Size(228, 20);
 			this.label7.TabIndex = 0;
 			this.label7.Text = "Индивидуальное задание";
 			// 
@@ -604,6 +627,96 @@
 			this.panel6.Name = "panel6";
 			this.panel6.Size = new System.Drawing.Size(297, 44);
 			this.panel6.TabIndex = 5;
+			// 
+			// buttonTempWindow
+			// 
+			this.buttonTempWindow.BackColor = System.Drawing.SystemColors.ButtonShadow;
+			this.buttonTempWindow.Location = new System.Drawing.Point(12, 9);
+			this.buttonTempWindow.Name = "buttonTempWindow";
+			this.buttonTempWindow.Size = new System.Drawing.Size(163, 35);
+			this.buttonTempWindow.TabIndex = 5;
+			this.buttonTempWindow.Text = "Создать документы";
+			this.buttonTempWindow.UseVisualStyleBackColor = false;
+			this.buttonTempWindow.Click += new System.EventHandler(this.buttonTempWindow_Click);
+			// 
+			// buttonBD
+			// 
+			this.buttonBD.Location = new System.Drawing.Point(195, 9);
+			this.buttonBD.Name = "buttonBD";
+			this.buttonBD.Size = new System.Drawing.Size(143, 35);
+			this.buttonBD.TabIndex = 6;
+			this.buttonBD.Text = "Изменить данные";
+			this.buttonBD.UseVisualStyleBackColor = true;
+			this.buttonBD.Click += new System.EventHandler(this.buttonBD_Click);
+			// 
+			// panelBD
+			// 
+			this.panelBD.Controls.Add(this.buttonConfirm);
+			this.panelBD.Controls.Add(this.label8);
+			this.panelBD.Controls.Add(this.buttonOpenFile);
+			this.panelBD.Controls.Add(this.textBoxFile);
+			this.panelBD.Dock = System.Windows.Forms.DockStyle.Bottom;
+			this.panelBD.Location = new System.Drawing.Point(0, 381);
+			this.panelBD.Name = "panelBD";
+			this.panelBD.Size = new System.Drawing.Size(918, 52);
+			this.panelBD.TabIndex = 9;
+			// 
+			// openFileDialogCSV
+			// 
+			this.openFileDialogCSV.FileName = "openFileDialog1";
+			// 
+			// textBoxFile
+			// 
+			this.textBoxFile.Location = new System.Drawing.Point(115, 13);
+			this.textBoxFile.Name = "textBoxFile";
+			this.textBoxFile.Size = new System.Drawing.Size(541, 22);
+			this.textBoxFile.TabIndex = 0;
+			// 
+			// buttonOpenFile
+			// 
+			this.buttonOpenFile.Location = new System.Drawing.Point(683, 10);
+			this.buttonOpenFile.Name = "buttonOpenFile";
+			this.buttonOpenFile.Size = new System.Drawing.Size(94, 29);
+			this.buttonOpenFile.TabIndex = 1;
+			this.buttonOpenFile.Text = "Открыть";
+			this.buttonOpenFile.UseVisualStyleBackColor = true;
+			this.buttonOpenFile.Click += new System.EventHandler(this.button1_Click);
+			// 
+			// label8
+			// 
+			this.label8.AutoSize = true;
+			this.label8.Location = new System.Drawing.Point(29, 13);
+			this.label8.Name = "label8";
+			this.label8.Size = new System.Drawing.Size(80, 17);
+			this.label8.TabIndex = 2;
+			this.label8.Text = "Файл (csv)";
+			// 
+			// buttonConfirm
+			// 
+			this.buttonConfirm.Location = new System.Drawing.Point(783, 9);
+			this.buttonConfirm.Name = "buttonConfirm";
+			this.buttonConfirm.Size = new System.Drawing.Size(123, 29);
+			this.buttonConfirm.TabIndex = 3;
+			this.buttonConfirm.Text = "Подтвердить";
+			this.buttonConfirm.UseVisualStyleBackColor = true;
+			this.buttonConfirm.Click += new System.EventHandler(this.buttonConfirm_Click);
+			// 
+			// textBoxFolder
+			// 
+			this.textBoxFolder.Location = new System.Drawing.Point(398, 12);
+			this.textBoxFolder.Name = "textBoxFolder";
+			this.textBoxFolder.Size = new System.Drawing.Size(369, 22);
+			this.textBoxFolder.TabIndex = 10;
+			// 
+			// buttonFolder
+			// 
+			this.buttonFolder.Location = new System.Drawing.Point(783, 7);
+			this.buttonFolder.Name = "buttonFolder";
+			this.buttonFolder.Size = new System.Drawing.Size(123, 32);
+			this.buttonFolder.TabIndex = 11;
+			this.buttonFolder.Text = "Рабочая папка";
+			this.buttonFolder.UseVisualStyleBackColor = true;
+			this.buttonFolder.Click += new System.EventHandler(this.buttonFolder_Click);
 			// 
 			// MainWindow
 			// 
@@ -619,6 +732,7 @@
 			this.MainPanel.ResumeLayout(false);
 			this.MainPanel.PerformLayout();
 			this.panelTop.ResumeLayout(false);
+			this.panelTop.PerformLayout();
 			this.StackItems_flowLayoutPanel.ResumeLayout(false);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.panel18.ResumeLayout(false);
@@ -647,6 +761,8 @@
 			this.panel5.PerformLayout();
 			this.panel19.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.pictureBox5)).EndInit();
+			this.panelBD.ResumeLayout(false);
+			this.panelBD.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -703,6 +819,17 @@
 		private System.Windows.Forms.PictureBox pictureBox4;
 		private System.Windows.Forms.PictureBox pictureBox5;
 		private System.Windows.Forms.Button button_start;
+		private System.Windows.Forms.Button buttonBD;
+		private System.Windows.Forms.Button buttonTempWindow;
+		private System.Windows.Forms.Panel panelBD;
+		private System.Windows.Forms.OpenFileDialog openFileDialogCSV;
+		private System.Windows.Forms.Button buttonOpenFile;
+		private System.Windows.Forms.TextBox textBoxFile;
+		private System.Windows.Forms.Label label8;
+		private System.Windows.Forms.Button buttonConfirm;
+		private System.Windows.Forms.Button buttonFolder;
+		private System.Windows.Forms.TextBox textBoxFolder;
+		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
 	}
 }
 
