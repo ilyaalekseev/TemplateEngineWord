@@ -18,7 +18,7 @@ namespace BackEnd_DLL
 			dataBase = new ManagingRequestsBD();
 		}
 
-		public void MakeDocuments(string course, string faculty)
+		public void MakeDocuments(string course, string faculty, bool[] tmp)
 		{
             CreateDiaryTemplate(course, faculty);
             CreateFeedbackTemplate(course, faculty);
@@ -164,7 +164,7 @@ namespace BackEnd_DLL
         // List<string[]> lstr; 
         // lstr.Add([Фамилия Имя Отчество, группа, отметка])  ...
         // если отметки нет, то в этом поле просто пустая строка
-        public List<string[]> GetStudentsShortInfo(int faculty, int course)
+        public List<string[]> GetStudentsShortInfo(string faculty, string course)
 		{
 			List<string[]> lstr = new List<string[]>();
 
