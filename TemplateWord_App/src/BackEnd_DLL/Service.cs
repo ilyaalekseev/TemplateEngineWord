@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TemplateEngine.Docx;
 using Xceed.Words.NET;
+using LingvoNET;
 
 namespace BackEnd_DLL
 {
@@ -18,11 +19,16 @@ namespace BackEnd_DLL
 			dataBase = new ManagingRequestsBD();
 		}
 
-		public void MakeDocuments(string course, string faculty)
+		public void MakeDocuments(string course, string faculty, bool[] tmp)
 		{
-            CreateDiaryTemplate(course, faculty);
-            CreateFeedbackTemplate(course, faculty);
-            CreateTaskTemplate(course, faculty);
+            if (tmp[0] == true)
+                CreateDiaryTemplate(course, faculty);
+
+            if (tmp[1] == true)
+                CreateFeedbackTemplate(course, faculty);
+
+            if (tmp[2] == true)
+                CreateTaskTemplate(course, faculty);
         }
 
         private void CreateTaskTemplate(string course, string faculty)
@@ -33,12 +39,11 @@ namespace BackEnd_DLL
 
             foreach (Task task in tasks)
             {
-                DocX document = DocX.Load(pathDocument + "task.docx");//создаю копию шаблона в той же директории, что и шаблон
-                document.SaveAs(pathDocument + "task " + task._dic["name_of_student"] + ".docx");// в том же каталоге создаю заполненный дневник на конкретного слушателя
+                DocX document = DocX.Load(pathDocument + "task.docx");
+                document.SaveAs(pathDocument + "task " + task._dic["name_of_student"] + ".docx");
                 var valuesToFill = new Content(
                     new FieldContent("head_position", task._dic["head_position"]),
                     new FieldContent("head_name", task._dic["head_name"]),
-                    new FieldContent("head_date", task._dic["head_date"]),
                     new FieldContent("Practic_type", task._dic["Practic_type"]),
                     new FieldContent("Practic_type_2", task._dic["Practic_type_2"]),
                     new FieldContent("name_of_student", task._dic["name_of_student"]),
@@ -48,11 +53,9 @@ namespace BackEnd_DLL
                     new FieldContent("date_end_1", task._dic["date_end_1"]),
                     new FieldContent("date_end_2", task._dic["date_end_2"]),
                     new FieldContent("footer_name_of_prepod", task._dic["footer_name_of_prepod"]),
-                    new FieldContent("footer_name_of_student", task._dic["footer_name_of_student"]),
-                    new FieldContent("footer_date_1", task._dic["footer_date_1"]),
-                    new FieldContent("footer_date_2", task._dic["footer_date_2"])
+                    new FieldContent("footer_name_of_student", task._dic["footer_name_of_student"])
                     );
-                using (var outputDocument = new TemplateProcessor("task " + task._dic["name_of_student"] + ".docx")
+                using (var outputDocument = new TemplateProcessor(pathDocument + "task " + task._dic["name_of_student"] + ".docx")
                     .SetRemoveContentControls(true))
                 {
                     outputDocument.FillContent(valuesToFill);
@@ -70,7 +73,7 @@ namespace BackEnd_DLL
                             new FieldContent("part_of_plan", "Пункт три")
                             )/*ну и сколько этих пунктов соответсвенно*/
                     );
-                using (var outputDocument = new TemplateProcessor(pathDocument + "tasks " + task._dic["name_of_student"] + ".docx")
+                using (var outputDocument = new TemplateProcessor(pathDocument + "task " + task._dic["name_of_student"] + ".docx")
                     .SetRemoveContentControls(true))
                 {
                     outputDocument.FillContent(valuesToFill2);
@@ -96,7 +99,6 @@ namespace BackEnd_DLL
                     new FieldContent("date_start", diary._dic["date_start"]),
                     new FieldContent("date_end", diary._dic["date_end"]),
                     new FieldContent("footer_date", diary._dic["footer_date"]),
-                    new FieldContent("footer_number", diary._dic["footer_number"]),
                     new FieldContent("head_prepod", diary._dic["head_prepod"]),
                     new FieldContent("head_date_1", diary._dic["head_date_1"]),
                     new FieldContent("rank_of_student", diary._dic["rank_of_student"]),
@@ -181,8 +183,58 @@ namespace BackEnd_DLL
             return false;
         }
 
+        public string GetGenitive(string word)
+        {
+            var noun = Nouns.FindSimilar(word, animacy: Animacy.Animate);
+            if (noun != null)
+            {
+                var accusative = noun[Case.Genitive, Number.Singular];
+                return accusative;
+            }
 
-		// Пока закомментил! 
+
+            return word;
+        }
+
+        public string GetDative(string word)
+        {
+            var noun = Nouns.FindSimilar(word, animacy: Animacy.Animate);
+            if (noun != null)
+            {
+                var accusative = noun[Case.Dative, Number.Singular];
+                return accusative;
+            }
+
+
+            return word;
+        }
+        public string GetLocative(string word)
+        {
+            var noun = Nouns.FindSimilar(word, animacy: Animacy.Animate);
+            if (noun != null)
+            {
+                var accusative = noun[Case.Locative, Number.Singular];
+                return accusative;
+            }
+
+
+            return word;
+        }
+
+        public string GetAccusative(string word)
+        {
+            var noun = Nouns.FindSimilar(word, animacy: Animacy.Animate);
+            if (noun != null)
+            {
+                var accusative = noun[Case.Accusative, Number.Singular];
+                return accusative;
+            }
+
+
+            return word;
+        }
+
+        // Пока закомментил! 
         private List<Report> MakeReport(string course, string faculty)
         {
             List<Teacher> prepods = dataBase.GetTeachers();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
@@ -299,25 +351,25 @@ namespace BackEnd_DLL
                     dicGeneral.Add("head_rank", approver.rank);
                     dicGeneral.Add("head_name", approver.name[0] + "." + approver.middleName[0] + ". " + approver.secondName);
                     dicGeneral.Add("head_date", nowADay);
-                    dicGeneral.Add("Practical_type", prepod.students[0].practiceTypeOne);
+                    dicGeneral.Add("Practical_type", GetGenitive( prepod.students[0].practiceTypeOne));
                     dicGeneral.Add("Practical_type_2", prepod.students[0].practiceTypeTwo);
                     dicGeneral.Add("number_of_group", stud.group);
                     dicGeneral.Add("faculty", prepod.students[0].faculty);
                     dicGeneral.Add("institute", "ИКСИ");
-                    dicGeneral.Add("rank_of_student", stud.rank);
-                    dicGeneral.Add("name_of_student", stud.secondName + " " + stud.name + " " + stud.middleName);
+                    dicGeneral.Add("rank_of_student", GetGenitive( stud.rank));
+                    dicGeneral.Add("name_of_student", GetGenitive( stud.secondName) + " " + GetGenitive(stud.name) + " " + GetGenitive( stud.middleName));
                     dicGeneral.Add("practic_position_of_student", stud.position);
                     dicGeneral.Add("place_of_practic_full", stud.location);
                     dicGeneral.Add("date_1_start", dates[0].Split('.')[0]);
-                    dicGeneral.Add("date_2_start", dates[0].Split('.')[1] + dates[0].Split('.')[2]);//пока не разобрался как перевести в русский месяц
+                    dicGeneral.Add("date_2_start", dates[0].Split('.')[1] + dates[0].Split('.')[2]);
                     dicGeneral.Add("date_1_end", dates[1].Split('.')[0]);
                     dicGeneral.Add("date_2_end", dates[1].Split('.')[1] + dates[1].Split('.')[2]);
                     dicGeneral.Add("name_of_student_2", stud.secondName + " " + stud.name[0] + "." + stud.middleName[0] +".");
-                    //Слушатель приобрел навыки...
+                    dicGeneral.Add("skill_of_practic", stud.skill);
                     dicGeneral.Add("mark", stud.mark);
                     dicGeneral.Add("footer_position", prepod.position);
                     dicGeneral.Add("footer_rank", prepod.rank);
-                    dicGeneral.Add("footer_name_of_prepod", prepod.name + "." + prepod.middleName + ". " + prepod.secondName);
+                    dicGeneral.Add("footer_name_of_prepod", prepod.name[0] + "." + prepod.middleName[0] + ". " + prepod.secondName);
                     dicGeneral.Add("footer_date", nowADay);
 
                     Feedback fb = new Feedback(dicGeneral);
@@ -430,7 +482,7 @@ namespace BackEnd_DLL
                         continue;
                     Dictionary<string, string> dicGeneral = new Dictionary<string, string>();
 
-                    dicGeneral.Add("Practic_type", prepod.students[0].practiceTypeOne);
+                    dicGeneral.Add("Practic_type", GetGenitive( prepod.students[0].practiceTypeOne));
                     dicGeneral.Add("Practic_type_2", prepod.students[0].practiceTypeTwo);
                     dicGeneral.Add("date_start", dates[0]);
                     dicGeneral.Add("date_end", dates[1]);
@@ -442,7 +494,7 @@ namespace BackEnd_DLL
                     dicGeneral.Add("rank_of_student", stud.rank);
                     dicGeneral.Add("name_of_student_full", stud.secondName + " " + stud.name + " " + stud.middleName);
                     dicGeneral.Add("footer_name_of_student", stud.name[0] + "." + stud.middleName[0] + ". " + stud.secondName);
-                    dicGeneral.Add("name_of_student_RP", stud.secondName + " " + stud.name + " " + stud.middleName);
+                    dicGeneral.Add("name_of_student_RP", GetGenitive( stud.secondName) + " " + GetGenitive( stud.name) + " " + GetGenitive(stud.middleName));
 
                     Dairy fb = new Dairy(dicGeneral);
                     dairies.Add(fb);
@@ -485,24 +537,26 @@ namespace BackEnd_DLL
 
                     Dictionary<string, string> dicGeneral = new Dictionary<string, string>();
 
+                    
+
                     dicGeneral.Add("head_position", approver.position);
-                    dicGeneral.Add("head_name", approver.name[0] + " " + approver.middleName[0] + " " + approver.secondName);
-                    dicGeneral.Add("head_date", "2020");
-                    dicGeneral.Add("Practic_type", prepod.students[0].practiceTypeOne);
+                    dicGeneral.Add("head_name", approver.name[0] + "." + approver.middleName[0] + ". " + approver.secondName);
+                    dicGeneral.Add("name_of_student", GetDative(stud.name) + " " + GetDative(stud.middleName) + " " + GetDative(stud.secondName));
+                    dicGeneral.Add("Practic_type", GetAccusative( prepod.students[0].practiceTypeOne));
                     dicGeneral.Add("Practic_type_2", prepod.students[0].practiceTypeTwo);
                     dicGeneral.Add("date_start_1", dates[0].Split('.')[0]);
-                    dicGeneral.Add("date_start_2", dates[0].Split('.')[1] + dates[0].Split('.')[2]);//пока не разобрался как перевести в русский месяц
+                    dicGeneral.Add("date_start_2", dates[0].Split('.')[1]);//пока не разобрался как перевести в русский месяц
                     dicGeneral.Add("date_end_1", dates[1].Split('.')[0]);
-                    dicGeneral.Add("date_end_2", dates[1].Split('.')[1] + dates[1].Split('.')[2]);
+                    dicGeneral.Add("date_end_2", dates[1].Split('.')[1]);
                     /*
                      * 
                      * разобраться с планом
                      * 
                      */
 
-                    dicGeneral.Add("footer_name_of_prepod", prepod.name[0] + "." + prepod.middleName[0] + "." + prepod.secondName);
-                    dicGeneral.Add("place_of_practic", stud.location);
-                    dicGeneral.Add("footer_name_of_student", stud.name[0] + " " + stud.middleName[0] + stud.secondName);
+                    dicGeneral.Add("footer_name_of_prepod", prepod.name[0] + "." + prepod.middleName[0] + ". " + prepod.secondName);
+                    dicGeneral.Add("place_of_practic", GetLocative(stud.location));
+                    dicGeneral.Add("footer_name_of_student", stud.name[0] + "." + stud.middleName[0] + ". " + stud.secondName);
 
                     Task task = new Task(dicGeneral);
                     tasks.Add(task);

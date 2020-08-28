@@ -260,6 +260,7 @@ namespace BackEnd_DLL
 			student.rank = studentArr[i++];
 			student.faculty = studentArr[i++];
 			student.course = studentArr[i][2].ToString(); // третья цифра - номер курса
+			student.group = studentArr[i];
 
 			i = 1;
 
