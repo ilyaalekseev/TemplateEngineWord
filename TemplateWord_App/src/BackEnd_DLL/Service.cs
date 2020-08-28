@@ -31,6 +31,15 @@ namespace BackEnd_DLL
                 CreateTaskTemplate(course, faculty);
         }
 
+        public static FieldContent GetPlan(Dictionary<string, string> _dic, int counter)
+        {
+            string numb_of_plan = "plan_" + counter.ToString();
+            if (_dic.ContainsKey(numb_of_plan))
+                return new FieldContent("part_of_plan", _dic[numb_of_plan] + ".");
+            else
+                return null;
+        }
+
         private void CreateTaskTemplate(string course, string faculty)
         {
             List<Task> tasks = MakeTask(course, faculty);
@@ -63,22 +72,31 @@ namespace BackEnd_DLL
                 }
                 var valuesToFill2 = new Content(
                     new ListContent("plan")
-                        .AddItem(
-                            new FieldContent("part_of_plan", "Изучить и выполнить функциональные обязанности по должности прохождения практики.")
-                            )/*заместо второго параметра должен быть n-ый пункт плана*/
-                        .AddItem(
-                            new FieldContent("part_of_plan", "Пункт два")
-                            )/*мне нужно знать в каком виде хранится конкретный пункт плана*/
-                        .AddItem(
-                            new FieldContent("part_of_plan", "Пункт три")
-                            )/*ну и сколько этих пунктов соответсвенно*/
-                    );
+                        .AddItem(GetPlan(task._dic, 1))
+                        .AddItem(GetPlan(task._dic, 2))
+                        .AddItem(GetPlan(task._dic, 3))
+                        .AddItem(GetPlan(task._dic, 4))
+                        .AddItem(GetPlan(task._dic, 5))
+                        .AddItem(GetPlan(task._dic, 6))
+                        .AddItem(GetPlan(task._dic, 7))
+                        .AddItem(GetPlan(task._dic, 8))
+                        .AddItem(GetPlan(task._dic, 9))
+                        .AddItem(GetPlan(task._dic, 10))
+                        .AddItem(GetPlan(task._dic, 11))
+                        .AddItem(GetPlan(task._dic, 12))
+                        .AddItem(GetPlan(task._dic, 13))
+                        .AddItem(GetPlan(task._dic, 14))
+                        );
                 using (var outputDocument = new TemplateProcessor(pathDocument + "task " + task._dic["name_of_student"] + ".docx")
                     .SetRemoveContentControls(true))
                 {
                     outputDocument.FillContent(valuesToFill2);
                     outputDocument.SaveChanges();
                 }
+                DocX doc = DocX.Load(pathDocument + "task " + task._dic["name_of_student"] + ".docx");
+
+                doc.RemoveParagraphAt(0);
+                doc.Save();
             }
         }
 
