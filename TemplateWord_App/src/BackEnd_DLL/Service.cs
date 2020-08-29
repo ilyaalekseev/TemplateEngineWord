@@ -32,7 +32,6 @@ namespace BackEnd_DLL
                 CreateTaskTemplate(course, faculty);
         }
 
-
         private void CreateTaskTemplate(string course, string faculty)
         {
             List<Task> tasks = MakeTask(course, faculty);
@@ -122,10 +121,6 @@ namespace BackEnd_DLL
             }
         }
 
-        // Верни плез список про слушаков типа:
-        // List<string[]> lstr; 
-        // lstr.Add([Фамилия Имя Отчество, группа, отметка])  ...
-        // если отметки нет, то в этом поле просто пустая строка
         public List<string[]> GetStudentsShortInfo(string faculty, string course)
 		{
 			List<string[]> lstr = new List<string[]>();
@@ -215,9 +210,24 @@ namespace BackEnd_DLL
 
         private List<Report> MakeReport(string course, string faculty)
         {
-            List<Teacher> prepods = dataBase.GetTeachers();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
-            string dateReport = prepods[0].students[0].date;//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
+
             Teacher approver = dataBase.GetApprover();
+            List<Student> students = dataBase.GetStudents();
+
+            List<Teacher> prepods = new List<Teacher>();
+            foreach (Student stud in students)
+            {
+                if (stud.course == course && stud.faculty == faculty)
+                {
+                    Teacher prepod = new Teacher();
+                    dataBase.MakeTeacher(dataBase.GetTeacherById(stud.teacherId), prepod);
+                    if (!IsExistPrepod(prepods, prepod))
+                        prepods.Add(prepod);
+
+                }
+            }
+            string dateReport = prepods[0].students[0].date;
+
             List<Report> reports = new List<Report>();
             string[] dates = dateReport.Split('-');
             string nowADay = DateTime.Now.ToShortDateString();
@@ -226,20 +236,22 @@ namespace BackEnd_DLL
             {
                 Dictionary<string, string> dicGeneral = new Dictionary<string, string>();
 
-                dicGeneral.Add("name_of_prepod", prepod.secondName + " " + prepod.name + " " + prepod.middleName);
-                dicGeneral.Add("position", prepod.position);
-                dicGeneral.Add("rank", prepod.rank);
-                dicGeneral.Add("footer_name", prepod.name[0] + "." + prepod.middleName[0] + ". " + prepod.secondName);
-                dicGeneral.Add("number", prepod.students[0].course);
-                dicGeneral.Add("Faculty_name", prepod.students[0].faculty);
-                dicGeneral.Add("date_start", dates[0]);
-                dicGeneral.Add("date_end", dates[1]);
-                dicGeneral.Add("footer_date", nowADay);
                 dicGeneral.Add("Head_position", approver.position);
                 dicGeneral.Add("Head_rank", approver.rank);
-                dicGeneral.Add("Head_name", prepod.name[0] + "." + prepod.middleName[0] + ". " + prepod.secondName);
+                dicGeneral.Add("Head_name", approver.name[0] + "." + approver.middleName[0] + ". " + approver.secondName);
                 dicGeneral.Add("Head_date", nowADay);
                 dicGeneral.Add("Practic_type", prepod.students[0].practiceTypeOne);
+                dicGeneral.Add("Practic_type_2", prepod.students[0].practiceTypeTwo);
+                dicGeneral.Add("position", prepod.position);
+                dicGeneral.Add("rank", prepod.rank);
+                dicGeneral.Add("name_of_prepod", prepod.secondName + " " + prepod.name + " " + prepod.middleName);
+                dicGeneral.Add("date_start", dates[0]);
+                dicGeneral.Add("date_end", dates[1]);
+                dicGeneral.Add("number", prepod.students[0].course);
+                dicGeneral.Add("Faculty_name", prepod.students[0].faculty);
+
+                dicGeneral.Add("footer_name", prepod.name[0] + "." + prepod.middleName[0] + ". " + prepod.secondName);
+                dicGeneral.Add("footer_date", nowADay);
 
                 List<Dictionary<string, string>> dicStudents = new List<Dictionary<string, string>>();
                 foreach (Student stud in prepod.students)
@@ -247,53 +259,18 @@ namespace BackEnd_DLL
                     Dictionary<string, string> dicStud = new Dictionary<string, string>();
 
                     dicStud.Add("Student_rank", stud.rank);
-                    dicStud.Add("name_of_student", stud.secondName + " " + stud.name + " " + stud.middleName);
+                    dicStud.Add("name_of_student", GetGenitive(stud.secondName) + " " + GetGenitive(stud.name) + " " + GetGenitive(stud.middleName));
                     dicStud.Add("Location_of_practic", stud.location);
                     dicStud.Add("student_position", stud.position);
                     dicStud.Add("name_of_student_short", stud.name[0] + "." + stud.middleName[0] + ". " + stud.secondName);
                     dicStud.Add("mark", stud.mark);
-                    //List<Teacher> prepods = dataBase.GetTeachers();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
-                    //string dateReport = dataBase.GetDate();//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
-                    //List<Report> reports = new List<Report>();
-                    //string[] dates = dateReport.Split('-');
-                    //string nowADay = DateTime.Now.ToShortDateString();
 
-                    //foreach(Teacher prepod in prepods)
-                    //{
-                    //    Dictionary<string, string> dicGeneral = new Dictionary<string, string>();
-
-                    //    dicGeneral.Add("name_of_prepod", prepod.secondName + " " + prepod.name + " " + prepod.middleName);
-                    //    dicGeneral.Add("position", prepod.position);
-                    //    dicGeneral.Add("rank", prepod.rank);
-                    //    dicGeneral.Add("footer_name", prepod.name[0] + "." + prepod.middleName[0] + ". " + prepod.secondName);
-                    //    dicGeneral.Add("number", prepod.students[0].course);
-                    //    dicGeneral.Add("Faculty_name", prepod.students[0].faculty);
-                    //    dicGeneral.Add("date_start", dates[0]);
-                    //    dicGeneral.Add("date_end", dates[1]);
-                    //    dicGeneral.Add("footer_date", nowADay);
-
-                    //    List<Dictionary<string, string>> dicStudents = new List<Dictionary<string, string>>();
-                    //    foreach(Student stud in prepod.students)
-                    //    {
-                    //        Dictionary<string, string> dicStud = new Dictionary<string, string>();
-                    //        dicStud.Add("Student_rank", stud.rank);
-                    //        dicStud.Add("name_of_student", stud.secondName + " " + stud.name + " " + stud.middleName);
-                    //        dicStud.Add("Location_of_practic", stud.location);
-                    //        dicStud.Add("student_position", stud.position);
-                    //        dicStud.Add("name_of_student_short", stud.name[0] + "." + stud.middleName[0] + ". " + stud.secondName);
-                    //        dicStud.Add("mark", stud.mark);
-
-                    //        dicStudents.Add(dicStud);
-                    //    }
-
-                    //    Report rep = new Report(dicGeneral, dicStudents);
-                    //    reports.Add(rep);
-                    //}
-
-                    //return reports;
+                    dicStudents.Add(dicStud);
                 }
+
+                reports.Add(new Report(dicGeneral, dicStudents));
             }
-			return new List<Report>();
+			return reports;
         }
 
         private List<Feedback> MakeFeedback(string course, string faculty)
