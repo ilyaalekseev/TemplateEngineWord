@@ -208,11 +208,14 @@ namespace BackEnd_DLL
 
         public string GetGenitive(string word)
         {
+            if (word == "техническая")
+                return "технической";
+
             var noun = Nouns.FindSimilar(word, animacy: Animacy.Animate);
             if (noun != null)
             {
-                var accusative = noun[Case.Genitive, Number.Singular];
-                return accusative;
+                var genetive = noun[Case.Genitive, Number.Singular];
+                return genetive;
             }
 
 
@@ -224,8 +227,14 @@ namespace BackEnd_DLL
             var noun = Nouns.FindSimilar(word, animacy: Animacy.Animate);
             if (noun != null)
             {
-                var accusative = noun[Case.Dative, Number.Singular];
-                return accusative;
+                var dative = noun[Case.Dative, Number.Singular];
+                if (dative == null)
+                {
+                    var adj = Adjectives.FindOne(word);
+                    var dat = adj[Case.Genitive, Gender.F];
+                    return dat;
+                }
+                return dative;
             }
 
 
@@ -237,8 +246,14 @@ namespace BackEnd_DLL
             var noun = Nouns.FindSimilar(word, animacy: Animacy.Animate);
             if (noun != null)
             {
-                var accusative = noun[Case.Locative, Number.Singular];
-                return accusative;
+                var locative = noun[Case.Locative, Number.Singular];
+                if (locative == null)
+                {
+                    var adj = Adjectives.FindOne(word);
+                    var loc = adj[Case.Genitive, Gender.F];
+                    return loc;
+                }
+                return locative;
             }
 
 
@@ -247,11 +262,12 @@ namespace BackEnd_DLL
 
         public string GetAccusative(string word)
         {
+            if (word == "техническая")
+                return "технической";
+
             var noun = Nouns.FindSimilar(word, animacy: Animacy.Animate);
             if (noun != null)
             {
-                if (word == "техническая")
-                    return "техническую";
                 var accusative = noun[Case.Accusative, Number.Singular];
                 return accusative;
             }
@@ -385,10 +401,20 @@ namespace BackEnd_DLL
                     dicGeneral.Add("name_of_student", GetGenitive( stud.secondName) + " " + GetGenitive(stud.name) + " " + GetGenitive( stud.middleName));
                     dicGeneral.Add("practic_position_of_student", stud.position);
                     dicGeneral.Add("place_of_practic_full", stud.location);
-                    dicGeneral.Add("date_1_start", dates[0].Split('.')[0]);
-                    dicGeneral.Add("date_2_start", dates[0].Split('.')[1] + dates[0].Split('.')[2]);
-                    dicGeneral.Add("date_1_end", dates[1].Split('.')[0]);
-                    dicGeneral.Add("date_2_end", dates[1].Split('.')[1] + dates[1].Split('.')[2]);
+
+                    int day = int.Parse(dates[0].Split('.')[0]);
+                    int month = int.Parse(dates[0].Split('.')[1]);
+                    int year = int.Parse(dates[0].Split('.')[2]);
+                    DateTime dateTime = new DateTime(year, month, day);
+                    dicGeneral.Add("date_1_start", dateTime.ToString("dd"));
+                    dicGeneral.Add("date_2_start", GetGenitive(dateTime.ToString("MMMM").ToLower()));
+
+                    day = int.Parse(dates[0].Split('.')[0]);
+                    month = int.Parse(dates[0].Split('.')[1]);
+                    year = int.Parse(dates[0].Split('.')[2]);
+                    dateTime = new DateTime(year, month, day);
+                    dicGeneral.Add("date_1_end", dateTime.ToString("dd"));
+                    dicGeneral.Add("date_2_end", GetGenitive(dateTime.ToString("MMMM").ToLower()));
                     dicGeneral.Add("name_of_student_2", stud.secondName + " " + stud.name[0] + "." + stud.middleName[0] +".");
                     dicGeneral.Add("skill_of_practic", stud.skill);
                     dicGeneral.Add("mark", stud.mark);
@@ -569,11 +595,20 @@ namespace BackEnd_DLL
                     dicGeneral.Add("name_of_student", GetDative(stud.name) + " " + GetDative(stud.middleName) + " " + GetDative(stud.secondName));
                     dicGeneral.Add("Practic_type", GetAccusative( prepod.students[0].practiceTypeOne));
                     dicGeneral.Add("Practic_type_2", prepod.students[0].practiceTypeTwo);
-                    DateTime dateTime = new DateTime(int.Parse(dates[0].Split('.')[0]), int.Parse(dates[0].Split('.')[1]), int.Parse(dates[0].Split('.')[2]));
+
+                    int day = int.Parse(dates[0].Split('.')[0]);
+                    int month = int.Parse(dates[0].Split('.')[1]);
+                    int year = int.Parse(dates[0].Split('.')[2]);
+                    DateTime dateTime = new DateTime(year, month, day);
                     dicGeneral.Add("date_start_1", dateTime.ToString("dd"));
-                    dicGeneral.Add("date_start_2", dateTime.ToString("MMMM"));//пока не разобрался как перевести в русский месяц
-                    dicGeneral.Add("date_end_1", dates[1].Split('.')[0]);
-                    dicGeneral.Add("date_end_2", dates[1].Split('.')[1]);
+                    dicGeneral.Add("date_start_2", GetGenitive(dateTime.ToString("MMMM").ToLower()));
+
+                    day = int.Parse(dates[1].Split('.')[0]);
+                    month = int.Parse(dates[1].Split('.')[1]);
+                    year = int.Parse(dates[1].Split('.')[2]);
+                    dateTime = new DateTime(year, month, day);
+                    dicGeneral.Add("date_end_1", dateTime.ToString("dd"));
+                    dicGeneral.Add("date_end_2", GetGenitive(dateTime.ToString("MMMM").ToLower()));
                     /*
                      * 
                      * разобраться с планом
