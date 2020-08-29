@@ -21,13 +21,14 @@ namespace BackEnd_DLL
 
 		public void MakeDocuments(string course, string faculty, bool[] tmp)
 		{
-            if (tmp[0] == true)
-                CreateDiaryTemplate(course, faculty);
-
-            if (tmp[1] == true)
-                CreateFeedbackTemplate(course, faculty);
 
             if (tmp[2] == true)
+                CreateDiaryTemplate(course, faculty);
+
+            if (tmp[3] == true)
+                CreateFeedbackTemplate(course, faculty);
+
+            if (tmp[4] == true)
                 CreateTaskTemplate(course, faculty);
         }
 
@@ -50,6 +51,10 @@ namespace BackEnd_DLL
             {
                 DocX document = DocX.Load(pathDocument + "task.docx");
                 document.SaveAs(pathDocument + "task " + task._dic["name_of_student"] + ".docx");
+                //FieldContent[] lst = new FieldContent[10];
+                //lst[0] = new FieldContent("head_position", task._dic["head_position"]);
+                //lst[1] = new FieldContent("head_position", task._dic["head_position"]);
+                //var valTmp = new Content(lst);
                 var valuesToFill = new Content(
                     new FieldContent("head_position", task._dic["head_position"]),
                     new FieldContent("head_name", task._dic["head_name"]),
@@ -226,6 +231,7 @@ namespace BackEnd_DLL
 
             return word;
         }
+
         public string GetLocative(string word)
         {
             var noun = Nouns.FindSimilar(word, animacy: Animacy.Animate);
@@ -254,7 +260,6 @@ namespace BackEnd_DLL
             return word;
         }
 
-        // Пока закомментил! 
         private List<Report> MakeReport(string course, string faculty)
         {
             List<Teacher> prepods = dataBase.GetTeachers();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
@@ -564,8 +569,9 @@ namespace BackEnd_DLL
                     dicGeneral.Add("name_of_student", GetDative(stud.name) + " " + GetDative(stud.middleName) + " " + GetDative(stud.secondName));
                     dicGeneral.Add("Practic_type", GetAccusative( prepod.students[0].practiceTypeOne));
                     dicGeneral.Add("Practic_type_2", prepod.students[0].practiceTypeTwo);
-                    dicGeneral.Add("date_start_1", dates[0].Split('.')[0]);
-                    dicGeneral.Add("date_start_2", dates[0].Split('.')[1]);//пока не разобрался как перевести в русский месяц
+                    DateTime dateTime = new DateTime(int.Parse(dates[0].Split('.')[0]), int.Parse(dates[0].Split('.')[1]), int.Parse(dates[0].Split('.')[2]));
+                    dicGeneral.Add("date_start_1", dateTime.ToString("dd"));
+                    dicGeneral.Add("date_start_2", dateTime.ToString("MMMM"));//пока не разобрался как перевести в русский месяц
                     dicGeneral.Add("date_end_1", dates[1].Split('.')[0]);
                     dicGeneral.Add("date_end_2", dates[1].Split('.')[1]);
                     /*
