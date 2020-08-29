@@ -226,6 +226,8 @@ namespace BackEnd_DLL
             var noun = Nouns.FindSimilar(word, animacy: Animacy.Animate);
             if (noun != null)
             {
+                if (word == "техническая")
+                    return "техническую";
                 var accusative = noun[Case.Accusative, Number.Singular];
                 return accusative;
             }
