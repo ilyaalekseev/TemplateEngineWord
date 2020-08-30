@@ -74,7 +74,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dairy.cs" />
+    <Compile Include="Diary.cs" />
     <Compile Include="DocumentWord.cs" />
     <Compile Include="Feedback.cs" />
     <Compile Include="IService.cs" />
