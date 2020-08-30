@@ -23,6 +23,11 @@ namespace BackEnd_DLL
             _inputPath = input;
         }
 
+        public void SetOutpath(string _path)
+        {
+            _outputPath = _path;
+        }
+
         public void MakeDocuments(string course, string faculty, bool[] tmp)
 		{
             if (tmp[0] == true)
@@ -122,7 +127,6 @@ namespace BackEnd_DLL
                     outputDocument.SaveChanges();
                 }
             }
-            
         }
 
         private void CreateFeedbackTemplate(string course, string faculty)
@@ -181,7 +185,7 @@ namespace BackEnd_DLL
                     stud_marks[counter_stud] = new FieldContent("stud_mark_" + (counter_stud).ToString(), mark_practic);
                     counter_stud++;
                 }
-                for (; counter_stud < 16; ++counter_stud)
+                for (; counter_stud < 16; ++counter_stud) //говнокод!!!!!!!!!!!!!1
                 {
                     stud[counter_stud] = new FieldContent("stud_" + (counter_stud).ToString(), "");
                     stud_marks[counter_stud] = new FieldContent("stud_mark_" + (counter_stud).ToString(), "");
