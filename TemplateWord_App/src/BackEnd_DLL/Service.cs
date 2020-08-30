@@ -1,4 +1,7 @@
 ﻿using System;
+using System.IO;
+using System.Collections;
+using CsvHelper;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -645,5 +648,27 @@ namespace BackEnd_DLL
 
             return tasks;
         }
+    
+        public bool PullDb(string path, int indicator, bool type)//рабочее название поменять потом сука
+        {
+            string[] str = { ";" };
+            using (StreamReader rd = new StreamReader(new FileStream(path, FileMode.Open)))
+            {
+                str = rd.ReadToEnd().Split(str, StringSplitOptions.RemoveEmptyEntries);
+            }
+
+            string[,] arr = new string[str.Length, 17];
+            int count = 0;
+            //foreach (string strTmp in str)
+            //    arr[count++,] = strTmp.Split(',');
+
+            if (type)
+                dataBase.WritingToTable((indicator == 1) ? "students" : "teachers", arr);
+            else
+                dataBase.RewritingToTable((indicator == 1) ? "students" : "teachers", arr);
+
+            return true;
+        }
+
     }
 }
