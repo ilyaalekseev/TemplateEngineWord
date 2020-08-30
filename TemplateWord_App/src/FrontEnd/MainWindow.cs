@@ -204,7 +204,8 @@ namespace FrontEnd
 
 			if (button_start.Text == "OK")
 			{
-				tableLayoutPanel1.Visible = true;
+				if (panelBD.Visible == false)
+					tableLayoutPanel1.Visible = true;
 				_course = comboBox_Cours.Text;
 				_faculty = comboBox_Faculty.Text;
 
@@ -226,7 +227,9 @@ namespace FrontEnd
 		private void button_Otmena_Click(object sender, EventArgs e)
 		{
 			comboBox_Cours.Text = "";
+			comboBox_Cours.Enabled = true;
 			comboBox_Faculty.Text = "";
+			comboBox_Faculty.Enabled = true;
 			button_start.Text = "OK";
 			pictureBox1.Image = Resources.close__1_;
 			pictureBox2.Image = Resources.close__1_;
@@ -240,18 +243,21 @@ namespace FrontEnd
 		private void button_OK_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
+
 			// _serv.MakeDocument(_course, _faculty, 
 			_serv.MakeDocuments(_course, _faculty, _docx);
+
 			this.Cursor = Cursors.Default;
 			MessageBox.Show("Готово", "Сообщение");
 		}
 
 		private void buttonTempWindow_Click(object sender, EventArgs e)
 		{
-			tableLayoutPanel1.Visible = true;
 			panelBD.Visible = false;
 			textBoxFile.Text = "";
 			button_Otmena_Click(sender, e);
+			if (button_start.Text == "Изменить")
+				tableLayoutPanel1.Visible = true;
 			buttonTempWindow.BackColor = Color.FromArgb(165, 165, 165);
 			buttonBD.BackColor = Color.FromArgb(245, 245, 245);
 		}
