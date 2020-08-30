@@ -21,6 +21,7 @@ namespace FrontEnd
 		string _course;
 		Service _serv;
 		bool[] _docx;
+		string _outputDir;
 
 
 		public MainWindow()
@@ -28,8 +29,10 @@ namespace FrontEnd
 			_lstrMarks = new List<string[]>();
 			_faculty = "";
 			_course = "";
+			_outputDir = "";
 			_docx = new bool[]{ false, false, false, false, false};
 			_serv = new Service();
+
 			InitializeComponent();
 			pictureBox1.Image = Resources.close__1_;
 			pictureBox2.Image = Resources.close__1_;
@@ -65,14 +68,6 @@ namespace FrontEnd
 
 		private async void OpenSetRatings()
 		{
-			if (_lstrMarks.Count == 0)
-			{
-				_lstrMarks = _serv.GetStudentsShortInfo(_course, _faculty);
-				_lstrMarks.Add(new string[] { "Петров Иван Иванович", "12", "4" });
-				_lstrMarks.Add(new string[] { "Моторенков Павел Романыч", "12", "5" });
-				_lstrMarks.Add(new string[] { "Хабибов Чубак Васильевич", "12", "3" });
-			}
-
 			SetRatings sr = new SetRatings(this, _lstrMarks);
 			sr.Show();
 			this.Enabled = false;
@@ -243,7 +238,7 @@ namespace FrontEnd
 		private void button_OK_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
-
+			
 			// _serv.MakeDocument(_course, _faculty, 
 			_serv.MakeDocuments(_course, _faculty, _docx);
 
@@ -314,6 +309,7 @@ namespace FrontEnd
 				if (folderDialog.ShowDialog(this) == DialogResult.OK)
 				{
 					textBoxFolder.Text = folderDialog.SelectedPath;
+					_outputDir = textBoxFolder.Text;
 				}
 			}
 		}
