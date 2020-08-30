@@ -12,15 +12,36 @@ namespace BackEnd_DLL
 	public class Service : IService
 	{
 		private ManagingRequestsBD dataBase;
-        private string _fullPath = "C:/doki/";
+        private string _outputPath;
+        private string _inputPath;
 
         public Service()
 		{
 			dataBase = new ManagingRequestsBD();
-		}
+            _outputPath = "C:/doki/";
+            _inputPath = "C:/doki/";
+        }
 
-		public void MakeDocuments(string course, string faculty, bool[] tmp)
+        public Service(string input, string output)
+        {
+            dataBase = new ManagingRequestsBD();
+            _outputPath = output;
+            _inputPath = input;
+        }
+
+        public Service(string output)
+        {
+            dataBase = new ManagingRequestsBD();
+            _outputPath = output;
+            _inputPath = "C:/doki/";
+        }
+
+
+
+        public void MakeDocuments(string course, string faculty, bool[] tmp)
 		{
+            if (tmp[0] == true)
+                CreateReportTemplate(course, faculty);
 
             if (tmp[2] == true)
                 CreateDiaryTemplate(course, faculty);
@@ -36,12 +57,10 @@ namespace BackEnd_DLL
         {
             List<Task> tasks = MakeTask(course, faculty);
 
-            string pathDocument = _fullPath;
-
             foreach (Task task in tasks)
             {
-                DocX document = DocX.Load(pathDocument + "task.docx");
-                document.SaveAs(pathDocument + "task " + task._dic["name_of_student"] + ".docx");
+                DocX document = DocX.Load(_inputPath + "task.docx");
+                document.SaveAs(_inputPath + "task " + task._dic["name_of_student"] + ".docx");
                 FieldContent[] lst = new FieldContent[task._dic.Count];
                 int count_content = 0;
                 foreach (var pair in task._dic)
@@ -50,12 +69,13 @@ namespace BackEnd_DLL
                         lst[count_content++] = new FieldContent(pair.Key, pair.Value);
                 }
                 var valuesToFill = new Content(lst);
-                using (var outputDocument = new TemplateProcessor(pathDocument + "task " + task._dic["name_of_student"] + ".docx")
+                using (var outputDocument = new TemplateProcessor(_outputPath + "/Индивидуальные задания/task_" + task._dic["name_of_student"] + ".docx")
                     .SetRemoveContentControls(true))
                 {
                     outputDocument.FillContent(valuesToFill);
                     outputDocument.SaveChanges();
                 }
+
                 var planing = new ListContent("plan");
                 foreach (var pair in task._dic)
                 {
@@ -63,9 +83,10 @@ namespace BackEnd_DLL
                         planing.AddItem(new FieldContent("part_of_plan", task._dic[pair.Key] + "."));
                 }
                 var valuesToFill2 = new Content(planing);
-                using (var outputDocument = new TemplateProcessor(pathDocument + "task " + task._dic["name_of_student"] + ".docx")
+                using (var outputDocument = new TemplateProcessor(_outputPath + "/Индивидуальные задания/task_" + task._dic["name_of_student"] + ".docx")
                     .SetRemoveContentControls(true))
                 {
+                    outputDocument.FillContent(valuesToFill);
                     outputDocument.FillContent(valuesToFill2);
                     outputDocument.SaveChanges();
                 }
@@ -76,18 +97,16 @@ namespace BackEnd_DLL
         {
             List<Dairy> dairies = MakeDairy(course, faculty);
 
-            string pathDocument = _fullPath;
-
             foreach (Dairy diary in dairies)
             {
-                DocX document = DocX.Load(pathDocument + "diary.docx");//создаю копию шаблона в той же директории, что и шаблон
-                document.SaveAs(pathDocument + "diary " + diary._dic["name_of_student_full"] + ".docx");// в том же каталоге создаю заполненный дневник на конкретного слушателя
+                DocX document = DocX.Load(_inputPath + "diary.docx");//создаю копию шаблона в той же директории, что и шаблон
+                document.SaveAs(_outputPath + "/Дневники/diary " + diary._dic["name_of_student_full"] + ".docx");// в том же каталоге создаю заполненный дневник на конкретного слушателя
                 FieldContent[] lst = new FieldContent[diary._dic.Count];
                 int count_content = 0;
                 foreach (var pair in diary._dic)
                 { lst[count_content++] = new FieldContent(pair.Key, pair.Value); }
                 var valuesToFill = new Content(lst);
-                using (var outputDocument = new TemplateProcessor(pathDocument + "diary " + diary._dic["name_of_student_full"] + ".docx")
+                using (var outputDocument = new TemplateProcessor(_outputPath + "/Дневники/diary " + diary._dic["name_of_student_full"] + ".docx")
                     .SetRemoveContentControls(true))
                 {
                     outputDocument.FillContent(valuesToFill);
@@ -101,21 +120,71 @@ namespace BackEnd_DLL
         {
             List<Feedback> feedbacks = MakeFeedback(course, faculty);
 
-            string pathDocument = _fullPath;
-
             foreach (Feedback feed in feedbacks)
             {
-                DocX document = DocX.Load(pathDocument + "feedback.docx");
-                document.SaveAs(pathDocument + "feedback " + feed._dic["name_of_student"] + ".docx");
+                DocX document = DocX.Load(_inputPath + "feedback.docx");
+                document.SaveAs(_outputPath + "/Отзывы/feedback " + feed._dic["name_of_student"] + ".docx");
                 FieldContent[] lst = new FieldContent[feed._dic.Count];
                 int count_content = 0;
                 foreach (var pair in feed._dic)
                 { lst[count_content++] = new FieldContent(pair.Key, pair.Value); }
                 var valuesToFill = new Content(lst);
-                using (var outputDocument = new TemplateProcessor(pathDocument + "feedback " + feed._dic["name_of_student"] + ".docx")
+                using (var outputDocument = new TemplateProcessor(_outputPath + "/Отзывы/feedback " + feed._dic["name_of_student"] + ".docx")
                 .SetRemoveContentControls(true))
                 {
                     outputDocument.FillContent(valuesToFill);
+                    outputDocument.SaveChanges();
+                }
+            }
+        }
+
+        private void CreateReportTemplate(string course, string faculty)
+        {
+            List<Report> reports = MakeReport(course, faculty);
+
+            foreach (Report rep in reports)
+            {
+                DocX document = DocX.Load(_inputPath + "report.docx");
+                document.SaveAs(_outputPath + "/Отчёты/report " + rep._dicGeneral["name_of_prepod"] + ".docx");
+                FieldContent[] lst = new FieldContent[rep._dicGeneral.Count];
+                int count_content = 0;
+                foreach (var pair in rep._dicGeneral)
+                { lst[count_content++] = new FieldContent(pair.Key, pair.Value); }
+                var valuesToFill = new Content(lst);
+                int counter_stud = 1;
+                FieldContent[] stud = new FieldContent[16];
+                FieldContent[] stud_marks = new FieldContent[16];
+                foreach (var elem in rep._students)
+                {
+                    string info_practic = "";
+                    string mark_practic = "";
+                    if (counter_stud == 1)
+                    {
+                        info_practic = elem["Student_rank"] + " " + elem["name_of_student"] + " в " + elem["Location_of_practic"] + " по воинской должности " + elem["student_position"];
+                        mark_practic = "Слушатель " + elem["name_of_student_short"] + " получил оценку «" + elem["mark"] + "»";
+                    }
+                    else
+                    {
+                        info_practic = ", " + elem["Student_rank"] + " " + elem["name_of_student"] + " в " + elem["Location_of_practic"] + " по воинской должности " + elem["student_position"];
+                        mark_practic = ", слушатель " + elem["name_of_student_short"] + " получил оценку «" + elem["mark"] + "»";
+                    }
+                    stud[counter_stud] = new FieldContent("stud_" + (counter_stud).ToString(), info_practic);
+                    stud_marks[counter_stud] = new FieldContent("stud_mark_" + (counter_stud).ToString(), mark_practic);
+                    counter_stud++;
+                }
+                for (; counter_stud < 16; ++counter_stud)
+                {
+                    stud[counter_stud] = new FieldContent("stud_" + (counter_stud).ToString(), "");
+                    stud_marks[counter_stud] = new FieldContent("stud_mark_" + (counter_stud).ToString(), "");
+                }
+                var valuesToFill2 = new Content(stud);
+                var valuesToFill3 = new Content(stud_marks);
+                using (var outputDocument = new TemplateProcessor(_outputPath + "/Отчёты/report " + rep._dicGeneral["name_of_prepod"] + ".docx")
+    .SetRemoveContentControls(true))
+                {
+                    outputDocument.FillContent(valuesToFill);
+                    outputDocument.FillContent(valuesToFill2);
+                    outputDocument.FillContent(valuesToFill3);
                     outputDocument.SaveChanges();
                 }
             }
@@ -256,13 +325,15 @@ namespace BackEnd_DLL
                 List<Dictionary<string, string>> dicStudents = new List<Dictionary<string, string>>();
                 foreach (Student stud in prepod.students)
                 {
+                    if (stud.course != course || stud.faculty != faculty)
+                        continue;
                     Dictionary<string, string> dicStud = new Dictionary<string, string>();
 
-                    dicStud.Add("Student_rank", stud.rank);
+                    dicStud.Add("Student_rank", GetGenitive(stud.rank));
                     dicStud.Add("name_of_student", GetGenitive(stud.secondName) + " " + GetGenitive(stud.name) + " " + GetGenitive(stud.middleName));
-                    dicStud.Add("Location_of_practic", stud.location);
+                    dicStud.Add("Location_of_practic", GetGenitive(stud.location));
                     dicStud.Add("student_position", stud.position);
-                    dicStud.Add("name_of_student_short", stud.name[0] + "." + stud.middleName[0] + ". " + stud.secondName);
+                    dicStud.Add("name_of_student_short", stud.name[0] + "." + stud.middleName[0] + ". " + GetGenitive(stud.secondName));
                     dicStud.Add("mark", stud.mark);
 
                     dicStudents.Add(dicStud);
@@ -290,16 +361,18 @@ namespace BackEnd_DLL
 
                 }
             }
-            string dateDairy = prepods[0].students[0].date;
+            string dateFeedback = prepods[0].students[0].date;
 
             List<Feedback> feedbacks = new List<Feedback>();
-            string[] dates = dateDairy.Split('-');
+            string[] dates = dateFeedback.Split('-');
             string nowADay = DateTime.Now.ToShortDateString();
 
             foreach (Teacher prepod in prepods)
             {
                 foreach (Student stud in prepod.students)
                 {
+                    if (stud.course != course || stud.faculty != faculty)
+                        continue;
                     Dictionary<string, string> dicGeneral = new Dictionary<string, string>();
 
                     dicGeneral.Add("head_position", approver.position);
@@ -363,10 +436,10 @@ namespace BackEnd_DLL
 
                 }
             }
-            string dateDairy = prepods[0].students[0].date;
+            string dateRaport = prepods[0].students[0].date;
 
             List<Raport> raports = new List<Raport>();
-            string[] dates = dateDairy.Split('-');
+            string[] dates = dateRaport.Split('-');
             string nowADay = DateTime.Now.ToShortDateString();
 
             foreach (Teacher prepod in prepods)
@@ -397,6 +470,8 @@ namespace BackEnd_DLL
                 List<Dictionary<string, string>> dicStudents = new List<Dictionary<string, string>>();
                 foreach (Student stud in prepod.students)
                 {
+                    if (stud.course != course || stud.faculty != faculty)
+                        continue;
                     Dictionary<string, string> dicStud = new Dictionary<string, string>();
                     
                     dicStud.Add("rank_of_student_in_direction", stud.rank);
@@ -443,7 +518,7 @@ namespace BackEnd_DLL
             {
                 foreach (Student stud in prepod.students)
                 {
-                    if (stud.course != course && stud.faculty != faculty)
+                    if (stud.course != course || stud.faculty != faculty)
                         continue;
                     Dictionary<string, string> dicGeneral = new Dictionary<string, string>();
 
@@ -487,10 +562,10 @@ namespace BackEnd_DLL
 
                 }
             }
-            string dateDairy = prepods[0].students[0].date;
+            string dateTask = prepods[0].students[0].date;
 
             List<Task> tasks = new List<Task>();
-            string[] dates = dateDairy.Split('-');
+            string[] dates = dateTask.Split('-');
 
 
             foreach (Teacher prepod in prepods)
