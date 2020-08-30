@@ -21,6 +21,8 @@ namespace BackEnd_DLL
 
 		public void MakeDocuments(string course, string faculty, bool[] tmp)
 		{
+            if (tmp[0] == true)
+                CreateReportTemplate(course, faculty);
 
             if (tmp[2] == true)
                 CreateDiaryTemplate(course, faculty);
@@ -50,12 +52,6 @@ namespace BackEnd_DLL
                         lst[count_content++] = new FieldContent(pair.Key, pair.Value);
                 }
                 var valuesToFill = new Content(lst);
-                using (var outputDocument = new TemplateProcessor(pathDocument + "task " + task._dic["name_of_student"] + ".docx")
-                    .SetRemoveContentControls(true))
-                {
-                    outputDocument.FillContent(valuesToFill);
-                    outputDocument.SaveChanges();
-                }
                 var planing = new ListContent("plan");
                 foreach (var pair in task._dic)
                 {
@@ -66,6 +62,7 @@ namespace BackEnd_DLL
                 using (var outputDocument = new TemplateProcessor(pathDocument + "task " + task._dic["name_of_student"] + ".docx")
                     .SetRemoveContentControls(true))
                 {
+                    outputDocument.FillContent(valuesToFill);
                     outputDocument.FillContent(valuesToFill2);
                     outputDocument.SaveChanges();
                 }
@@ -121,6 +118,59 @@ namespace BackEnd_DLL
             }
         }
 
+        private void CreateReportTemplate(string course, string faculty)
+        {
+            List<Report> reports = MakeReport(course, faculty);
+
+            string pathDocument = _fullPath;
+
+            foreach (Report rep in reports)
+            {
+                DocX document = DocX.Load(pathDocument + "report.docx");
+                document.SaveAs(pathDocument + "feedback " + rep._dicGeneral["name_of_prepod"] + ".docx");
+                FieldContent[] lst = new FieldContent[rep._dicGeneral.Count];
+                int count_content = 0;
+                foreach (var pair in rep._dicGeneral)
+                { lst[count_content++] = new FieldContent(pair.Key, pair.Value); }
+                var valuesToFill = new Content(lst);
+                int counter_stud = 1;
+                FieldContent[] stud = new FieldContent[16];
+                FieldContent[] stud_marks = new FieldContent[16];
+                foreach (var elem in rep._students)
+                {
+                    string info_practic = "";
+                    string mark_practic = "";
+                    if (counter_stud == 1)
+                    {
+                        info_practic = elem["Student_rank"] + " " + elem["name_of_student"] + " в " + elem["Location_of_practic"] + " по воинской должности " + elem["student_position"];
+                        mark_practic = "Слушатель " + elem["name_of_student_short"] + " получил оценку «" + elem["mark"] + "»";
+                    }
+                    else
+                    {
+                        info_practic = ", " + elem["Student_rank"] + " " + elem["name_of_student"] + " в " + elem["Location_of_practic"] + " по воинской должности " + elem["student_position"];
+                        mark_practic = ", слушатель " + elem["name_of_student_short"] + " получил оценку «" + elem["mark"] + "»";
+                    }
+                    stud[counter_stud] = new FieldContent("stud_" + (counter_stud).ToString(), info_practic);
+                    stud_marks[counter_stud] = new FieldContent("stud_mark_" + (counter_stud).ToString(), mark_practic);
+                    counter_stud++;
+                }
+                for (; counter_stud < 16; ++counter_stud)
+                {
+                    stud[counter_stud] = new FieldContent("stud_" + (counter_stud).ToString(), "");
+                    stud_marks[counter_stud] = new FieldContent("stud_mark_" + (counter_stud).ToString(), "");
+                }
+                var valuesToFill2 = new Content(stud);
+                var valuesToFill3 = new Content(stud_marks);
+                using (var outputDocument = new TemplateProcessor(pathDocument + "report " + rep._dicGeneral["name_of_prepod"] + ".docx")
+    .SetRemoveContentControls(true))
+                {
+                    outputDocument.FillContent(valuesToFill);
+                    outputDocument.FillContent(valuesToFill2);
+                    outputDocument.FillContent(valuesToFill3);
+                    outputDocument.SaveChanges();
+                }
+            }
+        }
         public List<string[]> GetStudentsShortInfo(string faculty, string course)
 		{
 			List<string[]> lstr = new List<string[]>();
