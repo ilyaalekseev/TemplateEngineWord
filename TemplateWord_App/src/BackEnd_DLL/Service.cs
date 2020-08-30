@@ -46,7 +46,7 @@ namespace BackEnd_DLL
             Raport raport = MakeRaport(course, faculty);
 
             DocX document = DocX.Load(_inputPath + "raport.docx");
-            document.SaveAs(_inputPath + "raport.docx");
+            document.SaveAs(_outputPath + "/Рапорт/raport.docx");
             foreach (var direct in raport._direct)
             {
                 FieldContent field = new FieldContent("номер потока", direct.Key);
@@ -76,7 +76,7 @@ namespace BackEnd_DLL
             foreach (Task task in tasks)
             {
                 DocX document = DocX.Load(_inputPath + "task.docx");
-                document.SaveAs(_inputPath + "task " + task._dic["name_of_student"] + ".docx");
+                document.SaveAs(_outputPath + "/Индивидуальные задания/task_" + task._dic["name_of_student"] + ".docx");
                 FieldContent[] lst = new FieldContent[task._dic.Count];
                 int count_content = 0;
                 foreach (var pair in task._dic)
@@ -85,13 +85,6 @@ namespace BackEnd_DLL
                         lst[count_content++] = new FieldContent(pair.Key, pair.Value);
                 }
                 var valuesToFill = new Content(lst);
-                using (var outputDocument = new TemplateProcessor(_outputPath + "/Индивидуальные задания/task_" + task._dic["name_of_student"] + ".docx")
-                    .SetRemoveContentControls(true))
-                {
-                    outputDocument.FillContent(valuesToFill);
-                    outputDocument.SaveChanges();
-                }
-
                 var planing = new ListContent("plan");
                 foreach (var pair in task._dic)
                 {
