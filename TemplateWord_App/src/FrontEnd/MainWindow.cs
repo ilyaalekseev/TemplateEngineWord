@@ -237,7 +237,14 @@ namespace FrontEnd
 		// Отправка в бекенд данных
 		private void button_OK_Click(object sender, EventArgs e)
 		{
+			if (_outputDir == "")
+			{
+				MessageBox.Show("Не выбрана рабочая папка!", "Сообщение");
+				return;
+			}
+
 			this.Cursor = Cursors.WaitCursor;
+			_serv.SetOutpath(_outputDir);
 
 			// _serv.MakeDocument(_course, _faculty, 
 			_serv.MakeDocuments(_course, _faculty, _docx);
