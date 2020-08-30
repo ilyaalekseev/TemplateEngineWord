@@ -253,11 +253,11 @@ namespace FrontEnd
 
 		private void buttonTempWindow_Click(object sender, EventArgs e)
 		{
-			if (button_start.Text == "Изменить")
-				tableLayoutPanel1.Visible = true;
 			panelBD.Visible = false;
 			textBoxFile.Text = "";
 			button_Otmena_Click(sender, e);
+			if (button_start.Text == "Изменить")
+				tableLayoutPanel1.Visible = true;
 			buttonTempWindow.BackColor = Color.FromArgb(165, 165, 165);
 			buttonBD.BackColor = Color.FromArgb(245, 245, 245);
 		}
