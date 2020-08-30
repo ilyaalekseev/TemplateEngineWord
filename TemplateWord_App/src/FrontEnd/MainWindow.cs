@@ -238,7 +238,7 @@ namespace FrontEnd
 		private void button_OK_Click(object sender, EventArgs e)
 		{
 			this.Cursor = Cursors.WaitCursor;
-			
+
 			// _serv.MakeDocument(_course, _faculty, 
 			_serv.MakeDocuments(_course, _faculty, _docx);
 
