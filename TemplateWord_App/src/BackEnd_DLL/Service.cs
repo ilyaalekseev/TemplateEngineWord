@@ -55,25 +55,43 @@ namespace BackEnd_DLL
 
             DocX document = DocX.Load(_inputPath + "raport.docx");
             document.SaveAs(_outputPath + "/Рапорт/raport.docx");
-            foreach (var direct in raport._direct)
+            FieldContent[] lst = new FieldContent[raport._dicGeneral.Count];
+            int count_content = 0;
+            foreach (var pair in raport._dicGeneral)
+                lst[count_content++] = new FieldContent(pair.Key, pair.Value);
+            var valuesToFill = new Content(lst);
+            var directions = new ListContent("Direction");
+            foreach (var pair in raport._direct)
             {
-                FieldContent field = new FieldContent("номер потока", direct.Key);
-                FieldContent[] lst = new FieldContent[direct.Value.Count];
-                int count_content = 0;
-                foreach (var pair in direct.Value)
+                int counting = 0;
+                string[] ranks = pair.Value["rank_of_student_in_direction"].Split('-');
+                string[] names = pair.Value["name_of_student_in_direction"].Split('-');
+                int count_of_stud = names.Count();
+                string studs_and_ranks = "";
+                for (int counter = 0; counter < count_of_stud; counter++)
                 {
-                    lst[count_content++] = new FieldContent(pair.Key, pair.Value);
+                    if (counter == 0)
+                        studs_and_ranks += ranks[counter] + " " + names[counter];
+                    else
+                        studs_and_ranks += ", " + ranks[counter] + " " + names[counter];
                 }
-                string[] ranks = direct.Value["rank_of_student_in_direction"].Split('-'); //массив всех рангов слушаков в 1 потоке
-                string[] names = direct.Value["name_of_student_in_direction"].Split('-'); //массив всех слушаков в 1 потоке
-            }
-
-            //var valuesToFill = new Content(lst);
-            using (var outputDocument = new TemplateProcessor(_outputPath + "/Рапорт/raport.docx")
-                .SetRemoveContentControls(true))
-            {
-                //outputDocument.FillContent(valuesToFill);
-                outputDocument.SaveChanges();
+                FieldContent[] nst = new FieldContent[pair.Value.Count + 1];
+                foreach (var elem in pair.Value)
+                {
+                    if (elem.Key != "name_of_student_in_direction" && elem.Key != "rank_of_student_in_direction")
+                        nst[counting++] = new FieldContent(elem.Key, elem.Value);
+                }
+                nst[counting++] = new FieldContent("student_in_direction", studs_and_ranks);
+                nst[pair.Value.Count] = new FieldContent("number_of_direction", pair.Key);
+                directions.AddItem(nst);
+                var valuesToFill2 = new Content(directions);
+                using (var outputDocument = new TemplateProcessor(_outputPath + "/Рапорт/raport.docx")
+    .SetRemoveContentControls(true))
+                {
+                    outputDocument.FillContent(valuesToFill);
+                    outputDocument.FillContent(valuesToFill2);
+                    outputDocument.SaveChanges();
+                }
             }
         }
 
