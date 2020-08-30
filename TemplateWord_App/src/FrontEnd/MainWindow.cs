@@ -317,7 +317,7 @@ namespace FrontEnd
 				string fileName = textBoxFile.Text;
 				bool flag = true;
 
-				//flag = PullBD(textBoxFile.Text, (comboBox_TablBD.Text == "Слушатели")? 1 : 2, !checkBox_Rewrite.Checked);
+				flag = _serv.PullDb(textBoxFile.Text, (comboBox_TablBD.Text == "Слушатели")? 1 : 2, !checkBox_Rewrite.Checked);
 
 				this.Cursor = Cursors.Default;
 
