@@ -28,6 +28,9 @@ namespace BackEnd_DLL
             if (tmp[0] == true)
                 CreateReportTemplate(course, faculty);
 
+            if (tmp[1] == true)
+                CreateRaportTemplate(course, faculty);
+
             if (tmp[2] == true)
                 CreateDiaryTemplate(course, faculty);
 
