@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TemplateEngine.Docx;
 using Xceed.Words.NET;
+using LingvoNET;
 
 namespace BackEnd_DLL
 {
@@ -20,9 +21,15 @@ namespace BackEnd_DLL
 
 		public void MakeDocuments(string course, string faculty, bool[] tmp)
 		{
-            CreateDiaryTemplate(course, faculty);
-            CreateFeedbackTemplate(course, faculty);
-            CreateTaskTemplate(course, faculty);
+
+            if (tmp[2] == true)
+                CreateDiaryTemplate(course, faculty);
+
+            if (tmp[3] == true)
+                CreateFeedbackTemplate(course, faculty);
+
+            if (tmp[4] == true)
+                CreateTaskTemplate(course, faculty);
         }
 
         private void CreateTaskTemplate(string course, string faculty)
@@ -33,44 +40,30 @@ namespace BackEnd_DLL
 
             foreach (Task task in tasks)
             {
-                DocX document = DocX.Load(pathDocument + "task.docx");//создаю копию шаблона в той же директории, что и шаблон
-                document.SaveAs(pathDocument + "task " + task._dic["name_of_student"] + ".docx");// в том же каталоге создаю заполненный дневник на конкретного слушателя
-                var valuesToFill = new Content(
-                    new FieldContent("head_position", task._dic["head_position"]),
-                    new FieldContent("head_name", task._dic["head_name"]),
-                    new FieldContent("head_date", task._dic["head_date"]),
-                    new FieldContent("Practic_type", task._dic["Practic_type"]),
-                    new FieldContent("Practic_type_2", task._dic["Practic_type_2"]),
-                    new FieldContent("name_of_student", task._dic["name_of_student"]),
-                    new FieldContent("place_of_practic", task._dic["place_of_practic"]),
-                    new FieldContent("date_start_1", task._dic["date_start_1"]),
-                    new FieldContent("date_start_2", task._dic["date_start_2"]),
-                    new FieldContent("date_end_1", task._dic["date_end_1"]),
-                    new FieldContent("date_end_2", task._dic["date_end_2"]),
-                    new FieldContent("footer_name_of_prepod", task._dic["footer_name_of_prepod"]),
-                    new FieldContent("footer_name_of_student", task._dic["footer_name_of_student"]),
-                    new FieldContent("footer_date_1", task._dic["footer_date_1"]),
-                    new FieldContent("footer_date_2", task._dic["footer_date_2"])
-                    );
-                using (var outputDocument = new TemplateProcessor("task " + task._dic["name_of_student"] + ".docx")
+                DocX document = DocX.Load(pathDocument + "task.docx");
+                document.SaveAs(pathDocument + "task " + task._dic["name_of_student"] + ".docx");
+                FieldContent[] lst = new FieldContent[task._dic.Count];
+                int count_content = 0;
+                foreach (var pair in task._dic)
+                {
+                    if (pair.Key.Substring(0, 4) != "plan")
+                        lst[count_content++] = new FieldContent(pair.Key, pair.Value);
+                }
+                var valuesToFill = new Content(lst);
+                using (var outputDocument = new TemplateProcessor(pathDocument + "task " + task._dic["name_of_student"] + ".docx")
                     .SetRemoveContentControls(true))
                 {
                     outputDocument.FillContent(valuesToFill);
                     outputDocument.SaveChanges();
                 }
-                var valuesToFill2 = new Content(
-                    new ListContent("plan")
-                        .AddItem(
-                            new FieldContent("part_of_plan", "Изучить и выполнить функциональные обязанности по должности прохождения практики.")
-                            )/*заместо второго параметра должен быть n-ый пункт плана*/
-                        .AddItem(
-                            new FieldContent("part_of_plan", "Пункт два")
-                            )/*мне нужно знать в каком виде хранится конкретный пункт плана*/
-                        .AddItem(
-                            new FieldContent("part_of_plan", "Пункт три")
-                            )/*ну и сколько этих пунктов соответсвенно*/
-                    );
-                using (var outputDocument = new TemplateProcessor(pathDocument + "tasks " + task._dic["name_of_student"] + ".docx")
+                var planing = new ListContent("plan");
+                foreach (var pair in task._dic)
+                {
+                    if (pair.Key.Substring(0, 4) == "plan")
+                        planing.AddItem(new FieldContent("part_of_plan", task._dic[pair.Key] + "."));
+                }
+                var valuesToFill2 = new Content(planing);
+                using (var outputDocument = new TemplateProcessor(pathDocument + "task " + task._dic["name_of_student"] + ".docx")
                     .SetRemoveContentControls(true))
                 {
                     outputDocument.FillContent(valuesToFill2);
@@ -89,21 +82,11 @@ namespace BackEnd_DLL
             {
                 DocX document = DocX.Load(pathDocument + "diary.docx");//создаю копию шаблона в той же директории, что и шаблон
                 document.SaveAs(pathDocument + "diary " + diary._dic["name_of_student_full"] + ".docx");// в том же каталоге создаю заполненный дневник на конкретного слушателя
-                var valuesToFill = new Content(
-                    new FieldContent("Practic_type", diary._dic["Practic_type"]),
-                    new FieldContent("Practic_type_2", diary._dic["Practic_type_2"]),
-                    new FieldContent("name_of_student_full", diary._dic["name_of_student_full"]),
-                    new FieldContent("date_start", diary._dic["date_start"]),
-                    new FieldContent("date_end", diary._dic["date_end"]),
-                    new FieldContent("footer_date", diary._dic["footer_date"]),
-                    new FieldContent("footer_number", diary._dic["footer_number"]),
-                    new FieldContent("head_prepod", diary._dic["head_prepod"]),
-                    new FieldContent("head_date_1", diary._dic["head_date_1"]),
-                    new FieldContent("rank_of_student", diary._dic["rank_of_student"]),
-                    new FieldContent("footer_name_of_student", diary._dic["footer_name_of_student"]),
-                    new FieldContent("name_of_student_RP", diary._dic["name_of_student_RP"]),
-                    new FieldContent("head_date_2", diary._dic["head_date_2"])
-                    );
+                FieldContent[] lst = new FieldContent[diary._dic.Count];
+                int count_content = 0;
+                foreach (var pair in diary._dic)
+                { lst[count_content++] = new FieldContent(pair.Key, pair.Value); }
+                var valuesToFill = new Content(lst);
                 using (var outputDocument = new TemplateProcessor(pathDocument + "diary " + diary._dic["name_of_student_full"] + ".docx")
                     .SetRemoveContentControls(true))
                 {
@@ -124,33 +107,11 @@ namespace BackEnd_DLL
             {
                 DocX document = DocX.Load(pathDocument + "feedback.docx");
                 document.SaveAs(pathDocument + "feedback " + feed._dic["name_of_student"] + ".docx");
-                var valuesToFill = new Content(
-                    new FieldContent("head_position", feed._dic["head_position"]),
-                    new FieldContent("head_rank", feed._dic["head_rank"]),
-                    new FieldContent("head_name", feed._dic["head_name"]),
-                    new FieldContent("head_date", feed._dic["head_date"]),
-                    new FieldContent("Practical_type", feed._dic["Practical_type"]),
-                    new FieldContent("Practical_type_2", feed._dic["Practical_type_2"]),
-                    new FieldContent("number_of_group", feed._dic["number_of_group"]),
-                    new FieldContent("faculty", feed._dic["faculty"]),
-                    new FieldContent("institute", feed._dic["institute"]),
-                    new FieldContent("rank_of_student", feed._dic["rank_of_student"]),
-                    new FieldContent("name_of_student", feed._dic["name_of_student"]),
-                    new FieldContent("practic_position_of_student", feed._dic["practic_position_of_student"]),
-                    new FieldContent("place_of_practic_full", feed._dic["place_of_practic_full"]),
-                    new FieldContent("date_1_start", feed._dic["date_1_start"]),
-                    new FieldContent("date_2_start", feed._dic["date_2_start"]),
-                    new FieldContent("date_1_end", feed._dic["date_1_end"]),
-                    new FieldContent("date_2_end", feed._dic["date_2_end"]),
-                    new FieldContent("name_of_student_2", feed._dic["name_of_student_2"]),
-                    new FieldContent("skill_of_practic", feed._dic["skill_of_practic"]),
-                    new FieldContent("mark", feed._dic["mark"]),
-                    new FieldContent("footer_position", feed._dic["footer_position"]),
-                    new FieldContent("footer_rank", feed._dic["footer_rank"]),
-                    new FieldContent("footer_name_of_prepod", feed._dic["footer_name_of_prepod"]),
-                    new FieldContent("footer_date", feed._dic["footer_date"])
-
-                );
+                FieldContent[] lst = new FieldContent[feed._dic.Count];
+                int count_content = 0;
+                foreach (var pair in feed._dic)
+                { lst[count_content++] = new FieldContent(pair.Key, pair.Value); }
+                var valuesToFill = new Content(lst);
                 using (var outputDocument = new TemplateProcessor(pathDocument + "feedback " + feed._dic["name_of_student"] + ".docx")
                 .SetRemoveContentControls(true))
                 {
@@ -160,10 +121,6 @@ namespace BackEnd_DLL
             }
         }
 
-        // Верни плез список про слушаков типа:
-        // List<string[]> lstr; 
-        // lstr.Add([Фамилия Имя Отчество, группа, отметка])  ...
-        // если отметки нет, то в этом поле просто пустая строка
         public List<string[]> GetStudentsShortInfo(string faculty, string course)
 		{
 			List<string[]> lstr = new List<string[]>();
@@ -181,13 +138,96 @@ namespace BackEnd_DLL
             return false;
         }
 
+        public string GetGenitive(string word)
+        {
+            if (word == "техническая")
+                return "технической";
 
-		// Пока закомментил! 
+            var noun = Nouns.FindSimilar(word, animacy: Animacy.Animate);
+            if (noun != null)
+            {
+                var genetive = noun[Case.Genitive, Number.Singular];
+                return genetive;
+            }
+
+
+            return word;
+        }
+
+        public string GetDative(string word)
+        {
+            var noun = Nouns.FindSimilar(word, animacy: Animacy.Animate);
+            if (noun != null)
+            {
+                var dative = noun[Case.Dative, Number.Singular];
+                if (dative == null)
+                {
+                    var adj = Adjectives.FindOne(word);
+                    var dat = adj[Case.Genitive, Gender.F];
+                    return dat;
+                }
+                return dative;
+            }
+
+
+            return word;
+        }
+
+        public string GetLocative(string word)
+        {
+            var noun = Nouns.FindSimilar(word, animacy: Animacy.Animate);
+            if (noun != null)
+            {
+                var locative = noun[Case.Locative, Number.Singular];
+                if (locative == null)
+                {
+                    var adj = Adjectives.FindOne(word);
+                    var loc = adj[Case.Genitive, Gender.F];
+                    return loc;
+                }
+                return locative;
+            }
+
+
+            return word;
+        }
+
+        public string GetAccusative(string word)
+        {
+            if (word == "техническая")
+                return "технической";
+
+            var noun = Nouns.FindSimilar(word, animacy: Animacy.Animate);
+            if (noun != null)
+            {
+                var accusative = noun[Case.Accusative, Number.Singular];
+                return accusative;
+            }
+
+
+            return word;
+        }
+
         private List<Report> MakeReport(string course, string faculty)
         {
-            List<Teacher> prepods = dataBase.GetTeachers();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
-            string dateReport = prepods[0].students[0].date;//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
+
             Teacher approver = dataBase.GetApprover();
+            List<Student> students = dataBase.GetStudents();
+
+            List<Teacher> prepods = new List<Teacher>();
+            foreach (Student stud in students)
+            {
+                if (stud.course == course && stud.faculty == faculty)
+                {
+                    Teacher prepod = new Teacher();
+                    dataBase.MakeTeacher(dataBase.GetTeacherById(stud.teacherId), prepod);
+                    if (!IsExistPrepod(prepods, prepod))
+                        prepods.Add(prepod);
+
+                }
+            }
+            string dateReport = prepods[0].students[0].date;
+
             List<Report> reports = new List<Report>();
             string[] dates = dateReport.Split('-');
             string nowADay = DateTime.Now.ToShortDateString();
@@ -196,20 +236,22 @@ namespace BackEnd_DLL
             {
                 Dictionary<string, string> dicGeneral = new Dictionary<string, string>();
 
-                dicGeneral.Add("name_of_prepod", prepod.secondName + " " + prepod.name + " " + prepod.middleName);
-                dicGeneral.Add("position", prepod.position);
-                dicGeneral.Add("rank", prepod.rank);
-                dicGeneral.Add("footer_name", prepod.name[0] + "." + prepod.middleName[0] + ". " + prepod.secondName);
-                dicGeneral.Add("number", prepod.students[0].course);
-                dicGeneral.Add("Faculty_name", prepod.students[0].faculty);
-                dicGeneral.Add("date_start", dates[0]);
-                dicGeneral.Add("date_end", dates[1]);
-                dicGeneral.Add("footer_date", nowADay);
                 dicGeneral.Add("Head_position", approver.position);
                 dicGeneral.Add("Head_rank", approver.rank);
-                dicGeneral.Add("Head_name", prepod.name[0] + "." + prepod.middleName[0] + ". " + prepod.secondName);
+                dicGeneral.Add("Head_name", approver.name[0] + "." + approver.middleName[0] + ". " + approver.secondName);
                 dicGeneral.Add("Head_date", nowADay);
                 dicGeneral.Add("Practic_type", prepod.students[0].practiceTypeOne);
+                dicGeneral.Add("Practic_type_2", prepod.students[0].practiceTypeTwo);
+                dicGeneral.Add("position", prepod.position);
+                dicGeneral.Add("rank", prepod.rank);
+                dicGeneral.Add("name_of_prepod", prepod.secondName + " " + prepod.name + " " + prepod.middleName);
+                dicGeneral.Add("date_start", dates[0]);
+                dicGeneral.Add("date_end", dates[1]);
+                dicGeneral.Add("number", prepod.students[0].course);
+                dicGeneral.Add("Faculty_name", prepod.students[0].faculty);
+
+                dicGeneral.Add("footer_name", prepod.name[0] + "." + prepod.middleName[0] + ". " + prepod.secondName);
+                dicGeneral.Add("footer_date", nowADay);
 
                 List<Dictionary<string, string>> dicStudents = new List<Dictionary<string, string>>();
                 foreach (Student stud in prepod.students)
@@ -217,53 +259,18 @@ namespace BackEnd_DLL
                     Dictionary<string, string> dicStud = new Dictionary<string, string>();
 
                     dicStud.Add("Student_rank", stud.rank);
-                    dicStud.Add("name_of_student", stud.secondName + " " + stud.name + " " + stud.middleName);
+                    dicStud.Add("name_of_student", GetGenitive(stud.secondName) + " " + GetGenitive(stud.name) + " " + GetGenitive(stud.middleName));
                     dicStud.Add("Location_of_practic", stud.location);
                     dicStud.Add("student_position", stud.position);
                     dicStud.Add("name_of_student_short", stud.name[0] + "." + stud.middleName[0] + ". " + stud.secondName);
                     dicStud.Add("mark", stud.mark);
-                    //List<Teacher> prepods = dataBase.GetTeachers();//функция получения всех преподов (в полях препода должны быть связанные с ним студенты)
-                    //string dateReport = dataBase.GetDate();//функция получения время практики в виде (придумать тип, например, "д.м.г - д.м.г")
-                    //List<Report> reports = new List<Report>();
-                    //string[] dates = dateReport.Split('-');
-                    //string nowADay = DateTime.Now.ToShortDateString();
 
-                    //foreach(Teacher prepod in prepods)
-                    //{
-                    //    Dictionary<string, string> dicGeneral = new Dictionary<string, string>();
-
-                    //    dicGeneral.Add("name_of_prepod", prepod.secondName + " " + prepod.name + " " + prepod.middleName);
-                    //    dicGeneral.Add("position", prepod.position);
-                    //    dicGeneral.Add("rank", prepod.rank);
-                    //    dicGeneral.Add("footer_name", prepod.name[0] + "." + prepod.middleName[0] + ". " + prepod.secondName);
-                    //    dicGeneral.Add("number", prepod.students[0].course);
-                    //    dicGeneral.Add("Faculty_name", prepod.students[0].faculty);
-                    //    dicGeneral.Add("date_start", dates[0]);
-                    //    dicGeneral.Add("date_end", dates[1]);
-                    //    dicGeneral.Add("footer_date", nowADay);
-
-                    //    List<Dictionary<string, string>> dicStudents = new List<Dictionary<string, string>>();
-                    //    foreach(Student stud in prepod.students)
-                    //    {
-                    //        Dictionary<string, string> dicStud = new Dictionary<string, string>();
-                    //        dicStud.Add("Student_rank", stud.rank);
-                    //        dicStud.Add("name_of_student", stud.secondName + " " + stud.name + " " + stud.middleName);
-                    //        dicStud.Add("Location_of_practic", stud.location);
-                    //        dicStud.Add("student_position", stud.position);
-                    //        dicStud.Add("name_of_student_short", stud.name[0] + "." + stud.middleName[0] + ". " + stud.secondName);
-                    //        dicStud.Add("mark", stud.mark);
-
-                    //        dicStudents.Add(dicStud);
-                    //    }
-
-                    //    Report rep = new Report(dicGeneral, dicStudents);
-                    //    reports.Add(rep);
-                    //}
-
-                    //return reports;
+                    dicStudents.Add(dicStud);
                 }
+
+                reports.Add(new Report(dicGeneral, dicStudents));
             }
-			return new List<Report>();
+			return reports;
         }
 
         private List<Feedback> MakeFeedback(string course, string faculty)
@@ -299,25 +306,35 @@ namespace BackEnd_DLL
                     dicGeneral.Add("head_rank", approver.rank);
                     dicGeneral.Add("head_name", approver.name[0] + "." + approver.middleName[0] + ". " + approver.secondName);
                     dicGeneral.Add("head_date", nowADay);
-                    dicGeneral.Add("Practical_type", prepod.students[0].practiceTypeOne);
+                    dicGeneral.Add("Practical_type", GetGenitive( prepod.students[0].practiceTypeOne));
                     dicGeneral.Add("Practical_type_2", prepod.students[0].practiceTypeTwo);
                     dicGeneral.Add("number_of_group", stud.group);
                     dicGeneral.Add("faculty", prepod.students[0].faculty);
                     dicGeneral.Add("institute", "ИКСИ");
-                    dicGeneral.Add("rank_of_student", stud.rank);
-                    dicGeneral.Add("name_of_student", stud.secondName + " " + stud.name + " " + stud.middleName);
+                    dicGeneral.Add("rank_of_student", GetGenitive( stud.rank));
+                    dicGeneral.Add("name_of_student", GetGenitive( stud.secondName) + " " + GetGenitive(stud.name) + " " + GetGenitive( stud.middleName));
                     dicGeneral.Add("practic_position_of_student", stud.position);
                     dicGeneral.Add("place_of_practic_full", stud.location);
-                    dicGeneral.Add("date_1_start", dates[0].Split('.')[0]);
-                    dicGeneral.Add("date_2_start", dates[0].Split('.')[1] + dates[0].Split('.')[2]);//пока не разобрался как перевести в русский месяц
-                    dicGeneral.Add("date_1_end", dates[1].Split('.')[0]);
-                    dicGeneral.Add("date_2_end", dates[1].Split('.')[1] + dates[1].Split('.')[2]);
+
+                    int day = int.Parse(dates[0].Split('.')[0]);
+                    int month = int.Parse(dates[0].Split('.')[1]);
+                    int year = int.Parse(dates[0].Split('.')[2]);
+                    DateTime dateTime = new DateTime(year, month, day);
+                    dicGeneral.Add("date_1_start", dateTime.ToString("dd"));
+                    dicGeneral.Add("date_2_start", GetGenitive(dateTime.ToString("MMMM").ToLower()));
+
+                    day = int.Parse(dates[0].Split('.')[0]);
+                    month = int.Parse(dates[0].Split('.')[1]);
+                    year = int.Parse(dates[0].Split('.')[2]);
+                    dateTime = new DateTime(year, month, day);
+                    dicGeneral.Add("date_1_end", dateTime.ToString("dd"));
+                    dicGeneral.Add("date_2_end", GetGenitive(dateTime.ToString("MMMM").ToLower()));
                     dicGeneral.Add("name_of_student_2", stud.secondName + " " + stud.name[0] + "." + stud.middleName[0] +".");
-                    //Слушатель приобрел навыки...
+                    dicGeneral.Add("skill_of_practic", stud.skill);
                     dicGeneral.Add("mark", stud.mark);
                     dicGeneral.Add("footer_position", prepod.position);
                     dicGeneral.Add("footer_rank", prepod.rank);
-                    dicGeneral.Add("footer_name_of_prepod", prepod.name + "." + prepod.middleName + ". " + prepod.secondName);
+                    dicGeneral.Add("footer_name_of_prepod", prepod.name[0] + "." + prepod.middleName[0] + ". " + prepod.secondName);
                     dicGeneral.Add("footer_date", nowADay);
 
                     Feedback fb = new Feedback(dicGeneral);
@@ -430,7 +447,7 @@ namespace BackEnd_DLL
                         continue;
                     Dictionary<string, string> dicGeneral = new Dictionary<string, string>();
 
-                    dicGeneral.Add("Practic_type", prepod.students[0].practiceTypeOne);
+                    dicGeneral.Add("Practic_type", GetGenitive( prepod.students[0].practiceTypeOne));
                     dicGeneral.Add("Practic_type_2", prepod.students[0].practiceTypeTwo);
                     dicGeneral.Add("date_start", dates[0]);
                     dicGeneral.Add("date_end", dates[1]);
@@ -442,7 +459,7 @@ namespace BackEnd_DLL
                     dicGeneral.Add("rank_of_student", stud.rank);
                     dicGeneral.Add("name_of_student_full", stud.secondName + " " + stud.name + " " + stud.middleName);
                     dicGeneral.Add("footer_name_of_student", stud.name[0] + "." + stud.middleName[0] + ". " + stud.secondName);
-                    dicGeneral.Add("name_of_student_RP", stud.secondName + " " + stud.name + " " + stud.middleName);
+                    dicGeneral.Add("name_of_student_RP", GetGenitive( stud.secondName) + " " + GetGenitive( stud.name) + " " + GetGenitive(stud.middleName));
 
                     Dairy fb = new Dairy(dicGeneral);
                     dairies.Add(fb);
@@ -485,24 +502,36 @@ namespace BackEnd_DLL
 
                     Dictionary<string, string> dicGeneral = new Dictionary<string, string>();
 
+                    
+
                     dicGeneral.Add("head_position", approver.position);
-                    dicGeneral.Add("head_name", approver.name[0] + " " + approver.middleName[0] + " " + approver.secondName);
-                    dicGeneral.Add("head_date", "2020");
-                    dicGeneral.Add("Practic_type", prepod.students[0].practiceTypeOne);
+                    dicGeneral.Add("head_name", approver.name[0] + "." + approver.middleName[0] + ". " + approver.secondName);
+                    dicGeneral.Add("name_of_student", GetDative(stud.name) + " " + GetDative(stud.middleName) + " " + GetDative(stud.secondName));
+                    dicGeneral.Add("Practic_type", GetAccusative( prepod.students[0].practiceTypeOne));
                     dicGeneral.Add("Practic_type_2", prepod.students[0].practiceTypeTwo);
-                    dicGeneral.Add("date_start_1", dates[0].Split('.')[0]);
-                    dicGeneral.Add("date_start_2", dates[0].Split('.')[1] + dates[0].Split('.')[2]);//пока не разобрался как перевести в русский месяц
-                    dicGeneral.Add("date_end_1", dates[1].Split('.')[0]);
-                    dicGeneral.Add("date_end_2", dates[1].Split('.')[1] + dates[1].Split('.')[2]);
+
+                    int day = int.Parse(dates[0].Split('.')[0]);
+                    int month = int.Parse(dates[0].Split('.')[1]);
+                    int year = int.Parse(dates[0].Split('.')[2]);
+                    DateTime dateTime = new DateTime(year, month, day);
+                    dicGeneral.Add("date_start_1", dateTime.ToString("dd"));
+                    dicGeneral.Add("date_start_2", GetGenitive(dateTime.ToString("MMMM").ToLower()));
+
+                    day = int.Parse(dates[1].Split('.')[0]);
+                    month = int.Parse(dates[1].Split('.')[1]);
+                    year = int.Parse(dates[1].Split('.')[2]);
+                    dateTime = new DateTime(year, month, day);
+                    dicGeneral.Add("date_end_1", dateTime.ToString("dd"));
+                    dicGeneral.Add("date_end_2", GetGenitive(dateTime.ToString("MMMM").ToLower()));
                     /*
                      * 
                      * разобраться с планом
                      * 
                      */
 
-                    dicGeneral.Add("footer_name_of_prepod", prepod.name[0] + "." + prepod.middleName[0] + "." + prepod.secondName);
-                    dicGeneral.Add("place_of_practic", stud.location);
-                    dicGeneral.Add("footer_name_of_student", stud.name[0] + " " + stud.middleName[0] + stud.secondName);
+                    dicGeneral.Add("footer_name_of_prepod", prepod.name[0] + "." + prepod.middleName[0] + ". " + prepod.secondName);
+                    dicGeneral.Add("place_of_practic", GetLocative(stud.location));
+                    dicGeneral.Add("footer_name_of_student", stud.name[0] + "." + stud.middleName[0] + ". " + stud.secondName);
 
                     Task task = new Task(dicGeneral);
                     tasks.Add(task);

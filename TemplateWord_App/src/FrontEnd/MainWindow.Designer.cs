@@ -218,15 +218,15 @@
             "ОТФ",
             "ФСТ",
             "Выбрать всех"});
-			this.comboBox_Faculty.Location = new System.Drawing.Point(115, 68);
-			this.comboBox_Faculty.Name = "comboBox_Faculty";
-			this.comboBox_Faculty.Size = new System.Drawing.Size(123, 24);
-			this.comboBox_Faculty.TabIndex = 5;
-			// 
-			// comboBox_Cours
-			// 
-			this.comboBox_Cours.FormattingEnabled = true;
-			this.comboBox_Cours.Items.AddRange(new object[] {
+            this.comboBox_Faculty.Location = new System.Drawing.Point(115, 68);
+            this.comboBox_Faculty.Name = "comboBox_Faculty";
+            this.comboBox_Faculty.Size = new System.Drawing.Size(123, 24);
+            this.comboBox_Faculty.TabIndex = 5;
+            // 
+            // comboBox_Cours
+            // 
+            this.comboBox_Cours.FormattingEnabled = true;
+            this.comboBox_Cours.Items.AddRange(new object[] {
             "1",
             "2",
             "3",
