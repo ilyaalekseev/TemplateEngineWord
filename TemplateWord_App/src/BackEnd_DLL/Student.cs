@@ -24,6 +24,7 @@ namespace BackEnd_DLL
         public string skill;//навыки полученные в ходе практики
         public string position;//должность в практике
         public string mark;
+        public string plan;
         //добавьте, если что-то забыл
         //добавьте, если что-то забыл 
     }
