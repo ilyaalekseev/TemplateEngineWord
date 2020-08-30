@@ -11,6 +11,7 @@ using MySql.Data.MySqlClient;
 using BackEnd_DLL;
 using FrontEnd.Properties;
 using System.Reflection;
+using System.IO;
 
 namespace FrontEnd
 {
@@ -43,6 +44,7 @@ namespace FrontEnd
 			panelBD.Visible = false;
 			buttonTempWindow.BackColor = Color.FromArgb(165, 165, 165);
 			buttonBD.BackColor = Color.FromArgb(245, 245, 245);
+			textBoxFile.ReadOnly = true;
 		}
 
 		private void MainWindow_Load(object sender, EventArgs e)
@@ -55,17 +57,13 @@ namespace FrontEnd
 		{
 			if (comboBox_Cours.Text == "" | comboBox_Faculty.Text == "")
 			{
-				comboBox_Cours.BackColor = Color.Red;
-				comboBox_Faculty.BackColor = Color.Red;
-				//Таймер на секунду
-				comboBox_Cours.BackColor = Color.White;
-				comboBox_Faculty.BackColor = Color.White;
 				return true;
 			}
 			else
 				return false;
 		}
 
+		//Для выставления отценок! -- убрал, но можем добавить
 		private async void OpenSetRatings()
 		{
 			SetRatings sr = new SetRatings(this, _lstrMarks);
@@ -75,11 +73,17 @@ namespace FrontEnd
 			this.Enabled = true;
 		}
 
+		public void SetLstr(List<string[]> lstr)
+		{
+			_lstrMarks = lstr;
+		}
+
+		// Выбор документов для шаблонов
 		private  void button_Otchet_Click(object sender, EventArgs e)
 		{
 			if (button_Otchet.Text == "Выбрать")
 			{
-				OpenSetRatings();
+				//OpenSetRatings();
 				pictureBox1.Image = Resources.tick;
 				button_Otchet.Text = "Убрать";
 				_docx[0] = true;
@@ -90,11 +94,6 @@ namespace FrontEnd
 				pictureBox1.Image = Resources.close__1_;
 				button_Otchet.Text = "Выбрать";
 			}
-		}
-
-		public void SetLstr(List<string[]> lstr)
-		{
-			_lstrMarks = lstr;
 		}
 
 		private void button_Raport_Click(object sender, EventArgs e)
@@ -145,7 +144,7 @@ namespace FrontEnd
 			}
 		}
 
-		private void button3_Click(object sender, EventArgs e)
+		private void button_Zadanie_Click(object sender, EventArgs e)
 		{
 			if (button3.Text == "Выбрать")
 			{
@@ -195,7 +194,11 @@ namespace FrontEnd
 		private void button_start_Click(object sender, EventArgs e)
 		{
 			if (NotFull())
+			{
+				MessageBox.Show("Необходимо выбрать факультет и курс!", "Сообщение");
 				return;
+			}
+				
 
 			if (button_start.Text == "OK")
 			{
@@ -231,22 +234,33 @@ namespace FrontEnd
 			pictureBox3.Image = Resources.close__1_;
 			pictureBox4.Image = Resources.close__1_;
 			pictureBox5.Image = Resources.close__1_;
-			button_start_Click(sender, e);
+			
+			if (tableLayoutPanel1.Visible == false)
+				panelBD.Visible = true;
+			tableLayoutPanel1.Visible = false;
+
 		}
 
 		// Отправка в бекенд данных
 		private void button_OK_Click(object sender, EventArgs e)
 		{
+			_outputDir = textBoxFolder.Text;
+
 			if (_outputDir == "")
 			{
 				MessageBox.Show("Не выбрана рабочая папка!", "Сообщение");
 				return;
 			}
 
+			if (!Directory.Exists(_outputDir))
+			{
+				MessageBox.Show("Выбранная рабочая папка не существует!", "Сообщение");
+				return;
+			}
+
 			this.Cursor = Cursors.WaitCursor;
 			_serv.SetOutpath(_outputDir);
 
-			// _serv.MakeDocument(_course, _faculty, 
 			_serv.MakeDocuments(_course, _faculty, _docx);
 
 			this.Cursor = Cursors.Default;
@@ -287,6 +301,12 @@ namespace FrontEnd
 
 		private void buttonConfirm_Click(object sender, EventArgs e)
 		{
+			if (comboBox_TablBD.Text == "")
+			{
+				MessageBox.Show("Необходимо выбрать таблицу для заполнения!", "Сообщение");
+				return;
+			}
+
 			if (textBoxFile.Text == "")
 			{
 				MessageBox.Show("Необходимо выбрать файл", "Сообщение");
@@ -295,16 +315,17 @@ namespace FrontEnd
 			{
 				this.Cursor = Cursors.WaitCursor;
 				string fileName = textBoxFile.Text;
-				int flag = 0;
-				// Вызов фунцкции проверки файла и заполнение BD через файл
-				// flag = ChengeBD(facultet, cours, filename);
+				bool flag = true;
+
+				//flag = PullBD(textBoxFile.Text, (comboBox_TablBD.Text == "Слушатели")? 1 : 2, !checkBox_Rewrite.Checked);
+
 				this.Cursor = Cursors.Default;
 
-				if (flag == 0)
-				{
+				if (flag)
 					MessageBox.Show("Изменения сохранены", "Сообщение");
-				}
-				textBoxFile.Text = "";
+				else
+					MessageBox.Show("Ошибка! Проверьте правильность заполнения файла!", "Сообщение");
+				
 			}
 
 		}
@@ -319,6 +340,12 @@ namespace FrontEnd
 					_outputDir = textBoxFolder.Text;
 				}
 			}
+		}
+
+		private void checkBox_Rewrite_CheckedChanged(object sender, EventArgs e)
+		{
+			if (checkBox_Rewrite.Checked == true)
+				MessageBox.Show("Все предыдущие данные из выбранной\nтаблицы будут удалены!", "Сообщение");
 		}
 	}
 }

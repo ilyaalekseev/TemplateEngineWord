@@ -89,6 +89,9 @@
 			this.panel6 = new System.Windows.Forms.Panel();
 			this.openFileDialogCSV = new System.Windows.Forms.OpenFileDialog();
 			this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+			this.comboBox_TablBD = new System.Windows.Forms.ComboBox();
+			this.label9 = new System.Windows.Forms.Label();
+			this.checkBox_Rewrite = new System.Windows.Forms.CheckBox();
 			this.MainPanel.SuspendLayout();
 			this.panelBD.SuspendLayout();
 			this.panelTop.SuspendLayout();
@@ -135,19 +138,22 @@
 			// 
 			// panelBD
 			// 
+			this.panelBD.Controls.Add(this.checkBox_Rewrite);
+			this.panelBD.Controls.Add(this.label9);
+			this.panelBD.Controls.Add(this.comboBox_TablBD);
 			this.panelBD.Controls.Add(this.buttonConfirm);
 			this.panelBD.Controls.Add(this.label8);
 			this.panelBD.Controls.Add(this.buttonOpenFile);
 			this.panelBD.Controls.Add(this.textBoxFile);
 			this.panelBD.Dock = System.Windows.Forms.DockStyle.Bottom;
-			this.panelBD.Location = new System.Drawing.Point(0, 381);
+			this.panelBD.Location = new System.Drawing.Point(0, 50);
 			this.panelBD.Name = "panelBD";
-			this.panelBD.Size = new System.Drawing.Size(918, 52);
+			this.panelBD.Size = new System.Drawing.Size(918, 383);
 			this.panelBD.TabIndex = 9;
 			// 
 			// buttonConfirm
 			// 
-			this.buttonConfirm.Location = new System.Drawing.Point(783, 9);
+			this.buttonConfirm.Location = new System.Drawing.Point(776, 54);
 			this.buttonConfirm.Name = "buttonConfirm";
 			this.buttonConfirm.Size = new System.Drawing.Size(123, 29);
 			this.buttonConfirm.TabIndex = 3;
@@ -158,7 +164,7 @@
 			// label8
 			// 
 			this.label8.AutoSize = true;
-			this.label8.Location = new System.Drawing.Point(29, 13);
+			this.label8.Location = new System.Drawing.Point(29, 62);
 			this.label8.Name = "label8";
 			this.label8.Size = new System.Drawing.Size(80, 17);
 			this.label8.TabIndex = 2;
@@ -166,7 +172,7 @@
 			// 
 			// buttonOpenFile
 			// 
-			this.buttonOpenFile.Location = new System.Drawing.Point(683, 10);
+			this.buttonOpenFile.Location = new System.Drawing.Point(676, 54);
 			this.buttonOpenFile.Name = "buttonOpenFile";
 			this.buttonOpenFile.Size = new System.Drawing.Size(94, 29);
 			this.buttonOpenFile.TabIndex = 1;
@@ -176,7 +182,7 @@
 			// 
 			// textBoxFile
 			// 
-			this.textBoxFile.Location = new System.Drawing.Point(115, 13);
+			this.textBoxFile.Location = new System.Drawing.Point(115, 59);
 			this.textBoxFile.Name = "textBoxFile";
 			this.textBoxFile.Size = new System.Drawing.Size(541, 22);
 			this.textBoxFile.TabIndex = 0;
@@ -216,23 +222,21 @@
             "ФИБ",
             "ФПМ",
             "ОТФ",
-            "ФСТ",
-            "Выбрать всех"});
-            this.comboBox_Faculty.Location = new System.Drawing.Point(115, 68);
-            this.comboBox_Faculty.Name = "comboBox_Faculty";
-            this.comboBox_Faculty.Size = new System.Drawing.Size(123, 24);
-            this.comboBox_Faculty.TabIndex = 5;
-            // 
-            // comboBox_Cours
-            // 
-            this.comboBox_Cours.FormattingEnabled = true;
-            this.comboBox_Cours.Items.AddRange(new object[] {
+            "ФСТ"});
+			this.comboBox_Faculty.Location = new System.Drawing.Point(115, 68);
+			this.comboBox_Faculty.Name = "comboBox_Faculty";
+			this.comboBox_Faculty.Size = new System.Drawing.Size(123, 24);
+			this.comboBox_Faculty.TabIndex = 5;
+			// 
+			// comboBox_Cours
+			// 
+			this.comboBox_Cours.FormattingEnabled = true;
+			this.comboBox_Cours.Items.AddRange(new object[] {
             "1",
             "2",
             "3",
             "4",
-            "5",
-            "Выбрать всех"});
+            "5"});
 			this.comboBox_Cours.Location = new System.Drawing.Point(371, 68);
 			this.comboBox_Cours.Name = "comboBox_Cours";
 			this.comboBox_Cours.Size = new System.Drawing.Size(122, 24);
@@ -337,7 +341,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 17F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 17F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 15F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(911, 299);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(911, 360);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// panel18
@@ -345,9 +349,9 @@
 			this.panel18.Controls.Add(this.button_Otmena);
 			this.panel18.Controls.Add(this.button_OK);
 			this.panel18.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel18.Location = new System.Drawing.Point(609, 253);
+			this.panel18.Location = new System.Drawing.Point(609, 308);
 			this.panel18.Name = "panel18";
-			this.panel18.Size = new System.Drawing.Size(299, 43);
+			this.panel18.Size = new System.Drawing.Size(299, 49);
 			this.panel18.TabIndex = 17;
 			// 
 			// button_Otmena
@@ -373,26 +377,26 @@
 			// panel17
 			// 
 			this.panel17.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel17.Location = new System.Drawing.Point(306, 253);
+			this.panel17.Location = new System.Drawing.Point(306, 308);
 			this.panel17.Name = "panel17";
-			this.panel17.Size = new System.Drawing.Size(297, 43);
+			this.panel17.Size = new System.Drawing.Size(297, 49);
 			this.panel17.TabIndex = 16;
 			// 
 			// panel16
 			// 
 			this.panel16.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel16.Location = new System.Drawing.Point(3, 253);
+			this.panel16.Location = new System.Drawing.Point(3, 308);
 			this.panel16.Name = "panel16";
-			this.panel16.Size = new System.Drawing.Size(297, 43);
+			this.panel16.Size = new System.Drawing.Size(297, 49);
 			this.panel16.TabIndex = 15;
 			// 
 			// panel15
 			// 
 			this.panel15.Controls.Add(this.button3);
 			this.panel15.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel15.Location = new System.Drawing.Point(609, 203);
+			this.panel15.Location = new System.Drawing.Point(609, 247);
 			this.panel15.Name = "panel15";
-			this.panel15.Size = new System.Drawing.Size(299, 44);
+			this.panel15.Size = new System.Drawing.Size(299, 55);
 			this.panel15.TabIndex = 14;
 			// 
 			// button3
@@ -403,23 +407,23 @@
 			this.button3.TabIndex = 3;
 			this.button3.Text = "Выбрать";
 			this.button3.UseVisualStyleBackColor = true;
-			this.button3.Click += new System.EventHandler(this.button3_Click);
+			this.button3.Click += new System.EventHandler(this.button_Zadanie_Click);
 			// 
 			// panel14
 			// 
 			this.panel14.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel14.Location = new System.Drawing.Point(306, 203);
+			this.panel14.Location = new System.Drawing.Point(306, 247);
 			this.panel14.Name = "panel14";
-			this.panel14.Size = new System.Drawing.Size(297, 44);
+			this.panel14.Size = new System.Drawing.Size(297, 55);
 			this.panel14.TabIndex = 13;
 			// 
 			// panel13
 			// 
 			this.panel13.Controls.Add(this.button_Dnevnik);
 			this.panel13.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel13.Location = new System.Drawing.Point(609, 153);
+			this.panel13.Location = new System.Drawing.Point(609, 186);
 			this.panel13.Name = "panel13";
-			this.panel13.Size = new System.Drawing.Size(299, 44);
+			this.panel13.Size = new System.Drawing.Size(299, 55);
 			this.panel13.TabIndex = 12;
 			// 
 			// button_Dnevnik
@@ -435,18 +439,18 @@
 			// panel12
 			// 
 			this.panel12.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel12.Location = new System.Drawing.Point(306, 153);
+			this.panel12.Location = new System.Drawing.Point(306, 186);
 			this.panel12.Name = "panel12";
-			this.panel12.Size = new System.Drawing.Size(297, 44);
+			this.panel12.Size = new System.Drawing.Size(297, 55);
 			this.panel12.TabIndex = 11;
 			// 
 			// panel11
 			// 
 			this.panel11.Controls.Add(this.button_Otzv);
 			this.panel11.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel11.Location = new System.Drawing.Point(609, 103);
+			this.panel11.Location = new System.Drawing.Point(609, 125);
 			this.panel11.Name = "panel11";
-			this.panel11.Size = new System.Drawing.Size(299, 44);
+			this.panel11.Size = new System.Drawing.Size(299, 55);
 			this.panel11.TabIndex = 10;
 			// 
 			// button_Otzv
@@ -462,18 +466,18 @@
 			// panel10
 			// 
 			this.panel10.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel10.Location = new System.Drawing.Point(306, 103);
+			this.panel10.Location = new System.Drawing.Point(306, 125);
 			this.panel10.Name = "panel10";
-			this.panel10.Size = new System.Drawing.Size(297, 44);
+			this.panel10.Size = new System.Drawing.Size(297, 55);
 			this.panel10.TabIndex = 9;
 			// 
 			// panel9
 			// 
 			this.panel9.Controls.Add(this.button_Raport);
 			this.panel9.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel9.Location = new System.Drawing.Point(609, 53);
+			this.panel9.Location = new System.Drawing.Point(609, 64);
 			this.panel9.Name = "panel9";
-			this.panel9.Size = new System.Drawing.Size(299, 44);
+			this.panel9.Size = new System.Drawing.Size(299, 55);
 			this.panel9.TabIndex = 8;
 			// 
 			// button_Raport
@@ -489,9 +493,9 @@
 			// panel8
 			// 
 			this.panel8.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel8.Location = new System.Drawing.Point(306, 53);
+			this.panel8.Location = new System.Drawing.Point(306, 64);
 			this.panel8.Name = "panel8";
-			this.panel8.Size = new System.Drawing.Size(297, 44);
+			this.panel8.Size = new System.Drawing.Size(297, 55);
 			this.panel8.TabIndex = 7;
 			// 
 			// panel7
@@ -500,7 +504,7 @@
 			this.panel7.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel7.Location = new System.Drawing.Point(609, 3);
 			this.panel7.Name = "panel7";
-			this.panel7.Size = new System.Drawing.Size(299, 44);
+			this.panel7.Size = new System.Drawing.Size(299, 55);
 			this.panel7.TabIndex = 6;
 			// 
 			// button_Otchet
@@ -520,7 +524,7 @@
 			this.panel_Otchet.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel_Otchet.Location = new System.Drawing.Point(3, 3);
 			this.panel_Otchet.Name = "panel_Otchet";
-			this.panel_Otchet.Size = new System.Drawing.Size(297, 44);
+			this.panel_Otchet.Size = new System.Drawing.Size(297, 55);
 			this.panel_Otchet.TabIndex = 0;
 			// 
 			// panel_Otchet_OK
@@ -559,9 +563,9 @@
 			this.panel_Raport.Controls.Add(this.panel_raport_OK);
 			this.panel_Raport.Controls.Add(this.label4);
 			this.panel_Raport.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel_Raport.Location = new System.Drawing.Point(3, 53);
+			this.panel_Raport.Location = new System.Drawing.Point(3, 64);
 			this.panel_Raport.Name = "panel_Raport";
-			this.panel_Raport.Size = new System.Drawing.Size(297, 44);
+			this.panel_Raport.Size = new System.Drawing.Size(297, 55);
 			this.panel_Raport.TabIndex = 1;
 			// 
 			// panel_raport_OK
@@ -597,9 +601,9 @@
 			this.panel_Otzv.Controls.Add(this.panel_Otzv_OK);
 			this.panel_Otzv.Controls.Add(this.label5);
 			this.panel_Otzv.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel_Otzv.Location = new System.Drawing.Point(3, 103);
+			this.panel_Otzv.Location = new System.Drawing.Point(3, 125);
 			this.panel_Otzv.Name = "panel_Otzv";
-			this.panel_Otzv.Size = new System.Drawing.Size(297, 44);
+			this.panel_Otzv.Size = new System.Drawing.Size(297, 55);
 			this.panel_Otzv.TabIndex = 2;
 			// 
 			// panel_Otzv_OK
@@ -635,9 +639,9 @@
 			this.panel4.Controls.Add(this.panel_Dnevnik_OK);
 			this.panel4.Controls.Add(this.label6);
 			this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel4.Location = new System.Drawing.Point(3, 153);
+			this.panel4.Location = new System.Drawing.Point(3, 186);
 			this.panel4.Name = "panel4";
-			this.panel4.Size = new System.Drawing.Size(297, 44);
+			this.panel4.Size = new System.Drawing.Size(297, 55);
 			this.panel4.TabIndex = 3;
 			// 
 			// panel_Dnevnik_OK
@@ -673,9 +677,9 @@
 			this.panel5.Controls.Add(this.panel19);
 			this.panel5.Controls.Add(this.label7);
 			this.panel5.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.panel5.Location = new System.Drawing.Point(3, 203);
+			this.panel5.Location = new System.Drawing.Point(3, 247);
 			this.panel5.Name = "panel5";
-			this.panel5.Size = new System.Drawing.Size(297, 44);
+			this.panel5.Size = new System.Drawing.Size(297, 55);
 			this.panel5.TabIndex = 4;
 			// 
 			// panel19
@@ -711,12 +715,43 @@
 			this.panel6.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel6.Location = new System.Drawing.Point(306, 3);
 			this.panel6.Name = "panel6";
-			this.panel6.Size = new System.Drawing.Size(297, 44);
+			this.panel6.Size = new System.Drawing.Size(297, 55);
 			this.panel6.TabIndex = 5;
 			// 
 			// openFileDialogCSV
 			// 
 			this.openFileDialogCSV.FileName = "openFileDialog1";
+			// 
+			// comboBox_TablBD
+			// 
+			this.comboBox_TablBD.FormattingEnabled = true;
+			this.comboBox_TablBD.Items.AddRange(new object[] {
+            "Слушатели",
+            "Преподаватели"});
+			this.comboBox_TablBD.Location = new System.Drawing.Point(115, 10);
+			this.comboBox_TablBD.Name = "comboBox_TablBD";
+			this.comboBox_TablBD.Size = new System.Drawing.Size(121, 24);
+			this.comboBox_TablBD.TabIndex = 4;
+			// 
+			// label9
+			// 
+			this.label9.AutoSize = true;
+			this.label9.Location = new System.Drawing.Point(29, 16);
+			this.label9.Name = "label9";
+			this.label9.Size = new System.Drawing.Size(65, 17);
+			this.label9.TabIndex = 5;
+			this.label9.Text = "Таблица";
+			// 
+			// checkBox_Rewrite
+			// 
+			this.checkBox_Rewrite.AutoSize = true;
+			this.checkBox_Rewrite.Location = new System.Drawing.Point(267, 12);
+			this.checkBox_Rewrite.Name = "checkBox_Rewrite";
+			this.checkBox_Rewrite.Size = new System.Drawing.Size(124, 21);
+			this.checkBox_Rewrite.TabIndex = 6;
+			this.checkBox_Rewrite.Text = "Перезаписать";
+			this.checkBox_Rewrite.UseVisualStyleBackColor = true;
+			this.checkBox_Rewrite.CheckedChanged += new System.EventHandler(this.checkBox_Rewrite_CheckedChanged);
 			// 
 			// MainWindow
 			// 
@@ -830,6 +865,9 @@
 		private System.Windows.Forms.Button buttonFolder;
 		private System.Windows.Forms.TextBox textBoxFolder;
 		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
+		private System.Windows.Forms.Label label9;
+		private System.Windows.Forms.ComboBox comboBox_TablBD;
+		private System.Windows.Forms.CheckBox checkBox_Rewrite;
 	}
 }
 
