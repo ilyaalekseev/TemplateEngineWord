@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace BackEnd_DLL
 {
-    public class Dairy:DocumentWord
+    public class Diary:DocumentWord
     {
 		public Dictionary<string, string> _dic;
 
-		public Dairy(Dictionary<string, string> dicGen)
+		public Diary(Dictionary<string, string> dicGen)
 		{
 			_dic = dicGen;//ключ - это тэг в шаблоне ворда, а значение - значение, которое вставляется по тэгу
 		}

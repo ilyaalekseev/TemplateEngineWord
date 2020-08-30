@@ -9,12 +9,12 @@ namespace BackEnd_DLL
     public class Raport : DocumentWord
     {
 		public Dictionary<string, string> _dicGeneral;
-		public List<Dictionary<string, string>> _students;
+		public Dictionary<string, Dictionary<string, string>> _direct;
 
-		public Raport(Dictionary<string, string> dicGen, List<Dictionary<string, string>> stud)
+		public Raport(Dictionary<string, string> dicGen, Dictionary<string, Dictionary<string, string>> dicDirect)
 		{
 			_dicGeneral = dicGen;
-			_students = stud;
+			_direct = dicDirect;
 		}
 	}
 }
