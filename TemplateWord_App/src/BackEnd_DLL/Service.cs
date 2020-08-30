@@ -114,6 +114,7 @@ namespace BackEnd_DLL
             foreach (Diary diary in dairies)
             {
                 DocX document = DocX.Load(_inputPath + "diary.docx");//создаю копию шаблона в той же директории, что и шаблон
+
                 document.SaveAs(_outputPath + "/Дневники/diary " + diary._dic["name_of_student_full"] + ".docx");// в том же каталоге создаю заполненный дневник на конкретного слушателя
                 FieldContent[] lst = new FieldContent[diary._dic.Count];
                 int count_content = 0;
@@ -346,7 +347,7 @@ namespace BackEnd_DLL
                     dicStud.Add("name_of_student", GetGenitive(stud.secondName) + " " + GetGenitive(stud.name) + " " + GetGenitive(stud.middleName));
                     dicStud.Add("Location_of_practic", GetGenitive(stud.location));
                     dicStud.Add("student_position", stud.position);
-                    dicStud.Add("name_of_student_short", stud.name[0] + "." + stud.middleName[0] + ". " + GetGenitive(stud.secondName));
+                    dicStud.Add("name_of_student_short", stud.name[0] + "." + stud.middleName[0] + ". " + stud.secondName);
                     dicStud.Add("mark", stud.mark);
 
                     dicStudents.Add(dicStud);
@@ -622,11 +623,15 @@ namespace BackEnd_DLL
                     dateTime = new DateTime(year, month, day);
                     dicGeneral.Add("date_end_1", dateTime.ToString("dd"));
                     dicGeneral.Add("date_end_2", GetGenitive(dateTime.ToString("MMMM").ToLower()));
-                    /*
-                     * 
-                     * разобраться с планом
-                     * 
-                     */
+
+                    string[] plans = stud.plan.Split('$');
+                    int count = 1;
+                    foreach (string plan in plans)
+                    {
+                        dicGeneral.Add("plan_" + count.ToString(), plan);
+                        count++;
+                    }
+
 
                     dicGeneral.Add("footer_name_of_prepod", prepod.name[0] + "." + prepod.middleName[0] + ". " + prepod.secondName);
                     dicGeneral.Add("place_of_practic", GetLocative(stud.location));

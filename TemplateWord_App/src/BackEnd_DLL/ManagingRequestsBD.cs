@@ -356,7 +356,8 @@ namespace BackEnd_DLL
 			student.location = studentArr[i++];
 			student.date = studentArr[i++];
 			student.skill = studentArr[i++];
-			student.mark = studentArr[i];
+			student.mark = studentArr[i++];
+			student.plan = studentArr[i];
 		}
 
 		/*
