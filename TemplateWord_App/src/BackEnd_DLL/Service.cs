@@ -1,7 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Collections;
-using CsvHelper;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +8,8 @@ using TemplateEngine.Docx;
 using Xceed.Words.NET;
 using LingvoNET;
 using DocumentFormat.OpenXml.Drawing.Diagrams;
+using Microsoft.VisualBasic;
+using Microsoft.VisualBasic.FileIO;
 
 namespace BackEnd_DLL
 {
@@ -669,23 +669,30 @@ namespace BackEnd_DLL
     
         public bool PullDb(string path, int indicator, bool type)//рабочее название поменять потом сука
         {
-            string[] str = { ";" };
-            using (StreamReader rd = new StreamReader(new FileStream(path, FileMode.Open)))
+            //чтение
+            StreamReader file = new StreamReader(path, Encoding.Default);
+            string[] str = file.ReadToEnd().Split('\n');
+
+            file.Close();
+
+            //запись
+            int rows = str.Length;
+            int colls = str[0].Split(';').Length;
+            string[,] arr = new string[rows, colls];
+
+            for (int i=0; i < rows; i++)
             {
-                str = rd.ReadToEnd().Split(str, StringSplitOptions.RemoveEmptyEntries);
+                string[] collums = str[i].Split(';');
+                for (int j = 0; j < colls; j++)
+                    arr[i, j] = collums[j];
             }
 
-            string[,] arr = new string[str.Length, 17];
-            int count = 0;
-            //foreach (string strTmp in str)
-            //    arr[count++,] = strTmp.Split(',');
 
             if (type)
-                dataBase.WritingToTable((indicator == 1) ? "students" : "teachers", arr);
-            else
-                dataBase.RewritingToTable((indicator == 1) ? "students" : "teachers", arr);
+                return rows == dataBase.WritingToTable((indicator == 1) ? "students" : "teachers", arr);
 
-            return true;
+            return rows == dataBase.RewritingToTable((indicator == 1) ? "students" : "teachers", arr);
+
         }
 
     }
