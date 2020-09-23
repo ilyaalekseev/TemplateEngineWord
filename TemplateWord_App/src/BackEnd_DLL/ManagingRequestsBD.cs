@@ -65,6 +65,34 @@ namespace BackEnd_DLL
 		}
 
 		/*
+			Возвращает массив для csv фаила таблицы tableName 
+		*/
+		public string[,] GetCsvArrays(string tableName)
+        {
+			string[,] table = GetTable(tableName);
+			int rowCount = table.GetLength(0);
+			int colCount = table.GetLength(1);
+			string[,] result = new string[rowCount + 1, colCount];
+			string[] colNames = GetColumnNames(tableName);
+
+			//заполнение шапки
+			for (int i = 0; i < colCount; ++i)
+            {
+				result[0, i] = colNames[i];
+            }
+
+			//заполнение содержимого
+			for (int i = 1; i < rowCount; ++i)
+            {
+				for (int j = 0; j < colCount; ++j)
+                {
+					result[i, j] = table[i, j];
+                }
+            }
+			return result;
+        }
+
+		/*
 			Изменяет старое значение в таблице tableName в колонке columnName
 			на новое значение newValue в строке с номером id
 		*/
