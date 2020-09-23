@@ -51,11 +51,41 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChoiceDocumentsSubwindow.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ChoiceDocumentsSubwindow.Designer.cs">
+      <DependentUpon>ChoiceDocumentsSubwindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ControlStudentsChoiceItem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ControlStudentsChoiceItem.Designer.cs">
+      <DependentUpon>ControlStudentsChoiceItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DatabaseManagementWindow.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DatabaseManagementWindow.Designer.cs">
+      <DependentUpon>DatabaseManagementWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DocumentControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="DocumentControl.Designer.cs">
+      <DependentUpon>DocumentControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainWindow_old.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainWindow_old.Designer.cs">
+      <DependentUpon>MainWindow_old.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -71,8 +101,23 @@
     <Compile Include="SetRatingsControl.Designer.cs">
       <DependentUpon>SetRatingsControl.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="ChoiceDocumentsSubwindow.resx">
+      <DependentUpon>ChoiceDocumentsSubwindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ControlStudentsChoiceItem.resx">
+      <DependentUpon>ControlStudentsChoiceItem.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DatabaseManagementWindow.resx">
+      <DependentUpon>DatabaseManagementWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DocumentControl.resx">
+      <DependentUpon>DocumentControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainWindow_old.resx">
+      <DependentUpon>MainWindow_old.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -90,7 +135,6 @@
     <EmbeddedResource Include="SetRatingsControl.resx">
       <DependentUpon>SetRatingsControl.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

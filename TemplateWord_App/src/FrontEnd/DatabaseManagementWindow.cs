@@ -1,0 +1,28 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace FrontEnd
+{
+	public partial class DatabaseManagementWindow : UserControl
+	{
+		private MainWindow _mw;
+
+		public DatabaseManagementWindow(MainWindow mw)
+		{
+			InitializeComponent();
+			_mw = mw;
+		}
+
+		private void TableComboBox_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			e.Handled = true;
+		}
+	}
+}

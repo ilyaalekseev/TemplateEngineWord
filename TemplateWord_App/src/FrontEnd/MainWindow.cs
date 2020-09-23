@@ -7,7 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
 using BackEnd_DLL;
 using FrontEnd.Properties;
 using System.Reflection;
@@ -17,335 +16,133 @@ namespace FrontEnd
 {
 	public partial class MainWindow : Form
 	{
-		List<string[]> _lstrMarks; // [[фио, отметка],[фио, отметка],...]
-		string _faculty;
-		string _course;
-		Service _serv;
-		bool[] _docx;
-		string _outputDir;
-
+		private string _faculty;
+		private string _course;
+		private Service _serv;
+		private ControlStudentsChoiceItem _csc; // конрол для выбора факультета и курса
+		private ChoiceDocumentsSubwindow _cds; // окно для выбора документов
+		private DatabaseManagementWindow _bdm;
+		private string _currentWindow;
 
 		public MainWindow()
 		{
-			_lstrMarks = new List<string[]>();
+			InitializeComponent();
+			InitializeFields();
+			DisplayingHomeScreen();
+		}
+
+		// иниализация полей
+		private void InitializeFields()
+		{
 			_faculty = "";
 			_course = "";
-			_outputDir = "";
-			_docx = new bool[]{ false, false, false, false, false};
 			_serv = new Service();
-
-			InitializeComponent();
-			pictureBox1.Image = Resources.close__1_;
-			pictureBox2.Image = Resources.close__1_;
-			pictureBox3.Image = Resources.close__1_;
-			pictureBox4.Image = Resources.close__1_;
-			pictureBox5.Image = Resources.close__1_;
-			tableLayoutPanel1.Visible = false;
-			panelBD.Visible = false;
-			buttonTempWindow.BackColor = Color.FromArgb(165, 165, 165);
-			buttonBD.BackColor = Color.FromArgb(245, 245, 245);
-			textBoxFile.ReadOnly = true;
+			_csc = new ControlStudentsChoiceItem(this);
+			_cds = new ChoiceDocumentsSubwindow(this);
+			_bdm = new DatabaseManagementWindow(this);
 		}
 
-		private void MainWindow_Load(object sender, EventArgs e)
+		// Отображение начального экрана
+		private void DisplayingHomeScreen()
 		{
-			//_mrBD.Close();
+			// Показываем, что открыто окно создания документов
+			ChangeBackColorForMenuButton(FillingOutDocumentsButton, true);
+
+			// Показываем окно создания документов
+			ShowWindowFillingOutDocuments();
+
+			// Блокируем кнопку "Создать" до выбора курса и факультета
+			_cds.EnabledButtonStartCreating(false);
 		}
 
-		// Выделить незаполненные поля
-		private bool NotFull()
+		// Сообщение о выборе курса и факультета
+		public void ControlStudentsChoiceItem_ClickOK(string faculty, string course)
 		{
-			if (comboBox_Cours.Text == "" | comboBox_Faculty.Text == "")
-			{
-				return true;
-			}
-			else
-				return false;
+			_faculty = faculty;
+			_course = course;
+			_currentWindow = "FillingOutDocuments";
 		}
 
-		//Для выставления отценок! -- убрал, но можем добавить
-		private async void OpenSetRatings()
+		// Для контрола выбора курса и факультета
+		public void EnabledButtonStartCreating(bool fl)
 		{
-			SetRatings sr = new SetRatings(this, _lstrMarks);
-			sr.Show();
-			this.Enabled = false;
-			await GetTaskFromEvent(sr, "FormClosed");
-			this.Enabled = true;
+			_cds.EnabledButtonStartCreating(fl);
 		}
 
-		public void SetLstr(List<string[]> lstr)
+		// Выбраны документы для создания
+		public void ChoiceDocumentsSubwindow_ClickOK(bool[] docx)
 		{
-			_lstrMarks = lstr;
+			//!!!!!!!!!!!!!!!
 		}
 
-		// Выбор документов для шаблонов
-		private  void button_Otchet_Click(object sender, EventArgs e)
+		// Открыть документ для редактирования
+		public void OpenDocument(string docName)
 		{
-			if (button_Otchet.Text == "Выбрать")
-			{
-				//OpenSetRatings();
-				pictureBox1.Image = Resources.tick;
-				button_Otchet.Text = "Убрать";
-				_docx[0] = true;
-			}
-			else
-			{
-				_docx[0] = false;
-				pictureBox1.Image = Resources.close__1_;
-				button_Otchet.Text = "Выбрать";
-			}
-		}
-
-		private void button_Raport_Click(object sender, EventArgs e)
-		{
-			if (button_Raport.Text == "Выбрать")
-			{
-				pictureBox2.Image = Resources.tick;
-				button_Raport.Text = "Убрать";
-				_docx[1] = true;
-			}
-			else
-			{
-				pictureBox2.Image = Resources.close__1_;
-				button_Raport.Text = "Выбрать";
-				_docx[0] = false;
-			}
-		}
-
-		private void button_Otzv_Click(object sender, EventArgs e)
-		{
-			if (button_Otzv.Text == "Выбрать")
-			{
-				pictureBox3.Image = Resources.tick;
-				button_Otzv.Text = "Убрать";
-				_docx[2] = true;
-			}
-			else
-			{
-				_docx[2] = false;
-				pictureBox3.Image = Resources.close__1_;
-				button_Otzv.Text = "Выбрать";
-			}
-		}
-
-		private void button_Dnevnik_Click(object sender, EventArgs e)
-		{
-			if (button_Dnevnik.Text == "Выбрать")
-			{
-				pictureBox4.Image = Resources.tick;
-				button_Dnevnik.Text = "Убрать";
-				_docx[3] = true;
-			}
-			else
-			{
-				_docx[3] = false;
-				pictureBox4.Image = Resources.close__1_;
-				button_Dnevnik.Text = "Выбрать";
-			}
-		}
-
-		private void button_Zadanie_Click(object sender, EventArgs e)
-		{
-			if (button3.Text == "Выбрать")
-			{
-				pictureBox5.Image = Resources.tick;
-				button3.Text = "Убрать";
-				_docx[4] = true;
-			}
-			else
-			{
-				_docx[4] = false;
-				pictureBox5.Image = Resources.close__1_;
-				button3.Text = "Выбрать";
-			}
-		}
-
-		//Вспомогательный метод: Создает объект Task, который может использоваться для ожидания срабатывания указанного события 
-		public static Task<object> GetTaskFromEvent(object o, string evt)
-		{
-			if (o == null || evt == null) throw new ArgumentNullException("Arguments cannot be null");
-
-			EventInfo einfo = o.GetType().GetEvent(evt);
-			if (einfo == null)
-			{
-				throw new ArgumentException(String.Format("*{0}* has no *{1}* event", o, evt));
-			}
-
-			TaskCompletionSource<object> tcs = new TaskCompletionSource<object>();
-			MethodInfo mi = null;
-			Delegate deleg = null;
-			EventHandler handler = null;
-
-			//код обработчика события
-			handler = (s, e) =>
-			{
-				mi = handler.Method;
-				deleg = Delegate.CreateDelegate(einfo.EventHandlerType, handler.Target, mi);
-				einfo.RemoveEventHandler(s, deleg); //отцепляем обработчик события
-				tcs.TrySetResult(null); //сигнализируем о наступлении события
-			};
-
-			mi = handler.Method;
-			deleg = Delegate.CreateDelegate(einfo.EventHandlerType, handler.Target, mi); //получаем делегат нужного типа
-			einfo.AddEventHandler(o, deleg); //присоединяем обработчик события
-			return tcs.Task;
-		}
-
-		private void button_start_Click(object sender, EventArgs e)
-		{
-			if (NotFull())
-			{
-				MessageBox.Show("Необходимо выбрать факультет и курс!", "Сообщение");
-				return;
-			}
-				
-
-			if (button_start.Text == "OK")
-			{
-				if (panelBD.Visible == false)
-					tableLayoutPanel1.Visible = true;
-				_course = comboBox_Cours.Text;
-				_faculty = comboBox_Faculty.Text;
-
-				button_start.Text = "Изменить";
-				comboBox_Cours.Enabled = false;
-				comboBox_Faculty.Enabled = false;
-			}
-			else
-			{
-				comboBox_Cours.Enabled = true;
-				comboBox_Faculty.Enabled = true;
-				tableLayoutPanel1.Visible = false;
-				button_start.Text = "OK";
-				_course = "";
-				_faculty = "";
-			}
-		}
-
-		private void button_Otmena_Click(object sender, EventArgs e)
-		{
-			comboBox_Cours.Text = "";
-			comboBox_Cours.Enabled = true;
-			comboBox_Faculty.Text = "";
-			comboBox_Faculty.Enabled = true;
-			button_start.Text = "OK";
-			pictureBox1.Image = Resources.close__1_;
-			pictureBox2.Image = Resources.close__1_;
-			pictureBox3.Image = Resources.close__1_;
-			pictureBox4.Image = Resources.close__1_;
-			pictureBox5.Image = Resources.close__1_;
 			
-			if (tableLayoutPanel1.Visible == false)
-				panelBD.Visible = true;
-			tableLayoutPanel1.Visible = false;
-
 		}
 
-		// Отправка в бекенд данных
-		private void button_OK_Click(object sender, EventArgs e)
+		private void ChangeBackColorForMenuButton(Button b, bool isChoose)
 		{
-			_outputDir = textBoxFolder.Text;
-
-			if (_outputDir == "")
-			{
-				MessageBox.Show("Не выбрана рабочая папка!", "Сообщение");
-				return;
-			}
-
-			if (!Directory.Exists(_outputDir))
-			{
-				MessageBox.Show("Выбранная рабочая папка не существует!", "Сообщение");
-				return;
-			}
-
-			this.Cursor = Cursors.WaitCursor;
-			_serv.SetOutpath(_outputDir);
-
-			_serv.MakeDocuments(_course, _faculty, _docx);
-
-			this.Cursor = Cursors.Default;
-			MessageBox.Show("Готово", "Сообщение");
-		}
-
-		private void buttonTempWindow_Click(object sender, EventArgs e)
-		{
-			panelBD.Visible = false;
-			textBoxFile.Text = "";
-			button_Otmena_Click(sender, e);
-			if (button_start.Text == "Изменить")
-				tableLayoutPanel1.Visible = true;
-			buttonTempWindow.BackColor = Color.FromArgb(165, 165, 165);
-			buttonBD.BackColor = Color.FromArgb(245, 245, 245);
-		}
-
-		private void buttonBD_Click(object sender, EventArgs e)
-		{
-			tableLayoutPanel1.Visible = false;
-			panelBD.Visible = true;
-			button_Otmena_Click(sender, e);
-			buttonBD.BackColor = Color.FromArgb(165, 165, 165);
-			buttonTempWindow.BackColor = Color.FromArgb(245, 245, 245);
-		}
-
-		private void button1_Click(object sender, EventArgs e)
-		{
-			using (OpenFileDialog openDialog = new OpenFileDialog())
-			{
-				openDialog.Filter = "Csv files(*.csv)|*.csv|All files(*.*)|*.*";
-				if (openDialog.ShowDialog(this) == DialogResult.OK)
-				{
-					textBoxFile.Text = openDialog.FileName;
-				}
-			}
-		}
-
-		private void buttonConfirm_Click(object sender, EventArgs e)
-		{
-			if (comboBox_TablBD.Text == "")
-			{
-				MessageBox.Show("Необходимо выбрать таблицу для заполнения!", "Сообщение");
-				return;
-			}
-
-			if (textBoxFile.Text == "")
-			{
-				MessageBox.Show("Необходимо выбрать файл", "Сообщение");
-			}
+			if (isChoose)
+				b.BackColor = Color.FromArgb(165, 165, 165);
 			else
-			{
-				this.Cursor = Cursors.WaitCursor;
-				string fileName = textBoxFile.Text;
-				bool flag = true;
-
-				flag = _serv.PullDb(textBoxFile.Text, (comboBox_TablBD.Text == "Слушатели")? 1 : 2, !checkBox_Rewrite.Checked);
-
-				this.Cursor = Cursors.Default;
-
-				if (flag)
-					MessageBox.Show("Изменения сохранены", "Сообщение");
-				else
-					MessageBox.Show("Ошибка! Проверьте правильность заполнения файла!", "Сообщение");
-				
-			}
-
+				b.BackColor = Color.FromArgb(245, 245, 245);
 		}
 
-		private void buttonFolder_Click(object sender, EventArgs e)
+		// показать окно для выбора документов
+		private void ShowWindowFillingOutDocuments()
 		{
-			using (FolderBrowserDialog folderDialog = new FolderBrowserDialog())
-			{
-				if (folderDialog.ShowDialog(this) == DialogResult.OK)
-				{
-					textBoxFolder.Text = folderDialog.SelectedPath;
-					_outputDir = textBoxFolder.Text;
-				}
-			}
+			CentralPanel.Controls.Clear();
+
+			// отображение панели выбора курса и факультета
+			CentralPanel.Controls.Add(_csc);
+			CentralPanel.Controls[0].Dock = DockStyle.Top;
+
+			// отображение окна для выбора документов, которые нужно заполнить
+			CentralPanel.Controls.Add(_cds);
+			CentralPanel.Controls[1].Dock = DockStyle.Bottom;
 		}
 
-		private void checkBox_Rewrite_CheckedChanged(object sender, EventArgs e)
+		// показать окно изменения бд
+		private void ShowWindowDatabaseManagement()
 		{
-			if (checkBox_Rewrite.Checked == true)
-				MessageBox.Show("Все предыдущие данные из выбранной\nтаблицы будут удалены!", "Сообщение");
+			CentralPanel.Controls.Clear();
+
+			// Отображение окна управления БД
+			CentralPanel.Controls.Add(_bdm);
+			CentralPanel.Controls[0].Dock = DockStyle.Fill;
+		}
+
+		// Открытие окна для выбора документов (кнопка)
+		private void FillingOutDocumentsButton_Click(object sender, EventArgs e)
+		{
+			if (_currentWindow == "FillingOutDocuments")
+				return;
+
+			// показать окно для выбора документов
+			ShowWindowFillingOutDocuments();
+
+			// Изменим цвет кнопок меню
+			ChangeBackColorForMenuButton(FillingOutDocumentsButton, true);
+			ChangeBackColorForMenuButton(DatabaseManagementButton, false);
+
+			_currentWindow = "FillingOutDocuments";
+		}
+
+		// Открытие окна для изменения БД (кнопка)
+		private void DatabaseManagementButton_Click(object sender, EventArgs e)
+		{
+			if (_currentWindow == "DatabaseManagement")
+				return;
+
+			// показать окно изменения бд
+			ShowWindowDatabaseManagement();
+
+			// Изменим цвет кнопок меню
+			ChangeBackColorForMenuButton(FillingOutDocumentsButton, false);
+			ChangeBackColorForMenuButton(DatabaseManagementButton, true);
+
+			_currentWindow = "DatabaseManagement";
 		}
 	}
 }

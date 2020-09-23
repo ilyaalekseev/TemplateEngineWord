@@ -12,11 +12,11 @@ namespace FrontEnd
 {
 	public partial class SetRatings : Form
 	{
-		MainWindow _mw;
+		MainWindow_old _mw;
 		List<SetRatingsControl> _lsrc;
 		List<string[]> _lmarks;
 
-		public SetRatings(MainWindow mw, List<string[]> lstr)
+		public SetRatings(MainWindow_old mw, List<string[]> lstr)
 		{
 			_mw = mw;
 			 _lsrc = new List<SetRatingsControl>();
