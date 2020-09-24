@@ -93,6 +93,31 @@ namespace BackEnd_DLL
         }
 
 		/*
+			Заносит значения оценок в бд из списка 
+			Возвращает успех если все записи успешно занесеныв таблицу
+		*/
+		public bool SetMarksById(List<string[]> infoList)
+        {
+			bool result = true;
+			
+			foreach (var info in infoList)
+            {
+				string sql = "UPDATE `template_engine`.`students` SET `mark` = '" + info[0] + "' WHERE (`id` = '" + info[1] +"');"; //UPDATE `template_engine`.`students` SET `mark` = '5' WHERE (`id` = '2');
+				try
+				{
+					MySqlCommand command = new MySqlCommand(sql, _con);
+					command.ExecuteNonQuery();
+				}
+				catch (Exception e)
+				{
+					Console.WriteLine("{0} Exception caught.", e);
+					result = false;
+				}
+			}
+			return result;
+		}
+
+		/*
 			Изменяет старое значение в таблице tableName в колонке columnName
 			на новое значение newValue в строке с номером id
 		*/
