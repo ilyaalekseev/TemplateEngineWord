@@ -93,6 +93,24 @@ namespace BackEnd_DLL
         }
 
 		/*
+			Возвращает список краткой информации об учениках : id, ФИО, группа, оценка
+		*/
+		public List<string[]> GetStudentsShortInfo () 
+		{
+			List<Student> studentList = GetStudents();
+			int count = studentList.Count();
+			List<string[]> shortInfoList = new List<string[]>();
+			foreach (var student in studentList)
+            {
+				string fullName = student.secondName + " " + student.name + " " + student.middleName;
+				string[] info = { student.id, fullName, student.group, student.mark };
+				shortInfoList.Add(info);
+            }
+
+			return shortInfoList;
+		}
+
+		/*
 			Заносит значения оценок в бд из списка 
 			Возвращает успех если все записи успешно занесеныв таблицу
 		*/
