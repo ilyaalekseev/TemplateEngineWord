@@ -66,11 +66,11 @@ namespace FrontEnd
 		//Для выставления отценок! -- убрал, но можем добавить
 		private async void OpenSetRatings()
 		{
-			SetRatings sr = new SetRatings(this, _lstrMarks);
-			sr.Show();
-			this.Enabled = false;
-			await GetTaskFromEvent(sr, "FormClosed");
-			this.Enabled = true;
+			//SetRatings sr = new SetRatings(this, _lstrMarks);
+			//sr.Show();
+			//this.Enabled = false;
+			//await GetTaskFromEvent(sr, "FormClosed");
+			//this.Enabled = true;
 		}
 
 		public void SetLstr(List<string[]> lstr)

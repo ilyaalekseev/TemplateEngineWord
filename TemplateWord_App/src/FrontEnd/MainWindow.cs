@@ -19,10 +19,15 @@ namespace FrontEnd
 		private string _faculty;
 		private string _course;
 		private Service _serv;
+		private List<string[]> _lIdFioGroupMark;
+		private string _currentWindow; // Текущее открытое окно
+		private bool[] _docx;
+
 		private ControlStudentsChoiceItem _csc; // конрол для выбора факультета и курса
-		private ChoiceDocumentsSubwindow _cds; // окно для выбора документов
-		private DatabaseManagementWindow _bdm;
-		private string _currentWindow;
+		private ChoiceDocumentsSubwindow _cds; // Окно для выбора документов
+		private DatabaseManagementWindow _bdm; // Откно управления БД
+		private SetEstimationWindow _sew; // Окно для выставления оценок (МОЖЕТ БЫТЬ NULL !!)
+		
 
 		public MainWindow()
 		{
@@ -36,6 +41,10 @@ namespace FrontEnd
 		{
 			_faculty = "";
 			_course = "";
+			_lIdFioGroupMark = new List<string[]>();
+			_currentWindow = "FillingOutDocuments";
+			_docx = new bool[] { false, false, false, false, false };
+
 			_serv = new Service();
 			_csc = new ControlStudentsChoiceItem(this);
 			_cds = new ChoiceDocumentsSubwindow(this);
@@ -69,18 +78,71 @@ namespace FrontEnd
 			_cds.EnabledButtonStartCreating(fl);
 		}
 
-		// Выбраны документы для создания
+		private void DisplayWindowSetEstimation()
+		{
+			// Функция GetStudentsShortInfo возвращает List с элементами типа
+			// [id, fio, group, mark], ...
+			_lIdFioGroupMark = _serv.GetStudentsShortInfo(_faculty, _course);
+
+			_sew = new SetEstimationWindow(_faculty, _course, _lIdFioGroupMark, this);
+
+			CentralPanel.Controls.Clear();
+
+			CentralPanel.Controls.Add(_sew);
+
+			EnabledMenuButton(false);
+		}
+
+		private void Serv_MakeDocuments()
+		{
+			bool flag = true;
+
+			MainPanel.Enabled = false;
+
+			this.Cursor = Cursors.WaitCursor;
+			_serv.MakeDocuments(_course, _faculty, _docx);
+			this.Cursor = Cursors.Default;
+
+			MainPanel.Enabled = true;
+
+			if (flag)
+				MessageBox.Show("Готово!", "Сообщение");
+			else
+				MessageBox.Show("Произошла ошибка!", "Сообщение");
+		}
+
+		// Выбраны документы для создания и нажата кнопка начать
 		public void ChoiceDocumentsSubwindow_ClickOK(bool[] docx)
 		{
-			//!!!!!!!!!!!!!!!
+			_docx = docx;
+
+			using (FolderBrowserDialog folderDialog = new FolderBrowserDialog())
+			{
+				folderDialog.Description = "Выбор папки для записи";
+				if (folderDialog.ShowDialog(this) == DialogResult.OK)
+				{
+					_serv.SetOutpath(folderDialog.SelectedPath);
+				}
+			}
+
+			// Если выбран документ "Отчет", открыть окно для выставления оценок
+			if (docx[0])
+			{
+				DisplayWindowSetEstimation();
+			}
+			else
+			{
+				Serv_MakeDocuments();
+			}
 		}
 
 		// Открыть документ для редактирования
 		public void OpenDocument(string docName)
 		{
-			
+			MessageBox.Show("Ещё не сделано!", "Сообщение");
 		}
 
+		// Изменение цвета кнопок основного меню
 		private void ChangeBackColorForMenuButton(Button b, bool isChoose)
 		{
 			if (isChoose)
@@ -143,6 +205,51 @@ namespace FrontEnd
 			ChangeBackColorForMenuButton(DatabaseManagementButton, true);
 
 			_currentWindow = "DatabaseManagement";
+		}
+
+		// Обновить (загрузить) таблицу по csv файлу
+		public void LoadTable(int tableID, string pathFile)
+		{
+			MainPanel.Enabled = false;
+
+			this.Cursor = Cursors.WaitCursor;
+			bool flag = _serv.PullDb(pathFile, tableID, false); // Сделал только на перезапись
+			this.Cursor = Cursors.Default;
+
+			MainPanel.Enabled = true;
+
+			if (flag)
+				MessageBox.Show("Изменения сохранены", "Сообщение");
+			else
+				MessageBox.Show("Ошибка! Проверьте правильность заполнения файла!", "Сообщение");
+		}
+
+		// Выгрузить таблицу в csv файл
+		public void UploadTable(string tableName, string outputDir)
+		{
+			MessageBox.Show("Ещё не сделано!", "Сообщение");
+		}
+
+		// Сохранить список оценок ( в листе элементы [id, fio, group, mark], ...)
+		public void SetListIdFioGroupMark(List<string[]> lIdFioGroupMark)
+		{
+			_lIdFioGroupMark = lIdFioGroupMark;
+
+			// НУЖНО ВЫЗВАТЬ ФУНКЦИЮ, КОТОРАЯ ИЗМЕНИТЬ ОЦЕНКИ
+		}
+
+		// Закрыть текушее окно выставления оценок
+		public void CloseSetEstimationWindow()
+		{
+			ShowWindowFillingOutDocuments();
+			EnabledMenuButton(true);
+			Serv_MakeDocuments();
+		}
+
+		private void EnabledMenuButton(bool fl)
+		{
+			FillingOutDocumentsButton.Enabled = fl;
+			DatabaseManagementButton.Enabled = fl;
 		}
 	}
 }

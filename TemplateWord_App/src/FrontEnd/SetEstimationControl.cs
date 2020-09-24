@@ -10,9 +10,10 @@ using System.Windows.Forms;
 
 namespace FrontEnd
 {
-	public partial class SetRatingsControl : UserControl
+	// Контрол для выставления оценки студенту
+	public partial class SetEstimationControl : UserControl
 	{
-		public SetRatingsControl(string fio, string group, string mark = "")
+		public SetEstimationControl(string fio, string group, string mark = "")
 		{
 			InitializeComponent();
 			label_FIO.Text = fio;
@@ -38,6 +39,21 @@ namespace FrontEnd
 		public string GetGroup()
 		{
 			return label_group.Text;
+		}
+
+		public void NotFilled()
+		{
+			comboBox_Mark.BackColor = Color.IndianRed;
+		}
+
+		private void comboBox_Mark_KeyPress(object sender, KeyPressEventArgs e)
+		{
+			e.Handled = true;
+		}
+
+		private void comboBox_Mark_MouseEnter(object sender, EventArgs e)
+		{
+			comboBox_Mark.BackColor = Color.White;
 		}
 	}
 }

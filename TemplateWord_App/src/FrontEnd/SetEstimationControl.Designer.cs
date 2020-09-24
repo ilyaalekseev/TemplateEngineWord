@@ -1,6 +1,6 @@
 ﻿namespace FrontEnd
 {
-	partial class SetRatingsControl
+	partial class SetEstimationControl
 	{
 		/// <summary> 
 		/// Required designer variable.
@@ -55,14 +55,16 @@
 			// 
 			this.comboBox_Mark.FormattingEnabled = true;
 			this.comboBox_Mark.Items.AddRange(new object[] {
-            "5",
-            "4",
-            "3",
-            "2"});
+            "отлично",
+            "хорошо",
+            "удовл",
+            "неудовл"});
 			this.comboBox_Mark.Location = new System.Drawing.Point(520, 9);
 			this.comboBox_Mark.Name = "comboBox_Mark";
 			this.comboBox_Mark.Size = new System.Drawing.Size(121, 24);
 			this.comboBox_Mark.TabIndex = 2;
+			this.comboBox_Mark.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.comboBox_Mark_KeyPress);
+			this.comboBox_Mark.MouseEnter += new System.EventHandler(this.comboBox_Mark_MouseEnter);
 			// 
 			// SetRatingsControl
 			// 

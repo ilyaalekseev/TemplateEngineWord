@@ -29,11 +29,12 @@
 		private void InitializeComponent()
 		{
 			this.MainPanel = new System.Windows.Forms.Panel();
-			this.TopPanel = new System.Windows.Forms.Panel();
-			this.BottomPanel = new System.Windows.Forms.Panel();
-			this.FillingOutDocumentsButton = new System.Windows.Forms.Button();
-			this.DatabaseManagementButton = new System.Windows.Forms.Button();
 			this.CentralPanel = new System.Windows.Forms.Panel();
+			this.BottomPanel = new System.Windows.Forms.Panel();
+			this.TopPanel = new System.Windows.Forms.Panel();
+			this.DatabaseManagementButton = new System.Windows.Forms.Button();
+			this.FillingOutDocumentsButton = new System.Windows.Forms.Button();
+			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
 			this.MainPanel.SuspendLayout();
 			this.TopPanel.SuspendLayout();
 			this.SuspendLayout();
@@ -49,15 +50,14 @@
 			this.MainPanel.Size = new System.Drawing.Size(1032, 603);
 			this.MainPanel.TabIndex = 0;
 			// 
-			// TopPanel
+			// CentralPanel
 			// 
-			this.TopPanel.Controls.Add(this.DatabaseManagementButton);
-			this.TopPanel.Controls.Add(this.FillingOutDocumentsButton);
-			this.TopPanel.Dock = System.Windows.Forms.DockStyle.Top;
-			this.TopPanel.Location = new System.Drawing.Point(0, 0);
-			this.TopPanel.Name = "TopPanel";
-			this.TopPanel.Size = new System.Drawing.Size(1032, 50);
-			this.TopPanel.TabIndex = 0;
+			this.CentralPanel.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
+			this.CentralPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.CentralPanel.Location = new System.Drawing.Point(0, 50);
+			this.CentralPanel.Name = "CentralPanel";
+			this.CentralPanel.Size = new System.Drawing.Size(1032, 503);
+			this.CentralPanel.TabIndex = 2;
 			// 
 			// BottomPanel
 			// 
@@ -68,15 +68,15 @@
 			this.BottomPanel.Size = new System.Drawing.Size(1032, 50);
 			this.BottomPanel.TabIndex = 1;
 			// 
-			// FillingOutDocumentsButton
+			// TopPanel
 			// 
-			this.FillingOutDocumentsButton.Location = new System.Drawing.Point(0, 0);
-			this.FillingOutDocumentsButton.Name = "FillingOutDocumentsButton";
-			this.FillingOutDocumentsButton.Size = new System.Drawing.Size(184, 50);
-			this.FillingOutDocumentsButton.TabIndex = 0;
-			this.FillingOutDocumentsButton.Text = "Заполнить документы";
-			this.FillingOutDocumentsButton.UseVisualStyleBackColor = true;
-			this.FillingOutDocumentsButton.Click += new System.EventHandler(this.FillingOutDocumentsButton_Click);
+			this.TopPanel.Controls.Add(this.DatabaseManagementButton);
+			this.TopPanel.Controls.Add(this.FillingOutDocumentsButton);
+			this.TopPanel.Dock = System.Windows.Forms.DockStyle.Top;
+			this.TopPanel.Location = new System.Drawing.Point(0, 0);
+			this.TopPanel.Name = "TopPanel";
+			this.TopPanel.Size = new System.Drawing.Size(1032, 50);
+			this.TopPanel.TabIndex = 0;
 			// 
 			// DatabaseManagementButton
 			// 
@@ -88,14 +88,15 @@
 			this.DatabaseManagementButton.UseVisualStyleBackColor = true;
 			this.DatabaseManagementButton.Click += new System.EventHandler(this.DatabaseManagementButton_Click);
 			// 
-			// CentralPanel
+			// FillingOutDocumentsButton
 			// 
-			this.CentralPanel.BackColor = System.Drawing.SystemColors.GradientActiveCaption;
-			this.CentralPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.CentralPanel.Location = new System.Drawing.Point(0, 50);
-			this.CentralPanel.Name = "CentralPanel";
-			this.CentralPanel.Size = new System.Drawing.Size(1032, 503);
-			this.CentralPanel.TabIndex = 2;
+			this.FillingOutDocumentsButton.Location = new System.Drawing.Point(0, 0);
+			this.FillingOutDocumentsButton.Name = "FillingOutDocumentsButton";
+			this.FillingOutDocumentsButton.Size = new System.Drawing.Size(184, 50);
+			this.FillingOutDocumentsButton.TabIndex = 0;
+			this.FillingOutDocumentsButton.Text = "Заполнить документы";
+			this.FillingOutDocumentsButton.UseVisualStyleBackColor = true;
+			this.FillingOutDocumentsButton.Click += new System.EventHandler(this.FillingOutDocumentsButton_Click);
 			// 
 			// MainWindow
 			// 
@@ -121,5 +122,6 @@
 		private System.Windows.Forms.Button DatabaseManagementButton;
 		private System.Windows.Forms.Button FillingOutDocumentsButton;
 		private System.Windows.Forms.Panel CentralPanel;
+		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
 	}
 }
