@@ -82,14 +82,45 @@ namespace BackEnd_DLL
             }
 
 			//заполнение содержимого
-			for (int i = 1; i < rowCount; ++i)
+			for (int i = 0; i < rowCount; ++i)
             {
 				for (int j = 0; j < colCount; ++j)
                 {
-					result[i, j] = table[i, j];
+					result[i + 1, j] = table[i, j];
                 }
             }
 			return result;
+        }
+
+		/*
+			Заполняет таблицу tablename данными из массива, сделаного из csv фаила
+			Возвращает строку с ошибками или пустую строку
+		*/
+
+		public string SetDataFromCsvArrays(string tableName, string[,] csvArrays)
+        {
+			string errors = "";
+			int rowCount = csvArrays.GetLength(0);
+			int colCount = csvArrays.GetLength(1);
+			for (int i = 1; i < rowCount; ++i)
+            {
+				
+				//делаем невроятную хуню - создаем двумерный массив из 1 строки чтобы юзнуть готовую функцию
+				string[,] currentRowArr = new string[1, colCount]; 
+				for (int j = 0; j < colCount; ++j)
+                {
+					currentRowArr[0, j] = csvArrays[i, j];
+                }
+				
+				if (csvArrays[i, 0].Equals(String.Empty)) { // пустой id - на запись в конец
+					errors += WritingToTable(tableName, currentRowArr);
+				}
+				else
+                {
+					errors += RewritingToTable(tableName, currentRowArr);
+				}
+            }
+			return errors;
         }
 
 		/*
@@ -164,8 +195,10 @@ namespace BackEnd_DLL
 			Внимание: массив recordsArr должен содержать кол-во столбцов равное кол-во столбцов в таблице tableName (и тот же порядок)
 			З.ы. поле id оставлять пустым для таблиц students/teachers
 		*/
-		public int WritingToTable(string tableName, string[,] recordsArr)
+		public string WritingToTable(string tableName, string[,] recordsArr)
 		{
+			string errors = "";
+
 			if (tableName != String.Empty)
 			{
 				//получаем размеры массива на входе и массив названия столбцов из таблицы
@@ -215,22 +248,25 @@ namespace BackEnd_DLL
 						}
 						catch (Exception e)
 						{
+							errors += e.Message.ToString() + '\n';
 							Console.WriteLine("{0} Exception caught.", e);
 							continue;
 						}
 					}
 				}
-				return success;
+				return errors; //success
 			}
-			return 0;
+			return errors; //0
 		}
 
 		/*
 			Перезаписывает записи со значениями массива recordsArr в таблицу tableName
 			Внимание: массив recordsArr должен содержать кол-во столбцов равное кол-во столбцов в таблице tableName (и тот же порядок)
 		*/
-		public int RewritingToTable(string tableName, string[,] recordsArr)
+		public string RewritingToTable(string tableName, string[,] recordsArr)
 		{
+			string errors = "";
+
 			if (tableName != String.Empty)
 			{
 				//получаем размеры массива на входе и массив названия столбцов из таблицы
@@ -275,14 +311,15 @@ namespace BackEnd_DLL
 						}
 						catch (Exception e)
 						{
+							errors += e.Message.ToString() + '\n';
 							Console.WriteLine("{0} Exception caught.", e);
 							continue;
 						}
 					}
 				}
-				return success;
+				return errors; //success
 			}
-			return 0;
+			return errors; //0
 		}
 
 		/*

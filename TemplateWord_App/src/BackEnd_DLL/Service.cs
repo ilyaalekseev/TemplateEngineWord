@@ -689,9 +689,9 @@ namespace BackEnd_DLL
 
 
             if (type)
-                return rows == dataBase.WritingToTable((indicator == 1) ? "students" : "teachers", arr);
+                return String.Empty == dataBase.WritingToTable((indicator == 1) ? "students" : "teachers", arr);
 
-            return rows == dataBase.RewritingToTable((indicator == 1) ? "students" : "teachers", arr);
+            return String.Empty == dataBase.RewritingToTable((indicator == 1) ? "students" : "teachers", arr);
 
         }
 
