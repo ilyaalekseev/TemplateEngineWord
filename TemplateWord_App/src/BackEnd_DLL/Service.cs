@@ -189,29 +189,34 @@ namespace BackEnd_DLL
                 int counter_stud = 1;
                 FieldContent[] stud = new FieldContent[16];
                 FieldContent[] stud_marks = new FieldContent[16];
+                Dictionary<string, string> StudTemp = new Dictionary<string, string>();//объединяем слушаков по месту&должности практики
+                Dictionary<string, string> MarkTemp = new Dictionary<string, string>();
+                Dictionary<string, string> StudPositionTemp = new Dictionary<string, string>();
+
                 foreach (var elem in rep._students)
                 {
-                    string info_practic = "";
-                    string mark_practic = "";
-                    if (counter_stud == 1)
+                    StudPositionTemp[elem["Location_of_practic"]] = elem["student_position"];
+                    StudTemp[elem["Location_of_practic"]] += elem["Student_rank"] + " " + elem["name_of_student"] + ", ";
+                    if (MarkTemp.ContainsKey(elem["mark"]))
                     {
-                        info_practic = elem["Student_rank"] + " " + elem["name_of_student"] + " в " + elem["Location_of_practic"] + " по воинской должности " + elem["student_position"];
-                        mark_practic = "Слушатель " + elem["name_of_student_short"] + " получил оценку «" + elem["mark"] + "»";
+                        MarkTemp[elem["mark"]] = elem["name_of_student_short"] + ", ";
+                        if (string.Compare(MarkTemp[elem["mark"]][8].ToString(), "и") != 0)
+                            MarkTemp[elem["mark"]] = "Слушатели" + MarkTemp[elem["mark"]].Substring(9);
                     }
                     else
-                    {
-                        info_practic = ", " + elem["Student_rank"] + " " + elem["name_of_student"] + " в " + elem["Location_of_practic"] + " по воинской должности " + elem["student_position"];
-                        mark_practic = ", слушатель " + elem["name_of_student_short"] + " получил оценку «" + elem["mark"] + "»";
-                    }
-                    stud[counter_stud] = new FieldContent("stud_" + (counter_stud).ToString(), info_practic);
-                    stud_marks[counter_stud] = new FieldContent("stud_mark_" + (counter_stud).ToString(), mark_practic);
-                    counter_stud++;
+                        MarkTemp[elem["mark"]] = "Слушатель " + elem["name_of_student_short"] + ", ";
                 }
-                for (; counter_stud < 16; ++counter_stud) //говнокод!!!!!!!!!!!!!1
-                {
-                    stud[counter_stud] = new FieldContent("stud_" + (counter_stud).ToString(), "");
-                    stud_marks[counter_stud] = new FieldContent("stud_mark_" + (counter_stud).ToString(), "");
-                }
+
+                string ResStud = "";
+                string ResMark = "";
+
+                foreach (var elem in StudTemp)
+                    ResStud += elem.Value.Substring(0,elem.Value.Length - 2) + "в " + elem.Key + " по воинской должности " + StudPositionTemp[elem.Key] + ", ";
+                foreach (var elem in StudTemp)
+                    ResMark += elem.Value.Substring(0, elem.Value.Length - 2) + (string.Compare(elem.Value[8].ToString(), "и") == 0 ? " получили оценки " : " получил оценку ") + elem.Key + ". ";
+
+                    stud[1] = new FieldContent("stud_1", ResStud.Substring(0, ResStud.Length - 2) + ".");
+                    stud_marks[1] = new FieldContent("stud_mark_1", ResMark.Substring(0, ResStud.Length - 1));
                 var valuesToFill2 = new Content(stud);
                 var valuesToFill3 = new Content(stud_marks);
                 using (var outputDocument = new TemplateProcessor(_outputPath + "/Отчёты/report " + rep._dicGeneral["name_of_prepod"] + ".docx")
@@ -437,7 +442,7 @@ namespace BackEnd_DLL
                     dateTime = new DateTime(year, month, day);
                     dicGeneral.Add("date_1_end", dateTime.ToString("dd"));
                     dicGeneral.Add("date_2_end", GetGenitive(dateTime.ToString("MMMM").ToLower()));
-                    dicGeneral.Add("name_of_student_2", stud.secondName + " " + stud.name[0] + "." + stud.middleName[0] +".");
+                    dicGeneral.Add("name_of_student_2", (stud.secondName + " " + stud.name[0] + "." + stud.middleName[0] +".").ToUpper());
                     dicGeneral.Add("skill_of_practic", stud.skill);
                     dicGeneral.Add("mark", stud.mark);
                     dicGeneral.Add("footer_position", prepod.position);
@@ -492,12 +497,14 @@ namespace BackEnd_DLL
             /*
              * 
              * кто подаёт рапорт????????????????????
+             * Gelza
              * 
              */
-            dicGeneral.Add("footer_position", prepods[0].position);
-            dicGeneral.Add("footer_rank", prepods[0].rank);
-            dicGeneral.Add("footer_name", prepods[0].name[0] + "." + prepods[0].middleName[0] + ". " + prepods[0].secondName);
-            dicGeneral.Add("footer_date", nowADay);
+            //dicGeneral.Add("footer_position", prepods[0].position);
+            //dicGeneral.Add("footer_rank", prepods[0].rank);
+            //dicGeneral.Add("footer_name", prepods[0].name[0] + "." + prepods[0].middleName[0] + ". " + prepods[0].secondName);
+            //dicGeneral.Add("footer_date", nowADay);
+            //Закоментил - т.к. И.Н. сказал, что не нужны эти данные
 
             Dictionary<string, Dictionary<string, string>> dicDirect = new Dictionary<string, Dictionary<string, string>>();
 
@@ -506,7 +513,7 @@ namespace BackEnd_DLL
                 Dictionary<string, string> dicInstance = new Dictionary<string, string>();
                 dicInstance.Add("full_position", prepod.position);
                 dicInstance.Add("rank_in_direction", prepod.rank);
-                dicInstance.Add("name_of_prepod_in_direction", prepod.secondName + " " + prepod.name + " " + prepod.middleName);
+                dicInstance.Add("name_of_prepod_in_direction", (prepod.secondName + " " + prepod.name + " " + prepod.middleName).ToUpper());
                 dicInstance.Add("individual_number", prepod.personalNumber);
 
                 dicInstance.Add("number_department_in_direction", prepod.department);
@@ -521,7 +528,7 @@ namespace BackEnd_DLL
                         continue;
 
                     dicInstance["rank_of_student_in_direction"] += stud.rank + "-";
-                    dicInstance["name_of_student_in_direction"] += stud.secondName + " " + stud.name + " " + stud.middleName + "-";
+                    dicInstance["name_of_student_in_direction"] += (stud.secondName + " " + stud.name + " " + stud.middleName + "-").ToUpper();
                     /*
                      * foreach(Dictionary<string, Dictionary<string, string>> direct in raport.dicDirect)
                      * {
