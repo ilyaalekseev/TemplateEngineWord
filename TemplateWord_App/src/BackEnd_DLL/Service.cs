@@ -10,6 +10,7 @@ using LingvoNET;
 using DocumentFormat.OpenXml.Drawing.Diagrams;
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.FileIO;
+using System.Diagnostics;
 
 namespace BackEnd_DLL
 {
@@ -24,6 +25,28 @@ namespace BackEnd_DLL
             dataBase = new ManagingRequestsBD();
             _outputPath = output;
             _inputPath = input;
+        }
+
+        string OpenDocument(string docName)
+        {
+            Dictionary<string, string> docs = new Dictionary<string, string>();
+
+            docs.Add("Рапорт", "raport");
+            docs.Add("Дневник", "diary");
+            docs.Add("Отзыв", "feedback");
+            docs.Add("Отчёт", "report");
+            docs.Add("Индивидуальное задание", "task");
+
+            if (docs.ContainsKey(docName))
+            {
+                Process iStartProcess = new Process();
+                iStartProcess.StartInfo.FileName = @"C:\program.exe\WINWORD.exe";
+                iStartProcess.StartInfo.Arguments = @"C:\doki\" + docs[docName] + ".docx";
+                iStartProcess.Start();
+                return "";
+            }
+
+            return "Такого шаблона нет";
         }
 
         public void SetOutpath(string _path)
@@ -234,8 +257,21 @@ namespace BackEnd_DLL
 		{
 			List<string[]> lstr = new List<string[]>();
 
+            List<Student> lst = dataBase.GetStudents();
 
-			return lstr;
+            foreach(Student stud in lst)
+            {
+                string[] str = new string[4];
+
+                str[0] = stud.id;
+                str[1] = stud.secondName + " " + stud.name + " " + stud.middleName;
+                str[2] = stud.group;
+                str[3] = stud.mark;
+
+                lstr.Add(str);
+            }
+
+            return lstr;
 		}
 
         public bool IsExistPrepod(List<Teacher> prepods, Teacher prepod)
@@ -700,6 +736,27 @@ namespace BackEnd_DLL
 
             return String.Empty == dataBase.RewritingToTable((indicator == 1) ? "students" : "teachers", arr);
 
+        }
+
+        public void DumpDb(int tableID, string path)
+        {
+            string[] tables = new string[3];
+            tables[0] = "teachers";
+            tables[1] = "students";
+            tables[3] = "practices";
+
+            string[,] csvStr = dataBase.GetCsvArrays(tables[tableID]);
+            using (FileStream file = new FileStream(path, FileMode.Append)) 
+            {
+                byte[] array = System.Text.Encoding.Default.GetBytes(csvStr.ToString());
+                // запись массива байтов в файл
+                file.Write(array, 0, array.Length);
+            }
+        }
+
+        public bool SetMarks(List<string[]> lst)
+        {
+            return dataBase.SetMarksById(lst);
         }
 
     }
