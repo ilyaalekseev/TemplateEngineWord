@@ -78,11 +78,14 @@ namespace FrontEnd
 			_cds.EnabledButtonStartCreating(fl);
 		}
 
+
+		// Показать окно для выставления оценок
 		private void DisplayWindowSetEstimation()
 		{
 			// Функция GetStudentsShortInfo возвращает List с элементами типа
 			// [id, fio, group, mark], ...
 			_lIdFioGroupMark = _serv.GetStudentsShortInfo(_faculty, _course);
+
 
 			_sew = new SetEstimationWindow(_faculty, _course, _lIdFioGroupMark, this);
 
@@ -93,10 +96,9 @@ namespace FrontEnd
 			EnabledMenuButton(false);
 		}
 
+		// создание документов
 		private void Serv_MakeDocuments()
 		{
-			bool flag = true;
-
 			MainPanel.Enabled = false;
 
 			this.Cursor = Cursors.WaitCursor;
@@ -105,10 +107,8 @@ namespace FrontEnd
 
 			MainPanel.Enabled = true;
 
-			if (flag)
-				MessageBox.Show("Готово!", "Сообщение");
-			else
-				MessageBox.Show("Произошла ошибка!", "Сообщение");
+			MessageBox.Show("Документы создаются!", "Сообщение");
+
 		}
 
 		// Выбраны документы для создания и нажата кнопка начать
@@ -139,7 +139,7 @@ namespace FrontEnd
 		// Открыть документ для редактирования
 		public void OpenDocument(string docName)
 		{
-			MessageBox.Show("Ещё не сделано!", "Сообщение");
+			_serv.OpenDocument(docName);
 		}
 
 		// Изменение цвета кнопок основного меню
@@ -227,7 +227,9 @@ namespace FrontEnd
 		// Выгрузить таблицу в csv файл
 		public void UploadTable(string tableName, string outputDir)
 		{
-			MessageBox.Show("Ещё не сделано!", "Сообщение");
+			_serv.DumpDb((tableName == "Студенты") ? 1 : 0, outputDir);
+
+			MessageBox.Show("Готово!", "Сообщение");
 		}
 
 		// Сохранить список оценок ( в листе элементы [id, fio, group, mark], ...)
@@ -235,7 +237,17 @@ namespace FrontEnd
 		{
 			_lIdFioGroupMark = lIdFioGroupMark;
 
-			// НУЖНО ВЫЗВАТЬ ФУНКЦИЮ, КОТОРАЯ ИЗМЕНИТЬ ОЦЕНКИ
+			List<string[]> lIdMark = new List<string[]>();
+
+			foreach (string[] arr in _lIdFioGroupMark)
+				lIdMark.Add(new string[] { arr[3], arr[0] });
+
+			bool fl = _serv.SetMarks(lIdMark);
+
+			if (fl)
+				MessageBox.Show("Оценки сохранены!", "Сообщение");
+			else
+				MessageBox.Show("Произошла ошибка!", "Сообщение");
 		}
 
 		// Закрыть текушее окно выставления оценок

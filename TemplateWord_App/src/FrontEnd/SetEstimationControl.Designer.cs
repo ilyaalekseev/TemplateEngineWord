@@ -45,7 +45,7 @@
 			// label_group
 			// 
 			this.label_group.AutoSize = true;
-			this.label_group.Location = new System.Drawing.Point(442, 10);
+			this.label_group.Location = new System.Drawing.Point(425, 10);
 			this.label_group.Name = "label_group";
 			this.label_group.Size = new System.Drawing.Size(59, 17);
 			this.label_group.TabIndex = 1;
@@ -57,16 +57,16 @@
 			this.comboBox_Mark.Items.AddRange(new object[] {
             "отлично",
             "хорошо",
-            "удовл",
-            "неудовл"});
-			this.comboBox_Mark.Location = new System.Drawing.Point(520, 9);
+            "удовлетворительно ",
+            "неудовлетворительно "});
+			this.comboBox_Mark.Location = new System.Drawing.Point(490, 9);
 			this.comboBox_Mark.Name = "comboBox_Mark";
-			this.comboBox_Mark.Size = new System.Drawing.Size(121, 24);
+			this.comboBox_Mark.Size = new System.Drawing.Size(151, 24);
 			this.comboBox_Mark.TabIndex = 2;
 			this.comboBox_Mark.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.comboBox_Mark_KeyPress);
 			this.comboBox_Mark.MouseEnter += new System.EventHandler(this.comboBox_Mark_MouseEnter);
 			// 
-			// SetRatingsControl
+			// SetEstimationControl
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -74,7 +74,7 @@
 			this.Controls.Add(this.comboBox_Mark);
 			this.Controls.Add(this.label_group);
 			this.Controls.Add(this.label_FIO);
-			this.Name = "SetRatingsControl";
+			this.Name = "SetEstimationControl";
 			this.Size = new System.Drawing.Size(682, 43);
 			this.ResumeLayout(false);
 			this.PerformLayout();
