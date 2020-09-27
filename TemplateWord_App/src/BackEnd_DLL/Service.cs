@@ -749,15 +749,24 @@ namespace BackEnd_DLL
             file.Close();
 
             //запись
-            int rows = str.Length;
+            int rows = str.Length - 1;
             int colls = 7;
             string[,] arr = new string[rows, colls];
 
             for (int i=0; i < rows; i++)
             {
                 string[] collums = str[i].Split(';');
-                for (int j = (collums[0][0] >= '0' && collums[0][0] <= '9') ? 0 : 1; j < colls; j++)
-                    arr[i, j] = collums[j];
+
+                int k = 0;
+                if (collums[0][0] < '0' || collums[0][0] > '9') 
+                {
+                    colls--;
+                    k = 1;
+                    arr[i, 0] = "";
+                }
+                for (int j = 0; j < colls; j++)
+                    arr[i, k++] = collums[j];
+                colls++;
             }
 
 
@@ -776,9 +785,20 @@ namespace BackEnd_DLL
             tables[3] = "practices";
 
             string[,] csvStr = dataBase.GetCsvArrays(tables[tableID]);
+            int rows = csvStr.GetLength(0);
+            int colls = csvStr.GetLength(1);
+            string str = "";
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < colls; j++)
+                    str += csvStr[i, j] + ";";
+
+                str += "\n";
+            }
+
             using (FileStream file = new FileStream(path, FileMode.Append)) 
             {
-                byte[] array = System.Text.Encoding.Default.GetBytes(csvStr.ToString());
+                byte[] array = System.Text.Encoding.Default.GetBytes(str);
                 // запись массива байтов в файл
                 file.Write(array, 0, array.Length);
             }
