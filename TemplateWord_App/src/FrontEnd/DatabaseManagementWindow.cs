@@ -86,11 +86,13 @@ namespace FrontEnd
 			if (_action == "Выгрузить")
 			{
 				ActionTextLabel.Text = "Выберите папку для выгрузки";
+				ClearCheckPanel.Visible = false;
 			}
 
 			else if (_action == "Загрузить")
 			{
 				ActionTextLabel.Text = "Выберите файл (.csv) для загрузки";
+				ClearCheckPanel.Visible = true;
 			}
 		}
 
@@ -129,6 +131,7 @@ namespace FrontEnd
 			_outputDir = "";
 			_filePath = "";
 			FolderTextBox.Text = "";
+			ClearDatabaseCheckBox.Checked = false;
 		}
 
 		// открыть окно для выбора папки/файла
@@ -156,7 +159,7 @@ namespace FrontEnd
 
 			if (_action == "Загрузить")
 			{
-				_mw.LoadTable((_tableName == "Студенты") ? 1 : 2, _filePath);
+				_mw.LoadTable((_tableName == "Студенты") ? 1 : 2, _filePath, ClearDatabaseCheckBox.Checked);
 			}
 			else if (_action == "Выгрузить")
 			{
@@ -177,6 +180,14 @@ namespace FrontEnd
 		private void FolderTextBox_MouseEnter(object sender, EventArgs e)
 		{
 			FolderTextBox.BackColor = Color.White;
+		}
+
+		private void ClearDatabaseCheckBox_MouseClick(object sender, MouseEventArgs e)
+		{
+			if (ClearDatabaseCheckBox.Checked == true)
+			{
+				MessageBox.Show("Таблица в базе данных будет стёрта и\nперезаписана в соответствии .csv файлом!", "Важно!");
+			}
 		}
 	}
 }

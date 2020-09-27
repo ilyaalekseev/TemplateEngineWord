@@ -27,7 +27,7 @@ namespace BackEnd_DLL
             _inputPath = input;
         }
 
-        string OpenDocument(string docName)
+        public string OpenDocument(string docName)
         {
             Dictionary<string, string> docs = new Dictionary<string, string>();
 

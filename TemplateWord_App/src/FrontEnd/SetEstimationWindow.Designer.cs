@@ -122,8 +122,8 @@
 			this.AllMarksComboBox.Items.AddRange(new object[] {
             "отлично",
             "хорошо",
-            "удовл",
-            "неудовл"});
+            "удовлетворительно ",
+            "неудовлетворительно "});
 			this.AllMarksComboBox.Location = new System.Drawing.Point(723, 13);
 			this.AllMarksComboBox.Name = "AllMarksComboBox";
 			this.AllMarksComboBox.Size = new System.Drawing.Size(160, 24);
