@@ -65,6 +65,28 @@ namespace BackEnd_DLL
 		}
 
 		/*
+			Удаляет таблицу
+		*/
+
+		public bool DeleteTable(string tableName)
+        {
+			string sql = "DELETE FROM " + tableName + ";";
+
+			try
+			{
+				MySqlCommand command = new MySqlCommand(sql, _con);
+				command.ExecuteNonQuery();
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("{0} Exception caught.", e);
+				return false;
+			}
+			return true;
+
+        }
+
+		/*
 			Возвращает массив для csv фаила таблицы tableName 
 		*/
 		public string[,] GetCsvArrays(string tableName)
