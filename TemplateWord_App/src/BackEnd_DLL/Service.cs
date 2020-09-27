@@ -558,29 +558,29 @@ namespace BackEnd_DLL
             }
             dicGeneral.Add("number_of_Department", String.Join("-", departments.ToArray()));
 
-            /*
-             * 
-             * кто подаёт рапорт????????????????????
-             * Gelza
-             * 
-             */
-            //dicGeneral.Add("footer_position", prepods[0].position);
-            //dicGeneral.Add("footer_rank", prepods[0].rank);
-            //dicGeneral.Add("footer_name", prepods[0].name[0] + "." + prepods[0].middleName[0] + ". " + prepods[0].secondName);
-            //dicGeneral.Add("footer_date", nowADay);
-            //Закоментил - т.к. И.Н. сказал, что не нужны эти данные
+            List<string> directions = new List<string>();
+            foreach (Teacher prep in prepods)
+            {
+                if (!directions.Contains(prep.directionNumber))
+                    directions.Add(prep.directionNumber);
+            }
 
             Dictionary<string, Dictionary<string, Dictionary<string, string>>> dicDirect = new Dictionary<string, Dictionary<string, Dictionary<string, string>>>();
+            foreach (var dic in directions)
+            {
+                dicDirect[dic] = null;
+            }
 
+            Dictionary<string, Dictionary<string, string>> dicInstance = new Dictionary<string, Dictionary<string, string>>();
             foreach (Teacher prepod in prepods)
             {
-                Dictionary<string, Dictionary<string, string>> dicInstance = new Dictionary<string, Dictionary<string, string>>();
                 Dictionary<string, string> dicDic = new Dictionary<string, string>();
                 dicDic.Add("full_position", prepod.position + " кафедры №" + prepod.department + " ");
                 dicDic.Add("rank_in_direction", prepod.rank);
                 dicDic.Add("individual_number", prepod.personalNumber);
 
                 dicDic.Add("number_department_in_direction", prepod.department);
+                dicDic.Add("direction", prepod.directionNumber);
                 dicDic.Add("faculty_in_direction", prepods[0].students[0].faculty);
                 dicDic.Add("institute_in_direction", "ИКСИ");
                 dicDic.Add("rank_of_student_in_direction", "");
@@ -593,19 +593,30 @@ namespace BackEnd_DLL
 
                     dicDic["rank_of_student_in_direction"] += stud.rank + "-";
                     dicDic["name_of_student_in_direction"] += (stud.secondName + " " + stud.name + " " + stud.middleName + "-").ToUpper();
-                    /*
-                     * foreach(Dictionary<string, Dictionary<string, string>> direct in raport.dicDirect)
-                     * {
-                     *      direct.Key(); //так номер потока берёшь
-                     *      
-                     * }
-                     * 
-                     */
                 }
 
                 dicInstance.Add(prepod.secondName.ToUpper() + " " + prepod.name + " " + prepod.middleName, dicDic);
 
-                dicDirect.Add(prepod.directionNumber, dicInstance);
+                //if (dicDirect.ContainsKey(prepod.directionNumber))
+                //{
+                //    dicDirect[prepod.directionNumber] = null;
+                //    dicDirect[prepod.directionNumber] = dicInstance;
+
+                //}
+                //else
+                //    dicDirect.Add(prepod.directionNumber, dicInstance);
+            }
+
+            foreach (var key in dicDirect.Keys)
+            {
+                Dictionary<string, Dictionary<string, string>> dicDicFinal = new Dictionary<string, Dictionary<string, string>>();
+                foreach (var prep in dicInstance.Keys)
+                {
+                    if (dicInstance[prep]["direction"] == key)
+                        dicDicFinal.Add(prep, dicInstance[prep]);
+                }
+
+                dicDirect[key] = dicDicFinal;
             }
 
             return new Raport(dicGeneral, dicDirect);
@@ -740,7 +751,7 @@ namespace BackEnd_DLL
             return tasks;
         }
     
-        public bool PullDb(string path, int indicator, bool type)//рабочее название поменять потом сука
+        public string PullDb(string path, int indicator, bool type)//рабочее название поменять потом сука
         {
             //чтение
             StreamReader file = new StreamReader(path, Encoding.Default);
@@ -750,30 +761,19 @@ namespace BackEnd_DLL
 
             //запись
             int rows = str.Length - 1;
-            int colls = 7;
+            int colls = str[0].Split(';').Length;
             string[,] arr = new string[rows, colls];
 
-            for (int i=0; i < rows; i++)
+            for (int i = 1; i < rows; i++)
             {
                 string[] collums = str[i].Split(';');
 
-                int k = 0;
-                if (collums[0][0] < '0' || collums[0][0] > '9') 
-                {
-                    colls--;
-                    k = 1;
-                    arr[i, 0] = "";
-                }
                 for (int j = 0; j < colls; j++)
-                    arr[i, k++] = collums[j];
-                colls++;
+                    arr[i, j] = collums[j];
             }
 
 
-            if (type)
-                return String.Empty == dataBase.WritingToTable((indicator == 1) ? "students" : "teachers", arr);
-
-            return String.Empty == dataBase.RewritingToTable((indicator == 1) ? "students" : "teachers", arr);
+            return dataBase.SetDataFromCsvArrays((indicator == 1) ? "students" : "teachers", arr);
 
         }
 
@@ -782,7 +782,7 @@ namespace BackEnd_DLL
             string[] tables = new string[3];
             tables[0] = "teachers";
             tables[1] = "students";
-            tables[3] = "practices";
+            tables[2] = "practices";
 
             string[,] csvStr = dataBase.GetCsvArrays(tables[tableID]);
             int rows = csvStr.GetLength(0);
@@ -791,12 +791,12 @@ namespace BackEnd_DLL
             for (int i = 0; i < rows; i++)
             {
                 for (int j = 0; j < colls; j++)
-                    str += csvStr[i, j] + ";";
+                    str += csvStr[i, j] + ((j != colls - 1)?";":"");
 
                 str += "\n";
             }
 
-            using (FileStream file = new FileStream(path, FileMode.Append)) 
+            using (FileStream file = new FileStream(path + "\\" + tables[tableID] + ".csv", FileMode.Append)) 
             {
                 byte[] array = System.Text.Encoding.Default.GetBytes(str);
                 // запись массива байтов в файл

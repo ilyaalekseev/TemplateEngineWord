@@ -264,9 +264,8 @@ namespace FrontEnd
 			MainPanel.Enabled = false;
 
 			this.Cursor = Cursors.WaitCursor;
-			bool flag = false;
+			string flag = "";
 			bool er = false;
-			flag = _serv.PullDb(pathFile, tableID, !clear);
 			
 			try
 			{
@@ -281,10 +280,10 @@ namespace FrontEnd
 			{
 				if (!er)
 				{
-					if (flag)
+					if (flag == "")
 						MessageBox.Show("Изменения сохранены", "Сообщение");
 					else
-						MessageBox.Show("Ошибка! Проверьте правильность заполнения файла!", "Сообщение");
+						MessageBox.Show("Ошибка! Проверьте правильность заполнения файла!\n" + flag, "Сообщение");
 				}
 			}
 
