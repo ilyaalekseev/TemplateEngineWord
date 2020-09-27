@@ -80,33 +80,54 @@ namespace BackEnd_DLL
             document.SaveAs(_outputPath + "/Рапорт/raport.docx");
             FieldContent[] lst = new FieldContent[raport._dicGeneral.Count];
             int count_content = 0;
+            if (raport._dicGeneral["number_of_Department"].Length > 4)
+            {
+                string res = "кафедр ";
+                string[] departs = raport._dicGeneral["number_of_Department"].Split('-');
+                for (int count = 1; count < departs.Length; count++)
+                    res += departs[count - 1] + ", ";
+                raport._dicGeneral["number_of_Department"] = res.Substring(0, res.Length - 2) + " и " + departs[departs.Length - 1];
+            }
+            else
+                raport._dicGeneral["number_of_Department"] = "кафедры " + raport._dicGeneral["number_of_Department"];
             foreach (var pair in raport._dicGeneral)
                 lst[count_content++] = new FieldContent(pair.Key, pair.Value);
             var valuesToFill = new Content(lst);
             var directions = new ListContent("Direction");
             foreach (var pair in raport._direct)
             {
-                int counting = 0;
-                string[] ranks = pair.Value["rank_of_student_in_direction"].Split('-');
-                string[] names = pair.Value["name_of_student_in_direction"].Split('-');
-                int count_of_stud = names.Count();
-                string studs_and_ranks = "";
-                for (int counter = 0; counter < count_of_stud; counter++)
-                {
-                    if (counter == 0)
-                        studs_and_ranks += ranks[counter] + " " + names[counter];
-                    else
-                        studs_and_ranks += ", " + ranks[counter] + " " + names[counter];
-                }
-                FieldContent[] nst = new FieldContent[pair.Value.Count + 1];
+                var dir_res = new ListItemContent("number_of_direction", "поток " + pair.Key);
+                string res_direct = "";
+                string[] resulting = new string[7];
+                int count_dir = 0;
                 foreach (var elem in pair.Value)
                 {
-                    if (elem.Key != "name_of_student_in_direction" && elem.Key != "rank_of_student_in_direction")
-                        nst[counting++] = new FieldContent(elem.Key, elem.Value);
+                    string[] ranks = elem.Value["rank_of_student_in_direction"].Split('-');
+                    string[] names = elem.Value["name_of_student_in_direction"].Split('-');
+                    int count_of_stud = names.Count();
+                    string studs_and_ranks = "";
+                    for (int counter = 0; counter < count_of_stud; counter++)
+                    {
+                        if (counter == 0)
+                            studs_and_ranks += ranks[counter] + " " + names[counter];
+                        else
+                            studs_and_ranks += ", " + ranks[counter] + " " + names[counter];
+                    }
+
+                    res_direct = elem.Value["full_position"] + " " + elem.Value["rank_in_direction"] + " " + elem.Key + " (" + elem.Value["individual_number"] + ") на кафедре " +
+                                 elem.Value["number_department_in_direction"] + " " + elem.Value["faculty_in_direction"] + ", " +
+                                 elem.Value["institute_in_direction"] + ", Академии ФСБ России - " + studs_and_ranks;
+                    resulting[count_dir] = res_direct;
+                    count_dir++;
                 }
-                nst[counting++] = new FieldContent("student_in_direction", studs_and_ranks);
-                nst[pair.Value.Count] = new FieldContent("number_of_direction", pair.Key);
-                directions.AddItem(nst);
+                for (int i = 0; i < resulting.Length; i++)
+                {
+                    if (String.Compare(resulting[i], "") == 1)
+                        dir_res.AddNestedItem(new FieldContent("full_position", resulting[i]));
+                    else
+                        break;
+                }
+                directions.AddItem(dir_res);
                 var valuesToFill2 = new Content(directions);
                 using (var outputDocument = new TemplateProcessor(_outputPath + "/Рапорт/raport.docx")
     .SetRemoveContentControls(true))
