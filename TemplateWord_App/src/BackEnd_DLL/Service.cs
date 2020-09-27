@@ -556,7 +556,7 @@ namespace BackEnd_DLL
                 Dictionary<string, string> dicInstance = new Dictionary<string, string>();
                 dicInstance.Add("full_position", prepod.position + " кафедры №" + prepod.department + " ");
                 dicInstance.Add("rank_in_direction", prepod.rank);
-                dicInstance.Add("name_of_prepod_in_direction", (prepod.secondName + " " + prepod.name + " " + prepod.middleName).ToUpper());
+                dicInstance.Add("name_of_prepod_in_direction", prepod.secondName.ToUpper() + " " + prepod.name + " " + prepod.middleName);
                 dicInstance.Add("individual_number", prepod.personalNumber);
 
                 dicInstance.Add("number_department_in_direction", prepod.department);
