@@ -266,7 +266,6 @@ namespace FrontEnd
 			this.Cursor = Cursors.WaitCursor;
 			bool flag = false;
 			bool er = false;
-			flag = _serv.PullDb(pathFile, tableID, !clear);
 			
 			try
 			{
