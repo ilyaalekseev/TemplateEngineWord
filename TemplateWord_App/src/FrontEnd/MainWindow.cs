@@ -78,37 +78,65 @@ namespace FrontEnd
 			_cds.EnabledButtonStartCreating(fl);
 		}
 
+		private void BDErrorMessage()
+		{
+			MessageBox.Show("Проверьте, что MySQL СУБД запущена!", "Ошибка");
+		}
 
 		// Показать окно для выставления оценок
 		private void DisplayWindowSetEstimation()
 		{
+			bool er = false;
 			// Функция GetStudentsShortInfo возвращает List с элементами типа
 			// [id, fio, group, mark], ...
-			_lIdFioGroupMark = _serv.GetStudentsShortInfo(_faculty, _course);
+			try
+			{
+				_lIdFioGroupMark = _serv.GetStudentsShortInfo(_faculty, _course);
+			}
+			catch
+			{
+				er = true;
+				BDErrorMessage();
+			}
+			finally
+			{
+				if (!er)
+				{
+					_sew = new SetEstimationWindow(_faculty, _course, _lIdFioGroupMark, this);
 
+					CentralPanel.Controls.Clear();
 
-			_sew = new SetEstimationWindow(_faculty, _course, _lIdFioGroupMark, this);
+					CentralPanel.Controls.Add(_sew);
 
-			CentralPanel.Controls.Clear();
-
-			CentralPanel.Controls.Add(_sew);
-
-			EnabledMenuButton(false);
+					EnabledMenuButton(false);
+				}
+			}
 		}
 
 		// создание документов
 		private void Serv_MakeDocuments()
 		{
+			bool er = false;
 			MainPanel.Enabled = false;
-
 			this.Cursor = Cursors.WaitCursor;
-			_serv.MakeDocuments(_course, _faculty, _docx);
+
+			try
+			{
+				_serv.MakeDocuments(_course, _faculty, _docx);
+			}
+			catch
+			{
+				er = true;
+				BDErrorMessage();
+			}
+			finally
+			{
+				if (!er)
+					MessageBox.Show("Документы создаются!", "Сообщение");
+			}
+			
 			this.Cursor = Cursors.Default;
-
 			MainPanel.Enabled = true;
-
-			MessageBox.Show("Документы создаются!", "Сообщение");
-
 		}
 
 		// Выбраны документы для создания и нажата кнопка начать
@@ -121,7 +149,16 @@ namespace FrontEnd
 				folderDialog.Description = "Выбор папки для записи";
 				if (folderDialog.ShowDialog(this) == DialogResult.OK)
 				{
-					_serv.SetOutpath(folderDialog.SelectedPath);
+					try
+					{
+						_serv.SetOutpath(folderDialog.SelectedPath);
+					}
+					catch
+					{
+						BDErrorMessage();
+						return;
+					}
+					
 				}
 			}
 
@@ -139,7 +176,20 @@ namespace FrontEnd
 		// Открыть документ для редактирования
 		public void OpenDocument(string docName)
 		{
-			_serv.OpenDocument(docName);
+			bool e = false;
+			string er = "";
+			try
+			{
+				er = _serv.OpenDocument(docName);
+			}
+			catch
+			{
+				e = true;
+				MessageBox.Show("Невозможно открыть файл!\n Проверьте, что он никгде не открыт!", "Ошибка");
+			}
+
+			if (er != "" & !e)
+				MessageBox.Show(er + "!", "Ошибка");
 		}
 
 		// Изменение цвета кнопок основного меню
@@ -208,28 +258,56 @@ namespace FrontEnd
 		}
 
 		// Обновить (загрузить) таблицу по csv файлу
-		public void LoadTable(int tableID, string pathFile)
+		public void LoadTable(int tableID, string pathFile, bool clear)
 		{
 			MainPanel.Enabled = false;
 
 			this.Cursor = Cursors.WaitCursor;
-			bool flag = _serv.PullDb(pathFile, tableID, false); // Сделал только на перезапись
+			bool flag = false;
+			bool er = false;
+			try
+			{
+				flag = _serv.PullDb(pathFile, tableID, !clear); // Сделал только на перезапись
+			}
+			catch
+			{
+				er = true;
+				BDErrorMessage();
+			}
+			finally
+			{
+				if (!er)
+				{
+					if (flag)
+						MessageBox.Show("Изменения сохранены", "Сообщение");
+					else
+						MessageBox.Show("Ошибка! Проверьте правильность заполнения файла!", "Сообщение");
+				}
+			}
+
 			this.Cursor = Cursors.Default;
 
 			MainPanel.Enabled = true;
 
-			if (flag)
-				MessageBox.Show("Изменения сохранены", "Сообщение");
-			else
-				MessageBox.Show("Ошибка! Проверьте правильность заполнения файла!", "Сообщение");
+			
 		}
 
 		// Выгрузить таблицу в csv файл
 		public void UploadTable(string tableName, string outputDir)
 		{
-			_serv.DumpDb((tableName == "Студенты") ? 1 : 0, outputDir);
-
-			MessageBox.Show("Готово!", "Сообщение");
+			bool er = false;
+			try
+			{
+				_serv.DumpDb((tableName == "Студенты") ? 1 : 0, outputDir);
+			}
+			catch
+			{
+				er = true;
+				BDErrorMessage();
+			}
+			
+			if (!er)
+				MessageBox.Show("Готово!", "Сообщение");
 		}
 
 		// Сохранить список оценок ( в листе элементы [id, fio, group, mark], ...)
@@ -241,13 +319,26 @@ namespace FrontEnd
 
 			foreach (string[] arr in _lIdFioGroupMark)
 				lIdMark.Add(new string[] { arr[3], arr[0] });
+			bool fl = false;
+			bool er = false;
+			try
+			{
+				fl = _serv.SetMarks(lIdMark);
+			}
+			catch
+			{
+				er = true;
+				BDErrorMessage();
+			}
 
-			bool fl = _serv.SetMarks(lIdMark);
-
-			if (fl)
-				MessageBox.Show("Оценки сохранены!", "Сообщение");
-			else
-				MessageBox.Show("Произошла ошибка!", "Сообщение");
+			if (!er)
+			{
+				if (fl)
+					MessageBox.Show("Оценки сохранены!", "Сообщение");
+				else
+					MessageBox.Show("Произошла ошибка!", "Сообщение");
+			}
+			
 		}
 
 		// Закрыть текушее окно выставления оценок

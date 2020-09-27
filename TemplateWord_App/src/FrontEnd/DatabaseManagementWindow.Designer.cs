@@ -44,10 +44,14 @@
 			this.TabtlComboboxLabel = new System.Windows.Forms.Label();
 			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+			this.ClearCheckPanel = new System.Windows.Forms.Panel();
+			this.ClearLabel = new System.Windows.Forms.Label();
+			this.ClearDatabaseCheckBox = new System.Windows.Forms.CheckBox();
 			this.MainPanel.SuspendLayout();
 			this.RightPpanel.SuspendLayout();
 			this.RightBottomPanel.SuspendLayout();
 			this.LeftPanel.SuspendLayout();
+			this.ClearCheckPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// MainPanel
@@ -63,6 +67,7 @@
 			// 
 			// RightPpanel
 			// 
+			this.RightPpanel.Controls.Add(this.ClearCheckPanel);
 			this.RightPpanel.Controls.Add(this.ActionTextLabel);
 			this.RightPpanel.Controls.Add(this.FolderButton);
 			this.RightPpanel.Controls.Add(this.FolderTextBox);
@@ -201,6 +206,37 @@
 			// 
 			this.openFileDialog1.FileName = "openFileDialog1";
 			// 
+			// ClearCheckPanel
+			// 
+			this.ClearCheckPanel.BackColor = System.Drawing.SystemColors.ButtonFace;
+			this.ClearCheckPanel.Controls.Add(this.ClearLabel);
+			this.ClearCheckPanel.Controls.Add(this.ClearDatabaseCheckBox);
+			this.ClearCheckPanel.Location = new System.Drawing.Point(28, 145);
+			this.ClearCheckPanel.Name = "ClearCheckPanel";
+			this.ClearCheckPanel.Size = new System.Drawing.Size(485, 112);
+			this.ClearCheckPanel.TabIndex = 6;
+			// 
+			// ClearLabel
+			// 
+			this.ClearLabel.Location = new System.Drawing.Point(12, 9);
+			this.ClearLabel.Name = "ClearLabel";
+			this.ClearLabel.Size = new System.Drawing.Size(456, 54);
+			this.ClearLabel.TabIndex = 7;
+			this.ClearLabel.Text = "Рекомендуется выбрать, если неоходимо точное совпадение (за исключением ID) данны" +
+    "х в базе данных и загружаемых данных!";
+			// 
+			// ClearDatabaseCheckBox
+			// 
+			this.ClearDatabaseCheckBox.AutoSize = true;
+			this.ClearDatabaseCheckBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+			this.ClearDatabaseCheckBox.Location = new System.Drawing.Point(15, 66);
+			this.ClearDatabaseCheckBox.Name = "ClearDatabaseCheckBox";
+			this.ClearDatabaseCheckBox.Size = new System.Drawing.Size(359, 21);
+			this.ClearDatabaseCheckBox.TabIndex = 6;
+			this.ClearDatabaseCheckBox.Text = "Отчистить таблицу в базе данных перед записью";
+			this.ClearDatabaseCheckBox.UseVisualStyleBackColor = true;
+			this.ClearDatabaseCheckBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ClearDatabaseCheckBox_MouseClick);
+			// 
 			// DatabaseManagementWindow
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -216,6 +252,8 @@
 			this.RightBottomPanel.ResumeLayout(false);
 			this.LeftPanel.ResumeLayout(false);
 			this.LeftPanel.PerformLayout();
+			this.ClearCheckPanel.ResumeLayout(false);
+			this.ClearCheckPanel.PerformLayout();
 			this.ResumeLayout(false);
 
 		}
@@ -238,5 +276,8 @@
 		private System.Windows.Forms.TextBox FolderTextBox;
 		private System.Windows.Forms.Label ActionTextLabel;
 		private System.Windows.Forms.Button StartButton;
+		private System.Windows.Forms.Panel ClearCheckPanel;
+		private System.Windows.Forms.Label ClearLabel;
+		private System.Windows.Forms.CheckBox ClearDatabaseCheckBox;
 	}
 }
