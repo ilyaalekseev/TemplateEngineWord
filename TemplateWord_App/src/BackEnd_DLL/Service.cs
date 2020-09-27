@@ -776,9 +776,20 @@ namespace BackEnd_DLL
             tables[3] = "practices";
 
             string[,] csvStr = dataBase.GetCsvArrays(tables[tableID]);
+            int rows = csvStr.GetLength(0);
+            int colls = csvStr.GetLength(1);
+            string str = "";
+            for (int i = 0; i < rows; i++)
+            {
+                for (int j = 0; j < colls; j++)
+                    str += csvStr[i, j] + ";";
+
+                str += "\n";
+            }
+
             using (FileStream file = new FileStream(path, FileMode.Append)) 
             {
-                byte[] array = System.Text.Encoding.Default.GetBytes(csvStr.ToString());
+                byte[] array = System.Text.Encoding.Default.GetBytes(str);
                 // запись массива байтов в файл
                 file.Write(array, 0, array.Length);
             }
