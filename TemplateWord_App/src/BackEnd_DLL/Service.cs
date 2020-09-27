@@ -606,14 +606,22 @@ namespace BackEnd_DLL
                 //else
                 //    dicDirect.Add(prepod.directionNumber, dicInstance);
             }
+            string[] strKeys = new string[dicDirect.Keys.Count()];
+            int k = 0;
+            foreach (var govno in dicDirect.Keys)
+                strKeys[k++] = govno;
 
-            foreach (var key in dicDirect.Keys)
+
+            foreach (var key in strKeys)
             {
                 Dictionary<string, Dictionary<string, string>> dicDicFinal = new Dictionary<string, Dictionary<string, string>>();
                 foreach (var prep in dicInstance.Keys)
                 {
                     if (dicInstance[prep]["direction"] == key)
+                    {
+                        dicInstance.Remove("direction");
                         dicDicFinal.Add(prep, dicInstance[prep]);
+                    }
                 }
 
                 dicDirect[key] = dicDicFinal;
