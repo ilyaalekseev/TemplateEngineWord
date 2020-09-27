@@ -89,11 +89,12 @@ namespace FrontEnd
 			bool er = false;
 			// Функция GetStudentsShortInfo возвращает List с элементами типа
 			// [id, fio, group, mark], ...
+			
 			try
 			{
 				_lIdFioGroupMark = _serv.GetStudentsShortInfo(_faculty, _course);
 			}
-			catch
+			catch (MySql.Data.MySqlClient.MySqlException)
 			{
 				er = true;
 				BDErrorMessage();
@@ -124,7 +125,7 @@ namespace FrontEnd
 			{
 				_serv.MakeDocuments(_course, _faculty, _docx);
 			}
-			catch
+			catch (MySql.Data.MySqlClient.MySqlException)
 			{
 				er = true;
 				BDErrorMessage();
@@ -153,7 +154,7 @@ namespace FrontEnd
 					{
 						_serv.SetOutpath(folderDialog.SelectedPath);
 					}
-					catch
+					catch (MySql.Data.MySqlClient.MySqlException)
 					{
 						BDErrorMessage();
 						return;
@@ -182,7 +183,7 @@ namespace FrontEnd
 			{
 				er = _serv.OpenDocument(docName);
 			}
-			catch
+			catch (MySql.Data.MySqlClient.MySqlException)
 			{
 				e = true;
 				MessageBox.Show("Невозможно открыть файл!\n Проверьте, что он никгде не открыт!", "Ошибка");
@@ -271,7 +272,7 @@ namespace FrontEnd
 			{
 				flag = _serv.PullDb(pathFile, tableID, !clear); // Сделал только на перезапись
 			}
-			catch
+			catch (MySql.Data.MySqlClient.MySqlException)
 			{
 				er = true;
 				BDErrorMessage();
@@ -302,7 +303,7 @@ namespace FrontEnd
 			{
 				_serv.DumpDb((tableName == "Студенты") ? 1 : 0, outputDir);
 			}
-			catch
+			catch (MySql.Data.MySqlClient.MySqlException)
 			{
 				er = true;
 				BDErrorMessage();
@@ -327,7 +328,7 @@ namespace FrontEnd
 			{
 				fl = _serv.SetMarks(lIdMark);
 			}
-			catch
+			catch (MySql.Data.MySqlClient.MySqlException)
 			{
 				er = true;
 				BDErrorMessage();
