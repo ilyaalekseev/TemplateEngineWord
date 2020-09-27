@@ -780,6 +780,8 @@ namespace BackEnd_DLL
                     arr[i, j] = collums[j];
             }
 
+            if (!type)
+                dataBase.DeleteTable((indicator == 1) ? "students" : "teachers");
 
             return dataBase.SetDataFromCsvArrays((indicator == 1) ? "students" : "teachers", arr);
 
@@ -787,10 +789,9 @@ namespace BackEnd_DLL
 
         public void DumpDb(int tableID, string path)
         {
-            string[] tables = new string[3];
+            string[] tables = new string[2];
             tables[0] = "teachers";
             tables[1] = "students";
-            tables[2] = "practices";
 
             string[,] csvStr = dataBase.GetCsvArrays(tables[tableID]);
             int rows = csvStr.GetLength(0);
