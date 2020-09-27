@@ -749,15 +749,24 @@ namespace BackEnd_DLL
             file.Close();
 
             //запись
-            int rows = str.Length;
+            int rows = str.Length - 1;
             int colls = 7;
             string[,] arr = new string[rows, colls];
 
             for (int i=0; i < rows; i++)
             {
                 string[] collums = str[i].Split(';');
-                for (int j = (collums[0][0] >= '0' && collums[0][0] <= '9') ? 0 : 1; j < colls; j++)
-                    arr[i, j] = collums[j];
+
+                int k = 0;
+                if (collums[0][0] < '0' || collums[0][0] > '9') 
+                {
+                    colls--;
+                    k = 1;
+                    arr[i, 0] = "";
+                }
+                for (int j = 0; j < colls; j++)
+                    arr[i, k++] = collums[j];
+                colls++;
             }
 
 
