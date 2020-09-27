@@ -570,29 +570,29 @@ namespace BackEnd_DLL
             //dicGeneral.Add("footer_date", nowADay);
             //Закоментил - т.к. И.Н. сказал, что не нужны эти данные
 
-            Dictionary<string, Dictionary<string, string>> dicDirect = new Dictionary<string, Dictionary<string, string>>();
+            Dictionary<string, Dictionary<string, Dictionary<string, string>>> dicDirect = new Dictionary<string, Dictionary<string, Dictionary<string, string>>>();
 
             foreach (Teacher prepod in prepods)
             {
-                Dictionary<string, string> dicInstance = new Dictionary<string, string>();
-                dicInstance.Add("full_position", prepod.position + " кафедры №" + prepod.department + " ");
-                dicInstance.Add("rank_in_direction", prepod.rank);
-                dicInstance.Add("name_of_prepod_in_direction", prepod.secondName.ToUpper() + " " + prepod.name + " " + prepod.middleName);
-                dicInstance.Add("individual_number", prepod.personalNumber);
+                Dictionary<string, Dictionary<string, string>> dicInstance = new Dictionary<string, Dictionary<string, string>>();
+                Dictionary<string, string> dicDic = new Dictionary<string, string>();
+                dicDic.Add("full_position", prepod.position + " кафедры №" + prepod.department + " ");
+                dicDic.Add("rank_in_direction", prepod.rank);
+                dicDic.Add("individual_number", prepod.personalNumber);
 
-                dicInstance.Add("number_department_in_direction", prepod.department);
-                dicInstance.Add("faculty_in_direction", prepods[0].students[0].faculty);
-                dicInstance.Add("institute_in_direction", "ИКСИ");
-                dicInstance.Add("rank_of_student_in_direction", "");
-                dicInstance.Add("name_of_student_in_direction", "");
+                dicDic.Add("number_department_in_direction", prepod.department);
+                dicDic.Add("faculty_in_direction", prepods[0].students[0].faculty);
+                dicDic.Add("institute_in_direction", "ИКСИ");
+                dicDic.Add("rank_of_student_in_direction", "");
+                dicDic.Add("name_of_student_in_direction", "");
 
                 foreach (Student stud in prepod.students)
                 {
                     if (stud.course != course || stud.faculty != faculty)
                         continue;
 
-                    dicInstance["rank_of_student_in_direction"] += stud.rank + "-";
-                    dicInstance["name_of_student_in_direction"] += (stud.secondName + " " + stud.name + " " + stud.middleName + "-").ToUpper();
+                    dicDic["rank_of_student_in_direction"] += stud.rank + "-";
+                    dicDic["name_of_student_in_direction"] += (stud.secondName + " " + stud.name + " " + stud.middleName + "-").ToUpper();
                     /*
                      * foreach(Dictionary<string, Dictionary<string, string>> direct in raport.dicDirect)
                      * {
@@ -602,6 +602,8 @@ namespace BackEnd_DLL
                      * 
                      */
                 }
+
+                dicInstance.Add(prepod.secondName.ToUpper() + " " + prepod.name + " " + prepod.middleName, dicDic);
 
                 dicDirect.Add(prepod.directionNumber, dicInstance);
             }
@@ -748,13 +750,13 @@ namespace BackEnd_DLL
 
             //запись
             int rows = str.Length;
-            int colls = str[0].Split(';').Length;
+            int colls = 7;
             string[,] arr = new string[rows, colls];
 
             for (int i=0; i < rows; i++)
             {
                 string[] collums = str[i].Split(';');
-                for (int j = 0; j < colls; j++)
+                for (int j = (collums[0][0] >= '0' && collums[0][0] <= '9') ? 0 : 1; j < colls; j++)
                     arr[i, j] = collums[j];
             }
 
