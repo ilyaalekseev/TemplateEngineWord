@@ -128,6 +128,7 @@ namespace BackEnd_DLL
                         break;
                 }
                 directions.AddItem(dir_res);
+            }
                 var valuesToFill2 = new Content(directions);
                 using (var outputDocument = new TemplateProcessor(_outputPath + "/Рапорт/raport.docx")
     .SetRemoveContentControls(true))
@@ -136,7 +137,7 @@ namespace BackEnd_DLL
                     outputDocument.FillContent(valuesToFill2);
                     outputDocument.SaveChanges();
                 }
-            }
+            
         }
 
         private void CreateTaskTemplate(string course, string faculty)
