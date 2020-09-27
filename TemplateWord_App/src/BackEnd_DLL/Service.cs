@@ -98,7 +98,7 @@ namespace BackEnd_DLL
             {
                 var dir_res = new ListItemContent("number_of_direction", "поток " + pair.Key);
                 string res_direct = "";
-                string[] resulting = new string[7];
+                string[] resulting = new string[10];
                 int count_dir = 0;
                 foreach (var elem in pair.Value)
                 {
