@@ -28,14 +28,17 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
 			this.MainPanel = new System.Windows.Forms.Panel();
 			this.CentralPanel = new System.Windows.Forms.Panel();
 			this.BottomPanel = new System.Windows.Forms.Panel();
+			this.Authorsbutton = new System.Windows.Forms.Button();
 			this.TopPanel = new System.Windows.Forms.Panel();
 			this.DatabaseManagementButton = new System.Windows.Forms.Button();
 			this.FillingOutDocumentsButton = new System.Windows.Forms.Button();
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
 			this.MainPanel.SuspendLayout();
+			this.BottomPanel.SuspendLayout();
 			this.TopPanel.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -62,11 +65,24 @@
 			// BottomPanel
 			// 
 			this.BottomPanel.BackColor = System.Drawing.SystemColors.ActiveBorder;
+			this.BottomPanel.Controls.Add(this.Authorsbutton);
 			this.BottomPanel.Dock = System.Windows.Forms.DockStyle.Bottom;
 			this.BottomPanel.Location = new System.Drawing.Point(0, 553);
 			this.BottomPanel.Name = "BottomPanel";
 			this.BottomPanel.Size = new System.Drawing.Size(1032, 50);
 			this.BottomPanel.TabIndex = 1;
+			// 
+			// Authorsbutton
+			// 
+			this.Authorsbutton.BackColor = System.Drawing.SystemColors.ActiveBorder;
+			this.Authorsbutton.Location = new System.Drawing.Point(447, 13);
+			this.Authorsbutton.Margin = new System.Windows.Forms.Padding(0);
+			this.Authorsbutton.Name = "Authorsbutton";
+			this.Authorsbutton.Size = new System.Drawing.Size(138, 28);
+			this.Authorsbutton.TabIndex = 0;
+			this.Authorsbutton.Text = "Авторы";
+			this.Authorsbutton.UseVisualStyleBackColor = false;
+			this.Authorsbutton.Click += new System.EventHandler(this.Authorsbutton_Click);
 			// 
 			// TopPanel
 			// 
@@ -104,11 +120,13 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(1032, 603);
 			this.Controls.Add(this.MainPanel);
+			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.MaximumSize = new System.Drawing.Size(1050, 650);
 			this.MinimumSize = new System.Drawing.Size(1050, 650);
 			this.Name = "MainWindow";
 			this.Text = "Автоматическое заполнение документов для практики";
 			this.MainPanel.ResumeLayout(false);
+			this.BottomPanel.ResumeLayout(false);
 			this.TopPanel.ResumeLayout(false);
 			this.ResumeLayout(false);
 
@@ -123,5 +141,6 @@
 		private System.Windows.Forms.Button FillingOutDocumentsButton;
 		private System.Windows.Forms.Panel CentralPanel;
 		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
+		private System.Windows.Forms.Button Authorsbutton;
 	}
 }

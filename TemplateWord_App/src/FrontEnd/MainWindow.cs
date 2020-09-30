@@ -356,5 +356,15 @@ namespace FrontEnd
 			FillingOutDocumentsButton.Enabled = fl;
 			DatabaseManagementButton.Enabled = fl;
 		}
+
+		private void Authorsbutton_Click(object sender, EventArgs e)
+		{
+			MessageBox.Show("   Над программой усердно работали, самоотверженно трудились,\n" +
+			   "альтруистически старались слушатели 3-го курса ФИБ ИКСИ:\n" +
+			   "1) FronEnd: Сысоев Илья Алексеевич;\n" +
+			   "2) BackEnd: Князев Даниил Александрович, Мотренко Павел\n    Константинович, Семёнов Артём Дмитриевич." +
+			   "\n\n\t\t\tАкадос 2020",
+			   "Разработчики");
+		}
 	}
 }
