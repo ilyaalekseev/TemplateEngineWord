@@ -1,16 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using BackEnd_DLL;
-using FrontEnd.Properties;
-using System.Reflection;
-using System.IO;
+
 
 namespace FrontEnd
 {
@@ -18,15 +11,15 @@ namespace FrontEnd
 	{
 		private string _faculty;
 		private string _course;
-		private Service _serv;
-		private List<string[]> _lIdFioGroupMark;
+		private Service _serv; // Интерфейс всего backend для frontend
+		private List<string[]> _lIdFioGroupMark; // string[] равен [id, fio, group, mark] - для каждого слушака (выбранного факультета и курса)
 		private string _currentWindow; // Текущее открытое окно
-		private bool[] _docx;
+		private bool[] _docx; // в нужном порядке хранить true/false (выбран/не выбран документ)
 
 		private ControlStudentsChoiceItem _csc; // конрол для выбора факультета и курса
 		private ChoiceDocumentsSubwindow _cds; // Окно для выбора документов
-		private DatabaseManagementWindow _bdm; // Откно управления БД
-		private SetEstimationWindow _sew; // Окно для выставления оценок (МОЖЕТ БЫТЬ NULL !!)
+		private DatabaseManagementWindow _bdm; // Окно управления БД
+		private SetEstimationWindow _sew; // Окно для выставления оценок
 		
 
 		public MainWindow()
@@ -87,11 +80,9 @@ namespace FrontEnd
 		private void DisplayWindowSetEstimation()
 		{
 			bool er = false;
-			// Функция GetStudentsShortInfo возвращает List с элементами типа
-			// [id, fio, group, mark], ...
-			
 			try
 			{
+				// смотри определение поля _lIdFioGroupMark и всё поймёшь
 				_lIdFioGroupMark = _serv.GetStudentsShortInfo(_faculty, _course);
 			}
 			catch (MySql.Data.MySqlClient.MySqlException)
@@ -321,6 +312,7 @@ namespace FrontEnd
 
 			foreach (string[] arr in _lIdFioGroupMark)
 				lIdMark.Add(new string[] { arr[3], arr[0] });
+
 			bool fl = false;
 			bool er = false;
 			try
@@ -360,10 +352,12 @@ namespace FrontEnd
 		private void Authorsbutton_Click(object sender, EventArgs e)
 		{
 			MessageBox.Show("   Над программой усердно работали, самоотверженно трудились,\n" +
-			   "альтруистически старались слушатели 3-го курса ФИБ ИКСИ:\n" +
-			   "1) FronEnd: Сысоев Илья Алексеевич;\n" +
-			   "2) BackEnd: Князев Даниил Александрович, Мотренко Павел\n    Константинович, Семёнов Артём Дмитриевич." +
-			   "\n\n\t\t\tАкадос 2020",
+			   "альтруистически старались слушатели ФИБ 2017 года поступления:\n" +
+			   "1) Князев Даниил Александрович;\n" +
+			   "2) Мотренко Павел Константинович;\n" +
+			   "3) Семёнов Артём Дмитриевич;\n" +
+			   "4) Сысоев Илья Алексеевич;" +
+			   "\n\n\t\t\tАкадемия 2020",
 			   "Разработчики");
 		}
 	}
