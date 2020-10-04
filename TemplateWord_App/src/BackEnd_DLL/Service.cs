@@ -75,9 +75,10 @@ namespace BackEnd_DLL
         private void CreateRaportTemplate(string course, string faculty)
         {
             Raport raport = MakeRaport(course, faculty);
-
+            if (!Directory.Exists(_outputPath + "/Рапорт"))
+                Directory.CreateDirectory(_outputPath + "/Рапорт");
             DocX document = DocX.Load(_inputPath + "raport.docx");
-            document.SaveAs(_outputPath + "/Рапорт/raport.docx");
+            document.SaveAs(_outputPath + "/Рапорт/raport " + raport._dicGeneral["number"] + " " + raport._dicGeneral["faculty"] + ".docx");
             FieldContent[] lst = new FieldContent[raport._dicGeneral.Count];
             int count_content = 0;
             if (raport._dicGeneral["number_of_Department"].Length > 4)
@@ -130,7 +131,7 @@ namespace BackEnd_DLL
                 directions.AddItem(dir_res);
             }
                 var valuesToFill2 = new Content(directions);
-                using (var outputDocument = new TemplateProcessor(_outputPath + "/Рапорт/raport.docx")
+                using (var outputDocument = new TemplateProcessor(_outputPath + "/Рапорт/raport " + raport._dicGeneral["number"] + " " + raport._dicGeneral["faculty"] + ".docx")
     .SetRemoveContentControls(true))
                 {
                     outputDocument.FillContent(valuesToFill);
@@ -143,7 +144,8 @@ namespace BackEnd_DLL
         private void CreateTaskTemplate(string course, string faculty)
         {
             List<Task> tasks = MakeTask(course, faculty);
-
+            if (!Directory.Exists(_outputPath + "/Индивидуальные задания"))
+                Directory.CreateDirectory(_outputPath + "/Индивидуальные задания");
             foreach (Task task in tasks)
             {
                 DocX document = DocX.Load(_inputPath + "task.docx");
@@ -176,7 +178,8 @@ namespace BackEnd_DLL
         private void CreateDiaryTemplate(string course, string faculty)
         {
             List<Diary> dairies = MakeDiary(course, faculty);
-
+            if (!Directory.Exists(_outputPath + "/Дневники"))
+                Directory.CreateDirectory(_outputPath + "/Дневники");
             foreach (Diary diary in dairies)
             {
                 DocX document = DocX.Load(_inputPath + "diary.docx");//создаю копию шаблона в той же директории, что и шаблон
@@ -199,7 +202,8 @@ namespace BackEnd_DLL
         private void CreateFeedbackTemplate(string course, string faculty)
         {
             List<Feedback> feedbacks = MakeFeedback(course, faculty);
-
+            if (!Directory.Exists(_outputPath + "/Отзывы"))
+                Directory.CreateDirectory(_outputPath + "/Отзывы");
             foreach (Feedback feed in feedbacks)
             {
                 DocX document = DocX.Load(_inputPath + "feedback.docx");
@@ -221,7 +225,8 @@ namespace BackEnd_DLL
         private void CreateReportTemplate(string course, string faculty)
         {
             List<Report> reports = MakeReport(course, faculty);
-
+            if (!Directory.Exists(_outputPath + "/Отчёты"))
+                Directory.CreateDirectory(_outputPath + "/Отчёты");
             foreach (Report rep in reports)
             {
                 DocX document = DocX.Load(_inputPath + "report.docx");
@@ -231,7 +236,6 @@ namespace BackEnd_DLL
                 foreach (var pair in rep._dicGeneral)
                     lst[count_content++] = new FieldContent(pair.Key, pair.Value);
                 var valuesToFill = new Content(lst);
-                int counter_stud = 1;
                 FieldContent[] stud = new FieldContent[16];
                 FieldContent[] stud_marks = new FieldContent[16];
                 Dictionary<string, string> StudTemp = new Dictionary<string, string>();//объединяем слушаков по месту&должности практики
