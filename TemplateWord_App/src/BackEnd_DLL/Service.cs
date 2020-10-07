@@ -41,7 +41,7 @@ namespace BackEnd_DLL
             {
                 Process iStartProcess = new Process();
                 iStartProcess.StartInfo.FileName = @"C:\Program Files (x86)\Microsoft Office\Office16\WINWORD.exe";
-                iStartProcess.StartInfo.Arguments = "C:/Users/user/Desktop/templateengineword/Templates/" + docs[docName] + ".docx";
+                iStartProcess.StartInfo.Arguments = _inputPath + docs[docName] + ".docx";
                 iStartProcess.Start();
                 return "";
             }
@@ -107,7 +107,7 @@ namespace BackEnd_DLL
                     string[] names = elem.Value["name_of_student_in_direction"].Split('-');
                     int count_of_stud = names.Count();
                     string studs_and_ranks = "";
-                    for (int counter = 0; counter < count_of_stud; counter++)
+                    for (int counter = 0; counter < count_of_stud - 1; counter++)
                     {
                         if (counter == 0)
                             studs_and_ranks += ranks[counter] + " " + names[counter];
@@ -116,6 +116,9 @@ namespace BackEnd_DLL
                     }
 
                     
+                    if(count_of_stud > 1)
+                        studs_and_ranks += " и " + ranks[count_of_stud - 1] + " " + names[count_of_stud - 1];
+
                     res_direct = elem.Value["full_position"] + " " + elem.Value["rank_in_direction"] + " " + elem.Key + " (" + elem.Value["individual_number"] + ") на кафедре " +
                                  elem.Value["number_department_in_direction"] + " " + elem.Value["faculty_in_direction"] + ", " +
                                  elem.Value["institute_in_direction"] + ", Академии ФСБ России - " + studs_and_ranks;
@@ -766,15 +769,13 @@ namespace BackEnd_DLL
             return tasks;
         }
     
-        public string PullDb(string path, int indicator, bool type)//рабочее название поменять потом сука
+        public string PullDb(string path, int indicator, bool type)
         {
-            //чтение
             StreamReader file = new StreamReader(path, Encoding.Default);
             string[] str = file.ReadToEnd().Split('\n');
 
             file.Close();
 
-            //запись
             int rows = str.Length - 1;
             int colls = str[0].Split(';').Length;
             string[,] arr = new string[rows, colls];
@@ -815,7 +816,6 @@ namespace BackEnd_DLL
             using (FileStream file = new FileStream(path + "\\" + tables[tableID] + ".csv", FileMode.Append)) 
             {
                 byte[] array = System.Text.Encoding.Default.GetBytes(str);
-                // запись массива байтов в файл
                 file.Write(array, 0, array.Length);
             }
         }
