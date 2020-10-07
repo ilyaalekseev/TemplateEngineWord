@@ -20,7 +20,7 @@ namespace BackEnd_DLL
         private string _outputPath;
         private string _inputPath;
 
-        public Service(string output = "C:/doki/", string input = "C:/doki/")
+        public Service(string output = "C:/Users/user/Desktop/templateengineword/Templates/", string input = "C:/Users/user/Desktop/templateengineword/Templates/")
         {
             dataBase = new ManagingRequestsBD();
             _outputPath = output;
@@ -34,14 +34,14 @@ namespace BackEnd_DLL
             docs.Add("Рапорт", "raport");
             docs.Add("Дневник", "diary");
             docs.Add("Отзыв", "feedback");
-            docs.Add("Отчёт", "report");
+            docs.Add("Отчет", "report");
             docs.Add("Индивидуальное задание", "task");
 
             if (docs.ContainsKey(docName))
             {
                 Process iStartProcess = new Process();
-                iStartProcess.StartInfo.FileName = @"C:\program.exe\WINWORD.exe";
-                iStartProcess.StartInfo.Arguments = @"C:\doki\" + docs[docName] + ".docx";
+                iStartProcess.StartInfo.FileName = @"C:\Program Files (x86)\Microsoft Office\Office16\WINWORD.exe";
+                iStartProcess.StartInfo.Arguments = "C:/Users/user/Desktop/templateengineword/Templates/" + docs[docName] + ".docx";
                 iStartProcess.Start();
                 return "";
             }
@@ -115,9 +115,11 @@ namespace BackEnd_DLL
                             studs_and_ranks += ", " + ranks[counter] + " " + names[counter];
                     }
 
+                    
                     res_direct = elem.Value["full_position"] + " " + elem.Value["rank_in_direction"] + " " + elem.Key + " (" + elem.Value["individual_number"] + ") на кафедре " +
                                  elem.Value["number_department_in_direction"] + " " + elem.Value["faculty_in_direction"] + ", " +
                                  elem.Value["institute_in_direction"] + ", Академии ФСБ России - " + studs_and_ranks;
+                    res_direct = res_direct.Substring(0, res_direct.Length - 3);
                     resulting[count_dir] = res_direct;
                     count_dir++;
                 }
