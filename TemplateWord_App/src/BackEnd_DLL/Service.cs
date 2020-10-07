@@ -107,14 +107,15 @@ namespace BackEnd_DLL
                     string[] names = elem.Value["name_of_student_in_direction"].Split('-');
                     int count_of_stud = names.Count();
                     string studs_and_ranks = "";
-                    for (int counter = 0; counter < count_of_stud; counter++)
+                    for (int counter = 0; counter < count_of_stud - 1; counter++)
                     {
                         if (counter == 0)
                             studs_and_ranks += ranks[counter] + " " + names[counter];
                         else
                             studs_and_ranks += ", " + ranks[counter] + " " + names[counter];
                     }
-
+                    if(count_of_stud > 1)
+                        studs_and_ranks += " и " + ranks[count_of_stud - 1] + " " + names[count_of_stud - 1];
                     res_direct = elem.Value["full_position"] + " " + elem.Value["rank_in_direction"] + " " + elem.Key + " (" + elem.Value["individual_number"] + ") на кафедре " +
                                  elem.Value["number_department_in_direction"] + " " + elem.Value["faculty_in_direction"] + ", " +
                                  elem.Value["institute_in_direction"] + ", Академии ФСБ России - " + studs_and_ranks;
