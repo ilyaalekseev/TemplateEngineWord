@@ -668,7 +668,7 @@ namespace BackEnd_DLL
 		public Teacher GetApprover()
 		{
 			Teacher approver = new Teacher();
-			string[] approverArr = GetTeacherById("0");
+			string[] approverArr = GetTeacherById("1");
 			MakeTeacher(approverArr, approver);
 			return approver;
 		}
