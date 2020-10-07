@@ -189,6 +189,26 @@ namespace BackEnd_DLL
 		}
 
 		/*
+			Сброс счетчика автоинкримента до числа number в таблице tableName
+		*/
+		public bool SetAutoIncrementValue(string tableName, string value)
+		{
+
+			string sql = "ALTER TABLE template_engine." + tableName + " AUTO_INCREMENT=" + value + ";";
+			try
+			{
+				MySqlCommand command = new MySqlCommand(sql, _con);
+				command.ExecuteNonQuery();
+				return true;
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine("{0} Exception caught.", e);
+				return false;
+			}
+		}
+
+		/*
 			Изменяет старое значение в таблице tableName в колонке columnName
 			на новое значение newValue в строке с номером id
 		*/
